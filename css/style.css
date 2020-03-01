@@ -1,0 +1,44 @@
+body {
+    text-align: center;
+    background-color: #1B998B;
+    font-family: cursive;
+    font-size: 1.5em;
+}
+
+li {
+    display: inline;
+}
+
+#done {
+    text-decoration: none;
+    color: black;
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    padding-top: 0px;
+    border: 2px solid #2D3047;
+    background-color: rgb(129, 226, 49);
+}
+
+h4 {
+    color: rgb(161, 255, 166);
+    color: rgb(255, 160, 144);
+}
+
+input, #physique_rating, #height_unit, #weight_unit {
+    font-size: 1.5rem;
+    background-color: rgb(216, 216, 216);
+    text-align: center;
+}
+
+input {
+    margin-bottom: 20px;
+}
+
+#age {
+    appearance: none;
+}
+
+#done {
+    cursor: pointer;
+}
