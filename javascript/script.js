@@ -14,8 +14,10 @@ const bmr = document.querySelector('#bmr');
 const metabolic_age = document.querySelector('#metabolic_age');
 const body_water = document.querySelector('#body_water');
 const done = document.querySelector('#done');
+const bmr_unit = document.querySelector('#bmr_unit');
 let incorrect = false;
 let gender_value;
+let physique_rating_value;
 
 done.addEventListener('click', function() {
     if (incorrect = false) {
@@ -180,8 +182,16 @@ weight.addEventListener('focusout', function() {
 
 weight_unit.addEventListener('focusout', function() {
     if (weight_unit.value === 'kg') {
-        if (weight.value > 908) {
+        if (weight.value > 908 ) {
             weight.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else if (muscle_mass.value > 908 ) {
+            muscle_mass.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else if (bone_mass.value > 36) {
+            bone_mass.style.background = 'rgb(255, 160, 144)';
             incorrect = true; 
         }
         else {
@@ -193,6 +203,14 @@ weight_unit.addEventListener('focusout', function() {
             weight.style.background = 'rgb(255, 160, 144)';
             incorrect = true; 
         }
+        else if (muscle_mass.value > 2000 ) {
+            muscle_mass.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else if (bone_mass.value > 80) {
+            bone_mass.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
         else {
             weight.style.background = 'rgb(216, 216, 216)';
         }
@@ -200,6 +218,14 @@ weight_unit.addEventListener('focusout', function() {
     else if (weight_unit.value === 'st') {
         if (weight.value > 143) {
             weight.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else if (muscle_mass.value > 143 ) {
+            muscle_mass.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else if (bone_mass.value > 6) {
+            bone_mass.style.background = 'rgb(255, 160, 144)';
             incorrect = true; 
         }
         else {
@@ -252,6 +278,158 @@ visceral_fat.addEventListener('focusout', function() {
     }
 })
 
+muscle_mass.addEventListener('focusout', function() {
+    if (muscle_mass.value === '') {
+        muscle_mass.style.background = 'rgb(255, 160, 144)';
+        incorrect = true; 
+    }
+    else if (muscle_mass.value < 0) {
+        muscle_mass.style.background = 'rgb(255, 160, 144)';
+        incorrect = true; 
+    }
+    else if (weight_unit.value === 'kg') {
+        if (muscle_mass.value > 908) {
+            muscle_mass.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else {
+            muscle_mass.style.background = 'rgb(216, 216, 216)';
+        }
+    }
+    else if (weight_unit.value === 'lbs') {
+        if (muscle_mass.value > 2000) {
+            muscle_mass.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else {
+            muscle_mass.style.background = 'rgb(216, 216, 216)';
+        }
+    }
+    else if (weight_unit.value === 'st') {
+        if (muscle_mass.value > 143) {
+            muscle_mass.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else {
+            muscle_mass.style.background = 'rgb(216, 216, 216)';
+        }
+    }
+})
+
+physique_rating.addEventListener('focusout', function() {
+    physique_rating_value = physique_rating.value;
+})
+
+bone_mass.addEventListener('focusout', function() {
+    if (bone_mass.value === '') {
+        bone_mass.style.background = 'rgb(255, 160, 144)';
+        incorrect = true; 
+    }
+    else if (bone_mass.value < 0) {
+        bone_mass.style.background = 'rgb(255, 160, 144)';
+        incorrect = true; 
+    }
+    else if (weight_unit.value === 'kg') {
+        if (bone_mass.value > 36) {
+            bone_mass.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else {
+            bone_mass.style.background = 'rgb(216, 216, 216)';
+        }
+    }
+    else if (weight_unit.value === 'lbs') {
+        if (bone_mass.value > 80) {
+            bone_mass.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else {
+            bone_mass.style.background = 'rgb(216, 216, 216)';
+        }
+    }
+    else if (weight_unit.value === 'st') {
+        if (bone_mass.value > 6) {
+            bone_mass.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else {
+            bone_mass.style.background = 'rgb(216, 216, 216)';
+        }
+    }
+})
+
+bmr.addEventListener('focusout', function() {
+    if (bmr.value === '') {
+        bmr.style.background = 'rgb(255, 160, 144)';
+        incorrect = true; 
+    }
+    else if (bmr.value < 0) {
+        bmr.style.background = 'rgb(255, 160, 144)';
+        incorrect = true; 
+    }
+    else if (bmr_unit.value === 'kcal') {
+        if (bmr.value > 5000) {
+            bmr.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else {
+            bmr.style.background = 'rgb(216, 216, 216)';
+        }
+    }
+    else if (bmr_unit.value === 'kJ') {
+        if (bmr.value > 21000) {
+            bmr.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else {
+            bmr.style.background = 'rgb(216, 216, 216)';
+        }
+    }
+})
+
+bmr_unit.addEventListener('focusout', function() {
+    if (bmr_unit.value === 'kcal') {
+        if (bmr.value > 5000) {
+            bmr.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else {
+            bmr.style.background = 'rgb(216, 216, 216)';
+        }
+    }
+    else if (bmr_unit.value === 'kJ') {
+        if (bmr.value > 21000) {
+            bmr.style.background = 'rgb(255, 160, 144)';
+            incorrect = true; 
+        }
+        else {
+            bmr.style.background = 'rgb(216, 216, 216)';
+        }
+    }
+})
+
+metabolic_age.addEventListener('focusout', function() {
+    if (metabolic_age.value > 150 || metabolic_age.value === '' || metabolic_age.value < 0) {
+        metabolic_age.style.background = 'rgb(255, 160, 144)';
+        incorrect = true;
+    }
+    else {
+        metabolic_age.style.background = 'rgb(216, 216, 216)';
+    }
+})
+
+body_water.addEventListener('focusout', function() {
+    if (body_water.value > 100 || body_water.value === '' || body_water.value < 0) {
+        body_water.style.background = 'rgb(255, 160, 144)';
+        incorrect = true;
+    }
+    else {
+        body_water.style.background = 'rgb(216, 216, 216)';
+    }
+})
 
 //make things required to fill in and only link work if they all filled in
 //make name input only accept letters
+//hide arrows on number input
+//adde different ways of adding weight and height into functionality ex (5'6'' for height in feet)
+//remove that blue line thing around inputs

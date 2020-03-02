@@ -17,7 +17,7 @@
     <p>Enter your body composition details from a Tanita body scanner and they will be personally analysed</p>
     
     <div class="container">
-        <div>
+        <div class="ele">
             <label for="name">Name</label> <br>
             <input type="text" name="name" id="name" maxlength="35" autocomplete="off">
         </div>
@@ -84,6 +84,10 @@
         <div>
             <label for="bmr">BMR</label> <br>
             <input type="number" name="bmr" id="bmr" autocomplete="off">
+            <select name="bmr_unit" id="bmr_unit">
+                <option value="kcal">kcal</option>
+                <option value="kJ">kJ</option>
+            </select>
         </div>
         <div>
             <label for="metabolic_age">Metabolic Age</label> <br>
