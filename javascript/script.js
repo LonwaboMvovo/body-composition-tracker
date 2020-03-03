@@ -1,3 +1,4 @@
+//Variables from HTML files:
 const name = document.querySelector('#name');
 const age = document.querySelector('#age');
 const gender = document.getElementsByName('gender');
@@ -18,16 +19,29 @@ const start = document.querySelector('#start');
 const next = document.querySelector('#next');
 const back = document.querySelector('#back');
 const done = document.querySelector('#done');
-let physique_rating_value = ''; // delete
 
+//Functions for javascript file:
 const user_details_filled = () => {
-    if (sessionStorage.age !== '' && sessionStorage.gender !== '' && sessionStorage.age !== undefined && sessionStorage.gender !== undefined) {
+    if (
+        sessionStorage.age !== '' &&
+        sessionStorage.gender !== ''
+        ) {
         return true;
     }
     return false;
 }
-const composition_details_filled = () => {
-    if (age.value !== '' && height.value !== '' && weight.value !== '' && body_fat.value !== '' && visceral_fat.value !== '' && muscle_mass.value !== '' && physique_rating_value !== '' && bone_mass.value !== '' && bmr.value !== '' && metabolic_age.value !== '' && body_water.value !== '' ) {
+const composition_details_filled = () => { //update so that it uses sessionstorage
+    if (
+        sessionStorage.height !== '' &&
+        sessionStorage.weight !== '' &&
+        sessionStorage.body_fat !== '' &&
+        sessionStorage.visceral_fat !== '' &&
+        sessionStorage.muscle_mass !== '' &&
+        sessionStorage.bone_mass !== '' &&
+        sessionStorage.bmr !== '' &&
+        sessionStorage.metabolic_age !== '' &&
+        sessionStorage.body_water !== ''
+        ) {
         return true;
     }
     return false;
@@ -39,7 +53,9 @@ const right = (detail) => {
     detail.style.background = 'rgb(216, 216, 216)';
 }
 
-if (window.location.href === "http://127.0.0.1:5500/html/index.html") {
+//Home Page:
+if (window.location.pathname === "/html/index.html") {
+    //Storage:
     if (typeof(Storage) === 'undefined') {
         document.querySelector('#header_msg').innerHTML = 'Unfortunately your browser does not support the type of storage used by this website';
         start.style.visibility = 'hidden'; 
@@ -47,12 +63,21 @@ if (window.location.href === "http://127.0.0.1:5500/html/index.html") {
 
     else {
         start.addEventListener('click', function() {
-            window.open('http://127.0.0.1:5500/html/user_details.html', '_self');
+            window.open('/html/user_details.html', '_self');
         })
     }
 }
 
-if (window.location.href === "http://127.0.0.1:5500/html/user_details.html") {
+//User Details page:
+if (window.location.pathname === "/html/user_details.html") {
+    //Name:
+    sessionStorage.name = ''
+    name.addEventListener('focusout', () => {
+        sessionStorage.name = name.value;
+    })
+
+    //Age:
+    sessionStorage.age = ''
     age.addEventListener('focusout', function() {
         if (age.value > 150 || age.value < 0 || age.value === '') {
             wrong(age);
@@ -64,6 +89,8 @@ if (window.location.href === "http://127.0.0.1:5500/html/user_details.html") {
         }
     })
     
+    //Gender
+    sessionStorage.gender !== ''
     for (let i = 0; i < gender.length; i++) {
         gender[i].addEventListener('click', () => {
             if (i === 0) {
@@ -75,158 +102,174 @@ if (window.location.href === "http://127.0.0.1:5500/html/user_details.html") {
         })
     }
 
+    //Height Unit:
+    sessionStorage.height_unit = 'cm';
+    height_unit.addEventListener('focusout', () => {
+        sessionStorage.height_unit = height_unit.value;
+    } )
+
+    //Weight Unit:
+    sessionStorage.weight_unit = 'kg';
+    weight_unit.addEventListener('focusout', () => {
+        sessionStorage.weight_unit = weight_unit.value;
+    } )
+
+    //BMR Unit:
+    sessionStorage.bmr_unit = 'kcal';
+    bmr_unit.addEventListener('focusout', () => {
+        sessionStorage.bmr_unit = bmr_unit.value;
+    } )
+
+    //Next:
     next.addEventListener('click', function() {
         if (user_details_filled()) {
-            window.open('http://127.0.0.1:5500/html/composition_details.html', '_self');
+            window.open('/html/composition_details.html', '_self');
         }
     })
 }
 
-if (window.location.href === 'http://127.0.0.1:5500/html/composition_details.html') {
+//Composition Details page
+if (window.location.pathname === '/html/composition_details.html') {
+    //Height: //write the height units in brackets
+    sessionStorage.height = '';
     height.addEventListener('focusout', function() {
-        if (height.value === '' || height.value < 0 || (height_unit.value === 'cm' && height.value > 275) || (height_unit.value === 'm' && height.value > 2.75) || (height_unit.value === 'ft' && height.value > 9)) {
+        if (height.value === '' || height.value < 0 || (sessionStorage.height_unit === 'cm' && height.value > 275) || (sessionStorage.height_unit === 'm' && height.value > 2.75) || (sessionStorage.height_unit === 'ft' && height.value > 9)) {
             wrong(height);
+            sessionStorage.height = '';
         }
         else {
             right(height);
+            sessionStorage.height = height.value;
         }
     })
 
+    //Weight: //write the weight units in brackets
+    sessionStorage.weight = '';
     weight.addEventListener('focusout', function() {
-        if (weight.value === '' || weight.value < 0 || (weight_unit.value === 'kg' && weight.value > 908) || (weight_unit.value === 'lbs' && weight.value > 2000) || (weight_unit.value === 'st' && weight.value > 143)) {
+        if (weight.value === '' || weight.value < 0 || (sessionStorage.weight_unit === 'kg' && weight.value > 908) || (sessionStorage.weight_unit === 'lbs' && weight.value > 2000) || (sessionStorage.weight_unit === 'st' && weight.value > 143)) {
             wrong(weight);
+            sessionStorage.weight = '';
         }
         else {
             right(weight);
+            sessionStorage.weight = weight.value;
         }
     })
 
+    //Body Fat:
+    sessionStorage.body_fat = '';
     body_fat.addEventListener('focusout', function() {
         if (body_fat.value === '' || body_fat.value < 0 || body_fat.value > 70) {
             wrong(body_fat);
+            sessionStorage.body_fat = '';
         }
         else {
             right(body_fat);
+            sessionStorage.body_fat = body_fat.value;
         }
     })
     
+    //Visceral Fat:
+    sessionStorage.visceral_fat = '';
     visceral_fat.addEventListener('focusout', function() {
         if (visceral_fat.value === '' || visceral_fat.value < 0 || visceral_fat.value > 59) {
             wrong(visceral_fat);
-        }
+            sessionStorage.visceral_fat = '';
+         }
         else {
             right(visceral_fat);
+            sessionStorage.visceral_fat = visceral_fat.value;
         }
     })
     
+    //Muscle Mass:
+    sessionStorage.muscle_mass = '';
     muscle_mass.addEventListener('focusout', function() {
-        if (muscle_mass.value === '' || muscle_mass.value < 0 || (weight_unit.value === 'kg' && muscle_mass.value > 908) || (weight_unit.value === 'lbs' && muscle_mass.value > 2000) || (weight_unit.value === 'st' && muscle_mass.value > 143)) {
+        if (muscle_mass.value === '' || muscle_mass.value < 0 || (sessionStorage.weight_unit === 'kg' && muscle_mass.value > 908) || (sessionStorage.weight_unit === 'lbs' && muscle_mass.value > 2000) || (sessionStorage.weight_unit === 'st' && muscle_mass.value > 143)) {
             wrong(muscle_mass);
+            sessionStorage.muscle_mass = '';
         }
         else {
             right(muscle_mass);
+            sessionStorage.muscle_mass = muscle_mass.value;
         }
     })
     
+    //Physique Rating:
+    sessionStorage.physique_rating = physique_rating.value;
     physique_rating.addEventListener('focusout', function() {
-        physique_rating_value = physique_rating.value;
+        sessionStorage.physique_rating = physique_rating.value;
     })
     
+    //Bone Mass
+    sessionStorage.bone_mass = '';
     bone_mass.addEventListener('focusout', function() {
-        if (bone_mass.value === '') {
-            bone_mass.style.background = 'rgb(255, 160, 144)';
-            incorrect = true; 
+        if (bone_mass.value === '' || bone_mass.value < 0 || (sessionStorage.weight_unit === 'kg' && bone_mass.value > 36) || (sessionStorage.weight_unit === 'lbs' && bone_mass.value > 80) || (sessionStorage.weight_unit === 'st' && bone_mass.value > 6)) {
+            wrong(bone_mass);
+            sessionStorage.bone_mass = '';
         }
-        else if (bone_mass.value < 0) {
-            bone_mass.style.background = 'rgb(255, 160, 144)';
-            incorrect = true; 
-        }
-        else if (weight_unit.value === 'kg') {
-            if (bone_mass.value > 36) {
-                bone_mass.style.background = 'rgb(255, 160, 144)';
-                incorrect = true; 
-            }
-            else {
-                bone_mass.style.background = 'rgb(216, 216, 216)';
-            }
-        }
-        else if (weight_unit.value === 'lbs') {
-            if (bone_mass.value > 80) {
-                bone_mass.style.background = 'rgb(255, 160, 144)';
-                incorrect = true; 
-            }
-            else {
-                bone_mass.style.background = 'rgb(216, 216, 216)';
-            }
-        }
-        else if (weight_unit.value === 'st') {
-            if (bone_mass.value > 6) {
-                bone_mass.style.background = 'rgb(255, 160, 144)';
-                incorrect = true; 
-            }
-            else {
-                bone_mass.style.background = 'rgb(216, 216, 216)';
-            }
+        else {
+            right(bone_mass);
+            sessionStorage.bone_mass = bone_mass;
         }
     })
     
+    //BMR: //write the bmr units in brackets
+    sessionStorage.bmr = '';
     bmr.addEventListener('focusout', function() {
-        if (bmr.value === '') {
-            bmr.style.background = 'rgb(255, 160, 144)';
-            incorrect = true; 
+        if (bmr.value === '' || bmr.value < 0 || (sessionStorage.bmr_unit === 'kcal' && bmr.value > 5000) || (sessionStorage.bmr_unit === 'kJ' && bmr.value > 21000)) {
+            wrong(bmr);
+            sessionStorage.bmr = '';
         }
-        else if (bmr.value < 0) {
-            bmr.style.background = 'rgb(255, 160, 144)';
-            incorrect = true; 
-        }
-        else if (bmr_unit.value === 'kcal') {
-            if (bmr.value > 5000) {
-                bmr.style.background = 'rgb(255, 160, 144)';
-                incorrect = true; 
-            }
-            else {
-                bmr.style.background = 'rgb(216, 216, 216)';
-            }
-        }
-        else if (bmr_unit.value === 'kJ') {
-            if (bmr.value > 21000) {
-                bmr.style.background = 'rgb(255, 160, 144)';
-                incorrect = true; 
-            }
-            else {
-                bmr.style.background = 'rgb(216, 216, 216)';
-            }
+        else {
+            right(bmr);
+            sessionStorage.bmr = bmr.value;
         }
     })
     
+    //Metabolic Age:
+    sessionStorage.metabolic_age = '';
     metabolic_age.addEventListener('focusout', function() {
         if (metabolic_age.value > 150 || metabolic_age.value === '' || metabolic_age.value < 0) {
-            metabolic_age.style.background = 'rgb(255, 160, 144)';
-            incorrect = true;
+            wrong(metabolic_age);
+            sessionStorage.metabolic_age = '';
         }
         else {
-            metabolic_age.style.background = 'rgb(216, 216, 216)';
+            right(metabolic_age)
+            sessionStorage.metabolic_age = metabolic_age.value;
         }
     })
     
+    //Body Water:
+    sessionStorage.body_water = '';
     body_water.addEventListener('focusout', function() {
         if (body_water.value > 100 || body_water.value === '' || body_water.value < 0) {
-            body_water.style.background = 'rgb(255, 160, 144)';
-            incorrect = true;
+            wrong(body_water);
+            sessionStorage.body_water = '';
         }
         else {
-            body_water.style.background = 'rgb(216, 216, 216)';
+            right(body_water);
+            sessionStorage.body_water = body_water.value;
         }
     })
     
+    //Done:
     done.addEventListener('click', function() {
         if (composition_details_filled()) {
-            window.open('http://127.0.0.1:5500/html/breakdown.html', '_self');
+            window.open('/html/breakdown.html', '_self');
         }
     })
     
+    //Back:
     back.addEventListener('click', function() {
-        window.open('http://127.0.0.1:5500/html/index.html', '_self');
+        window.history.back();
+    })
+}
+
+if (window.location.pathname === '/html/breakdown.html') {
+    //Back:
+    back.addEventListener('click', function() {
+        window.history.back();
     })
 }
 
@@ -241,3 +284,6 @@ if (window.location.href === 'http://127.0.0.1:5500/html/composition_details.htm
 //Have better wording on the website 
 //make a table that saves all the use details that uses local storage like excel
 //if the website see's that the user has already used the website then it just goes to updating info
+//add animation on buttons
+//if name is undefined then address user as you
+//if radio buttons have not been selected highlight that is what needs to be filled in
