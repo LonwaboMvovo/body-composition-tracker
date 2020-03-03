@@ -71,10 +71,13 @@ if (window.location.pathname === "/html/index.html") {
 //User Details page:
 if (window.location.pathname === "/html/user_details.html") {
     //Name:
-    sessionStorage.name = ''
-    name.addEventListener('focusout', () => {
-        sessionStorage.name = name.value;
-    })
+    sessionStorage.name = '';
+    name.addEventListener("keypress", (event) => {
+        if ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) && sessionStorage.name.length < 35) {
+            name.value += event.key;
+            sessionStorage.name = name.value;
+        }
+    });
 
     //Age:
     sessionStorage.age = ''
@@ -276,11 +279,11 @@ if (window.location.pathname === '/html/breakdown.html') {
 //message that tells user whats wrong or what needs to be filled in
 
 //add different ways of adding weight and height into functionality ex (5'6'' for height in feet)
-//weekly reminder to add input
 //save user details using local storage
-//Have better wording on the website 
 //make a table that saves all the use details that uses local storage like excel
-//if the website see's that the user has already used the website then it just goes to updating info
-//add animation on buttons
 //if name is undefined then address user as you
-//add the script in the javascript file to make sure the name input is letters only
+//if the website see's that the user has already used the website then it just goes to updating info
+//weekly reminder to add input
+//add animation on buttons
+//if user browser does not support then show images of browsers that do 
+//Have better wording on the website 
