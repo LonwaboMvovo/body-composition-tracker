@@ -273,12 +273,9 @@ if (window.location.pathname === '/html/breakdown.html') {
     })
 }
 
-//saving variables using localstorage
+//message that tells user whats wrong or what needs to be filled in
 
-//make name input only accept letters
-//hide arrows on number input
 //add different ways of adding weight and height into functionality ex (5'6'' for height in feet)
-//remove that blue line thing around inputs
 //weekly reminder to add input
 //save user details using local storage
 //Have better wording on the website 
@@ -286,4 +283,4 @@ if (window.location.pathname === '/html/breakdown.html') {
 //if the website see's that the user has already used the website then it just goes to updating info
 //add animation on buttons
 //if name is undefined then address user as you
-//if radio buttons have not been selected highlight that is what needs to be filled in
+//add the script in the javascript file to make sure the name input is letters only

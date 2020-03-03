@@ -21,11 +21,11 @@
     <div class="container">
         <div>
             <label for="name">Name:</label> <br>
-            <input type="text" name="name" id="name" maxlength="35" autocomplete="off">
+            <input type="text" name="name" id="name" maxlength="35" autocomplete="off" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)">
         </div>
         <div>
             <label for="age">Age:</label> <br>
-            <input type="number" id='age' autocomplete="off" min='0' max='150'>
+            <input type="number" id='age' autocomplete="off">
         </div>
         <div>
             <input type="radio" id="male" name="gender" value="male">

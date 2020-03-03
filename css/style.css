@@ -4,16 +4,20 @@ body {
     font-size: 1.5em;
 }
 
+::selection {
+    background: rgb(204, 204, 204);
+}
+
 header {
     text-align: center;
 }
 
-.container {
-    margin-left: 500px;
+h1 {
+    user-select: none;
 }
 
-.name {
-    appearance: none;
+.container {
+    margin-left: 500px;
 }
 
 li {
@@ -31,11 +35,18 @@ li {
     background-color: rgb(129, 226, 49);
     cursor: pointer;
     margin-left: 50px;
+    outline: none;
 }
 
 h4 {
     color: rgb(161, 255, 166);
     color: rgb(255, 160, 144);
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }
 
 input, #physique_rating, #height_unit, #weight_unit, #bmr_unit {
@@ -44,6 +55,7 @@ input, #physique_rating, #height_unit, #weight_unit, #bmr_unit {
     text-align: center;
     margin-bottom: 20px;
     border: 1px solid black;
+    outline: none;
 }
 
 #age {
