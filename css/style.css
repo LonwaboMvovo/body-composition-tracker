@@ -4,12 +4,12 @@ body {
     font-size: 1.5em;
 }
 
-.container {
+header {
     text-align: center;
 }
 
-.ele {
-    display: inline-block;
+.container {
+    margin-left: 500px;
 }
 
 .name {
@@ -20,7 +20,7 @@ li {
     display: inline;
 }
 
-#done {
+#done, #next, #back, #start {
     text-decoration: none;
     color: black;
     display: inline-block;
@@ -29,6 +29,8 @@ li {
     padding-top: 0px;
     border: 2px solid #2D3047;
     background-color: rgb(129, 226, 49);
+    cursor: pointer;
+    margin-left: 50px;
 }
 
 h4 {
@@ -40,17 +42,10 @@ input, #physique_rating, #height_unit, #weight_unit, #bmr_unit {
     font-size: 1.5rem;
     background-color: rgb(216, 216, 216);
     text-align: center;
-}
-
-input {
     margin-bottom: 20px;
     border: 1px solid black;
 }
 
 #age {
-    appearance: none;
-}
-
-#done {
-    cursor: pointer;
+    appearance: textfield;
 }
