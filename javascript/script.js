@@ -15,6 +15,9 @@ const bmr = document.querySelector('#bmr');
 const bmr_unit = document.querySelector('#bmr_unit');
 const metabolic_age = document.querySelector('#metabolic_age');
 const body_water = document.querySelector('#body_water');
+const error_msg = document.querySelectorAll('.error_msg');
+const tick = document.querySelectorAll('.tick'); 
+const cross = document.querySelectorAll('.cross'); 
 const start = document.querySelector('#start');
 const next = document.querySelector('#next');
 const back = document.querySelector('#back');
@@ -24,7 +27,10 @@ const done = document.querySelector('#done');
 const user_details_filled = () => {
     if (
         sessionStorage.age !== '' &&
-        sessionStorage.gender !== ''
+        sessionStorage.gender !== '' &&
+        sessionStorage.height_unit !== '' &&
+        sessionStorage.weight_unit !== '' &&
+        sessionStorage.bmr_unit !== ''
         ) {
         return true;
     }
@@ -58,7 +64,7 @@ if (window.location.pathname === "/html/index.html") {
     //Storage:
     if (typeof(Storage) === 'undefined') {
         document.querySelector('#header_msg').innerHTML = 'Unfortunately your browser does not support the type of storage used by this website';
-        start.style.visibility = 'hidden'; 
+        start.style.visibility = 'hidden';
     }
 
     else {
@@ -74,26 +80,50 @@ if (window.location.pathname === "/html/user_details.html") {
     sessionStorage.name = '';
     name.addEventListener("keypress", (event) => {
         if ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) && sessionStorage.name.length < 35) {
+            error_msg[0].innerText = '';
             name.value += event.key;
             sessionStorage.name = name.value;
+        }
+        else {
+            error_msg[0].innerText = '(Letters only)';
         }
     });
 
     //Age:
-    sessionStorage.age = ''
+    sessionStorage.age = '';
     age.addEventListener('focusout', function() {
-        if (age.value > 150 || age.value < 0 || age.value === '') {
+        if (age.value > 150) {
             wrong(age);
             sessionStorage.age = '';
+            error_msg[1].innerText = "(Nobody's that old)";
+            tick[0].classList.add('not');
+            cross[0].classList.remove('not');
+        }
+        else if (age.value < 0) {
+            wrong(age);
+            sessionStorage.age = '';
+            error_msg[1].innerText = "(You're not even born yet)";
+            tick[0].classList.add('not');
+            cross[0].classList.remove('not');
+        }
+        else if (age.value === '') {
+            wrong(age);
+            sessionStorage.age = '';
+            error_msg[1].innerText = "(Required)";
+            tick[0].classList.add('not');
+            cross[0].classList.remove('not');
         }
         else {
             right(age);
             sessionStorage.age = age.value;
+            error_msg[1].innerText = '';
+            tick[0].classList.remove('not');
+            cross[0].classList.add('not');
         }
     })
     
     //Gender
-    sessionStorage.gender !== ''
+    sessionStorage.gender = '';
     for (let i = 0; i < gender.length; i++) {
         gender[i].addEventListener('click', () => {
             if (i === 0) {
@@ -106,19 +136,19 @@ if (window.location.pathname === "/html/user_details.html") {
     }
 
     //Height Unit:
-    sessionStorage.height_unit = 'cm';
+    sessionStorage.height_unit = '';
     height_unit.addEventListener('focusout', () => {
         sessionStorage.height_unit = height_unit.value;
     } )
 
     //Weight Unit:
-    sessionStorage.weight_unit = 'kg';
+    sessionStorage.weight_unit = '';
     weight_unit.addEventListener('focusout', () => {
         sessionStorage.weight_unit = weight_unit.value;
     } )
 
     //BMR Unit:
-    sessionStorage.bmr_unit = 'kcal';
+    sessionStorage.bmr_unit = '';
     bmr_unit.addEventListener('focusout', () => {
         sessionStorage.bmr_unit = bmr_unit.value;
     } )
@@ -259,31 +289,32 @@ if (window.location.pathname === '/html/composition_details.html') {
     //Done:
     done.addEventListener('click', function() {
         if (composition_details_filled()) {
-            window.open('/html/breakdown.html', '_self');
+            window.open('/html/progress.html', '_self');
         }
     })
     
     //Back:
     back.addEventListener('click', function() {
-        window.history.back();
+        window.open('/html/composition_details.html', '_self');
     })
 }
 
-if (window.location.pathname === '/html/breakdown.html') {
-    //Back:
-    back.addEventListener('click', function() {
-        window.history.back();
-    })
+//Progress page:
+if (window.location.pathname === '/html/progress.html') {
 }
 
 //message that tells user whats wrong or what needs to be filled in
 
+//show units of what is being filled in from what the user selected
+//don't allow point to be inputed for number inputs (maybe use includes method)
 //add different ways of adding weight and height into functionality ex (5'6'' for height in feet)
 //save user details using local storage
 //make a table that saves all the use details that uses local storage like excel
 //if name is undefined then address user as you
 //if the website see's that the user has already used the website then it just goes to updating info
 //weekly reminder to add input
-//add animation on buttons
 //if user browser does not support then show images of browsers that do 
 //Have better wording on the website 
+//Remove error message when someone unfocusses
+
+//when you shut down change the name of the 'body-composition-analyser' to 'body-composition-tracker'

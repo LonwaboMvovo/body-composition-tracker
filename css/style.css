@@ -1,7 +1,7 @@
 body {
-    background-color: #1B998B;
     font-family: cursive;
     font-size: 1.5em;
+    margin: 0px;
 }
 
 ::selection {
@@ -9,7 +9,31 @@ body {
 }
 
 header {
+    background-color: #1B998B;
     text-align: center;
+    padding: 5px;
+}
+
+.header_msg {
+    text-align: center;
+}
+
+ul {
+    margin: 0px;
+}
+
+li {
+    display: inline;
+}
+
+a {
+    color: black;
+    margin: 0px 10px
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
 }
 
 h1 {
@@ -20,11 +44,7 @@ h1 {
     margin-left: 500px;
 }
 
-li {
-    display: inline;
-}
-
-#done, #next, #back, #start {
+.button {
     text-decoration: none;
     color: black;
     display: inline-block;
@@ -49,15 +69,38 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0; 
 }
 
-input, #physique_rating, #height_unit, #weight_unit, #bmr_unit {
+.inputs {
     font-size: 1.5rem;
     background-color: rgb(216, 216, 216);
     text-align: center;
     margin-bottom: 20px;
     border: 1px solid black;
-    outline: none;
 }
 
-#age {
-    appearance: textfield;
+.inputs:focus {
+    box-shadow: 0 0px 15px rgba(49, 49, 49, 0.7);
 }
+
+.error_msg, .tick {
+    display: inline;
+}
+
+.tick {
+    /* float: left; */
+    margin-left: 10px;
+    color: green;
+}
+
+.cross {
+    /* float: left; */
+    display: inline;
+}
+
+.not {
+    visibility: hidden;
+}
+
+/* fix how cross and tick are displayed */
+
+/* add animation on buttons */
+/* clean code */
