@@ -17,8 +17,7 @@ const metabolic_age = document.querySelector('#metabolic_age');
 const body_water = document.querySelector('#body_water');
 const unit = document.querySelectorAll('.unit')
 const error_msg = document.querySelectorAll('.error_msg');
-// const tick = document.querySelectorAll('.tick'); 
-// const cross = document.querySelectorAll('.cross'); 
+const mark = document.querySelectorAll('.mark'); 
 const start = document.querySelector('#start');
 const next = document.querySelector('#next');
 const back = document.querySelector('#back');
@@ -64,8 +63,8 @@ const right = (detail) => {
 if (window.location.pathname === "/html/index.html") {
     //Storage:
     if (typeof(Storage) === 'undefined') {
-        document.querySelector('#header_msg').innerHTML = 'Unfortunately your browser does not support the type of storage used by this website';
-        start.style.visibility = 'hidden';
+        document.querySelector('.header_msg').innerHTML = 'Unfortunately your browser does not support the type of storage used by this website';
+        start.classList.add('not');
     }
 
     else {
@@ -97,29 +96,25 @@ if (window.location.pathname === "/html/user_details.html") {
             wrong(age);
             sessionStorage.age = '';
             error_msg[1].innerText = "(Nobody's that old)";
-            // tick[0].classList.add('not');
-            // cross[0].classList.remove('not');
+            mark[0].innerHTML = '&#10006;'
         }
         else if (age.value < 0) {
             wrong(age);
             sessionStorage.age = '';
             error_msg[1].innerText = "(You're not even born yet)";
-            // tick[0].classList.add('not');
-            // cross[0].classList.remove('not');
+            mark[0].innerHTML = '&#10006;'
         }
         else if (age.value === '') {
             wrong(age);
             sessionStorage.age = '';
             error_msg[1].innerText = "(Required)";
-            // tick[0].classList.add('not');
-            // cross[0].classList.remove('not');
+            mark[0].innerHTML = '&#10006;'
         }
         else {
             right(age);
             sessionStorage.age = age.value;
             error_msg[1].innerText = '';
-            // tick[0].classList.remove('not');
-            // cross[0].classList.add('not');
+            mark[0].innerHTML = '&#10004;'
         }
     })
     
@@ -130,10 +125,12 @@ if (window.location.pathname === "/html/user_details.html") {
             if (i === 0) {
                 sessionStorage.gender = 'male';
                 error_msg[2].innerText = '';
+                mark[1].innerHTML = '&#10004;'
             }
             else {
                 sessionStorage.gender = 'female';
                 error_msg[2].innerText = '';
+                mark[1].innerHTML = '&#10004;'
             }
         })
     }
@@ -141,25 +138,52 @@ if (window.location.pathname === "/html/user_details.html") {
     //Height Unit:
     sessionStorage.height_unit = '';
     height_unit.addEventListener('focusout', () => {
-        sessionStorage.height_unit = height_unit.value;
-        error_msg[3].innerText = '';
-        right(height_unit);
+        if (height_unit.value === 'Choose') {
+            wrong(height_unit);
+            sessionStorage.height_unit = '';
+            error_msg[3].innerText = '(Required)';
+            mark[2].innerHTML = '&#10006;'
+        }
+        else {
+            sessionStorage.height_unit = height_unit.value;
+            error_msg[3].innerText = '';
+            right(height_unit);
+            mark[2].innerHTML = '&#10004;'
+        }
     } )
 
     //Weight Unit:
     sessionStorage.weight_unit = '';
     weight_unit.addEventListener('focusout', () => {
-        sessionStorage.weight_unit = weight_unit.value;
-        error_msg[4].innerText = '';
-        right(weight_unit);
+        if (weight_unit.value === 'Choose') {
+            wrong(weight_unit);
+            sessionStorage.weight_unit = '';
+            error_msg[4].innerText = '(Required)';
+            mark[3].innerHTML = '&#10006;'
+        }
+        else {
+            sessionStorage.weight_unit = weight_unit.value;
+            error_msg[4].innerText = '';
+            right(weight_unit);
+            mark[3].innerHTML = '&#10004;'
+        }
     } )
 
     //BMR Unit:
     sessionStorage.bmr_unit = '';
     bmr_unit.addEventListener('focusout', () => {
-        sessionStorage.bmr_unit = bmr_unit.value;
-        error_msg[5].innerText = '';
-        right(bmr_unit);
+        if (bmr_unit.value === 'Choose') {
+            wrong(bmr_unit);
+            sessionStorage.bmr_unit = '';
+            error_msg[5].innerText = '(Required)';
+            mark[4].innerHTML = '&#10006;'
+        }
+        else {
+            sessionStorage.bmr_unit = bmr_unit.value;
+            error_msg[5].innerText = '';
+            right(bmr_unit);
+            mark[4].innerHTML = '&#10004;'
+        }
     } )
 
     //Next:
@@ -171,21 +195,26 @@ if (window.location.pathname === "/html/user_details.html") {
             if (sessionStorage.age === '') {
                 wrong(age);
                 error_msg[1].innerText = "(Required)";
+                mark[0].innerHTML = '&#10006;'
             }
             if (sessionStorage.gender === '') {
                 error_msg[2].innerText = "(Required)";
+                mark[1].innerHTML = '&#10006;'
             }
             if (sessionStorage.height_unit === '') {
                 wrong(height_unit);
                 error_msg[3].innerText = "(Required)";
+                mark[2].innerHTML = '&#10006;'
             }
-            if (sessionStorage.height_unit === '') {
+            if (sessionStorage.weight_unit === '') {
                 wrong(weight_unit);
                 error_msg[4].innerText = "(Required)";
+                mark[3].innerHTML = '&#10006;'
             }
-            if (sessionStorage.height_unit === '') {
+            if (sessionStorage.bmr_unit === '') {
                 wrong(bmr_unit);
                 error_msg[5].innerText = "(Required)";
+                mark[4].innerHTML = '&#10006;'
             }
         }
     })
@@ -201,35 +230,41 @@ if (window.location.pathname === '/html/composition_details.html') {
             wrong(height);
             sessionStorage.height = '';
             error_msg[0].innerText = '(Required)';
+            mark[0].innerHTML = '&#10006;'
         }
         else if (height.value < 0) {
             wrong(height);
             sessionStorage.height = '';
             error_msg[0].innerText = '(Must be positive)';
+            mark[0].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.height_unit === 'cm' && height.value > 275)) {
             wrong(height);
             sessionStorage.height = '';
             error_msg[0].innerText = "(Nobody's that tall)";
+            mark[0].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.height_unit === 'm' && height.value > 2.75)) {
             wrong(height);
             sessionStorage.height = '';
             error_msg[0].innerText = "(Nobody's that tall)";
+            mark[0].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.height_unit === 'ft' && height.value > 9)) {
             wrong(height);
             sessionStorage.height = '';
             error_msg[0].innerText = "(Nobody's that tall)";
+            mark[0].innerHTML = '&#10006;'
         }
         else {
             right(height);
             sessionStorage.height = height.value;
             error_msg[0].innerText = '';
+            mark[0].innerHTML = '&#10004;'
         }
     })
 
-    //Weight: //write the weight units in brackets
+    //Weight:
     sessionStorage.weight = '';
     unit[1].innerText = `(${sessionStorage.weight_unit})`;
     weight.addEventListener('focusout', function() {
@@ -237,31 +272,37 @@ if (window.location.pathname === '/html/composition_details.html') {
             wrong(weight);
             sessionStorage.weight = '';
             error_msg[1].innerText = '(Required)';
+            mark[1].innerHTML = '&#10006;'
         }
         else if (weight.value < 0) {
             wrong(weight);
             sessionStorage.weight = '';
             error_msg[1].innerText = '(Must be positive)';
+            mark[1].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'kg' && weight.value > 908)) {
             wrong(weight);
             sessionStorage.weight = '';
             error_msg[1].innerText = "(Nobody's that heavy)";
+            mark[1].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'lbs' && weight.value > 2000)) {
             wrong(weight);
             sessionStorage.weight = '';
             error_msg[1].innerText = "(Nobody's that heavy)";
+            mark[1].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'st' && weight.value > 143)) {
             wrong(weight);
             sessionStorage.weight = '';
             error_msg[1].innerText = "(Nobody's that heavy)";
+            mark[1].innerHTML = '&#10006;'
         }
         else {
             right(weight);
             sessionStorage.weight = weight.value;
             error_msg[1].innerText = '';
+            mark[1].innerHTML = '&#10004;'
         }
     })
 
@@ -272,21 +313,25 @@ if (window.location.pathname === '/html/composition_details.html') {
             wrong(body_fat);
             sessionStorage.body_fat = '';
             error_msg[2].innerText = '(Required)';
+            mark[2].innerHTML = '&#10006;'
         }
         else if (body_fat.value < 0) {
             wrong(body_fat);
             sessionStorage.body_fat = '';
             error_msg[2].innerText = '(Must be positive)';
+            mark[2].innerHTML = '&#10006;'
         }
         else if (body_fat.value > 70) {
             wrong(body_fat);
             sessionStorage.body_fat = '';
             error_msg[2].innerText = "(Nobody's that fat)";
+            mark[2].innerHTML = '&#10006;'
         }
         else {
             right(body_fat);
             sessionStorage.body_fat = body_fat.value;
             error_msg[2].innerText = '';
+            mark[2].innerHTML = '&#10004;'
         }
     })
     
@@ -297,21 +342,25 @@ if (window.location.pathname === '/html/composition_details.html') {
             wrong(visceral_fat);
             sessionStorage.visceral_fat = '';
             error_msg[3].innerText = '(Required)';
+            mark[3].innerHTML = '&#10006;'
         }
         else if (visceral_fat.value < 0) {
             wrong(visceral_fat);
             sessionStorage.visceral_fat = '';
             error_msg[3].innerText = '(Must be positive)';
+            mark[3].innerHTML = '&#10006;'
         }
         else if (visceral_fat.value > 59) {
             wrong(visceral_fat);
             sessionStorage.visceral_fat = '';
             error_msg[3].innerText = "(Nobody's that fat)";
+            mark[3].innerHTML = '&#10006;'
         }
         else {
             right(visceral_fat);
             sessionStorage.visceral_fat = visceral_fat.value;
-            error_msg[3].innerText = ''; 
+            error_msg[3].innerText = '';
+            mark[3].innerHTML = '&#10004;'
         }
     })
     
@@ -323,40 +372,56 @@ if (window.location.pathname === '/html/composition_details.html') {
             wrong(muscle_mass);
             sessionStorage.muscle_mass = '';
             error_msg[4].innerText = "(Required)";
+            mark[4].innerHTML = '&#10006;'
         }
         else if (muscle_mass.value < 0) {
             wrong(muscle_mass);
             sessionStorage.muscle_mass = '';
             error_msg[4].innerText = "(Must be positive)";
+            mark[4].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'kg' && muscle_mass.value > 908)) {
             wrong(muscle_mass);
             sessionStorage.muscle_mass = '';
             error_msg[4].innerText = "(Nobody's that muscular)";
+            mark[4].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'lbs' && muscle_mass.value > 2000)) {
             wrong(muscle_mass);
             sessionStorage.muscle_mass = '';
             error_msg[4].innerText = "(Nobody's that muscular)";
+            mark[4].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'st' && muscle_mass.value > 143)) {
             wrong(muscle_mass);
             sessionStorage.muscle_mass = '';
             error_msg[4].innerText = "(Nobody's that muscular)";
+            mark[4].innerHTML = '&#10006;'
         }
         else {
             right(muscle_mass);
             sessionStorage.muscle_mass = muscle_mass.value;
             error_msg[4].innerText = '';
+            mark[4].innerHTML = '&#10004;'
         }
     })
     
     //Physique Rating:
     sessionStorage.physique_rating = '';
     physique_rating.addEventListener('focusout', function() {
-        sessionStorage.physique_rating = physique_rating.value;
-        error_msg[5].innerText = '';
-        right(physique_rating);
+        if (physique_rating.value === 'Choose') {
+            wrong(physique_rating);
+            sessionStorage.physique_rating = '';
+            error_msg[5].innerText = '(Required)';
+            mark[5].innerHTML = '&#10006;'
+        }
+        else {
+            sessionStorage.physique_rating = physique_rating.value;
+            error_msg[5].innerText = '';
+            right(physique_rating);
+            mark[5].innerHTML = '&#10004;'
+        }
+        
     })
     
     //Bone Mass
@@ -367,31 +432,37 @@ if (window.location.pathname === '/html/composition_details.html') {
             wrong(bone_mass);
             sessionStorage.bone_mass = '';
             error_msg[6].innerText = "(Required)";
+            mark[6].innerHTML = '&#10006;'
         }
         else if (bone_mass.value < 0) {
             wrong(bone_mass);
             sessionStorage.bone_mass = '';
             error_msg[6].innerText = "(Must be positive)";
+            mark[6].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'kg' && bone_mass.value > 36)) {
             wrong(bone_mass);
             sessionStorage.bone_mass = '';
             error_msg[6].innerText = "(Nobody's bones are that heavy)";
+            mark[6].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'lbs' && bone_mass.value > 80)) {
             wrong(bone_mass);
             sessionStorage.bone_mass = '';
             error_msg[6].innerText = "(Nobody's bones are that heavy)";
+            mark[6].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'st' && bone_mass.value > 6)) {
             wrong(bone_mass);
             sessionStorage.bone_mass = '';
             error_msg[6].innerText = "(Nobody's bones are that heavy)";
+            mark[6].innerHTML = '&#10006;'
         }
         else {
             right(bone_mass);
             sessionStorage.bone_mass = bone_mass;
             error_msg[6].innerText = '';
+            mark[6].innerHTML = '&#10004;'
         }
     })
     
@@ -403,26 +474,31 @@ if (window.location.pathname === '/html/composition_details.html') {
             wrong(bmr);
             sessionStorage.bmr = '';
             error_msg[7].innerText = "(Required)";
+            mark[7].innerHTML = '&#10006;'
         }
         else if (bmr.value < 0) {
             wrong(bmr);
             sessionStorage.bmr = '';
             error_msg[7].innerText = "(Must be positive)";
+            mark[7].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.bmr_unit === 'kcal' && bmr.value > 5000)) {
             wrong(bmr);
             sessionStorage.bmr = '';
             error_msg[7].innerText = "(Nobody needs that many calories)";
+            mark[7].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.bmr_unit === 'kJ' && bmr.value > 21000)) {
             wrong(bmr);
             sessionStorage.bmr = '';
             error_msg[7].innerText = "(Nobody needs that many calories)";
+            mark[7].innerHTML = '&#10006;'
         }
         else {
             right(bmr);
             sessionStorage.bmr = bmr.value;
             error_msg[7].innerText = '';
+            mark[7].innerHTML = '&#10004;'
         }
     })
     
@@ -433,21 +509,25 @@ if (window.location.pathname === '/html/composition_details.html') {
             wrong(metabolic_age);
             sessionStorage.metabolic_age = '';
             error_msg[8].innerText = "(Required)";
+            mark[8].innerHTML = '&#10006;'
         }
         else if (metabolic_age.value < 0) {
             wrong(metabolic_age);
             sessionStorage.metabolic_age = '';
             error_msg[8].innerText = "(Must be positive)";
+            mark[8].innerHTML = '&#10006;'
         }
         else if (metabolic_age.value > 150) {
             wrong(metabolic_age);
             sessionStorage.metabolic_age = '';
             error_msg[8].innerText = "(Nobody's that old)";
+            mark[8].innerHTML = '&#10006;'
         }
         else {
             right(metabolic_age)
             sessionStorage.metabolic_age = metabolic_age.value;
             error_msg[8].innerText = '';
+            mark[8].innerHTML = '&#10004;'
         }
     })
     
@@ -458,21 +538,25 @@ if (window.location.pathname === '/html/composition_details.html') {
             wrong(body_water);
             sessionStorage.body_water = '';
             error_msg[9].innerText = "(Required)";
+            mark[9].innerHTML = '&#10006;'
         }
         else if (body_water.value < 0) {
             wrong(body_water);
             sessionStorage.body_water = '';
             error_msg[9].innerText = "(Must be positive)";
+            mark[9].innerHTML = '&#10006;'
         }
         else if (body_water.value > 100) {
             wrong(body_water);
             sessionStorage.body_water = '';
-            error_msg[9].innerText = "(Must be less than 100)";
+            error_msg[9].innerText = "(Can't be more than 100)";
+            mark[9].innerHTML = '&#10006;'
         }
         else {
             right(body_water);
             sessionStorage.body_water = body_water.value;
             error_msg[9].innerText = '';
+            mark[9].innerHTML = '&#10004;'
         }
     })
     
@@ -485,42 +569,52 @@ if (window.location.pathname === '/html/composition_details.html') {
             if (sessionStorage.height === '') {
                 wrong(height);
                 error_msg[0].innerText = "(Required)";
+                mark[0].innerHTML = '&#10006;'
             }
             if (sessionStorage.weight === '') {
                 wrong(weight);
                 error_msg[1].innerText = "(Required)";
+                mark[1].innerHTML = '&#10006;'
             }
             if (sessionStorage.body_fat === '') {
                 wrong(body_fat);
                 error_msg[2].innerText = "(Required)";
+                mark[2].innerHTML = '&#10006;'
             }
             if (sessionStorage.visceral_fat === '') {
                 wrong(visceral_fat);
                 error_msg[3].innerText = "(Required)";
+                mark[3].innerHTML = '&#10006;'
             }
             if (sessionStorage.muscle_mass === '') {
                 wrong(muscle_mass);
                 error_msg[4].innerText = "(Required)";
+                mark[4].innerHTML = '&#10006;'
             }
             if (sessionStorage.physique_rating === '') {
                 wrong(physique_rating);
                 error_msg[5].innerText = "(Required)";
+                mark[5].innerHTML = '&#10006;'
             }
             if (sessionStorage.bone_mass === '') {
                 wrong(bone_mass);
                 error_msg[6].innerText = "(Required)";
+                mark[6].innerHTML = '&#10006;'
             }
             if (sessionStorage.bmr === '') {
                 wrong(bmr);
                 error_msg[7].innerText = "(Required)";
+                mark[7].innerHTML = '&#10006;'
             }
             if (sessionStorage.metabolic_age === '') {
                 wrong(metabolic_age);
                 error_msg[8].innerText = "(Required)";
+                mark[8].innerHTML = '&#10006;'
             }
             if (sessionStorage.body_water === '') {
                 wrong(body_water);
                 error_msg[9].innerText = "(Required)";
+                mark[9].innerHTML = '&#10006;'
             }
         }
     })
@@ -535,13 +629,10 @@ if (window.location.pathname === '/html/composition_details.html') {
 if (window.location.pathname === '/html/progress.html') {
 }
 
-//message that tells user whats wrong or what needs to be filled in
-
 //show tick or cross
-//show units of what is being filled in from what the user selected
-//don't allow point to be inputed for number inputs (maybe use includes method)
+
+//formating problems don't allow point to be inputed for number inputs (maybe use includes method)
 //add different ways of adding weight and height into functionality ex (5'6'' for height in feet)
-//save user details using local storage
 //make a table that saves all the use details that uses local storage like excel
 //if name is undefined then address user as you
 //if the website see's that the user has already used the website then it just goes to updating info
@@ -549,5 +640,3 @@ if (window.location.pathname === '/html/progress.html') {
 //if user browser does not support then show images of browsers that do 
 //Have better wording on the website 
 //Remove error message when someone unfocusses
-
-//when you shut down change the name of the 'body-composition-analyser' to 'body-composition-tracker'

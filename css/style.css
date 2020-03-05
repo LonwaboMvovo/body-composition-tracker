@@ -81,26 +81,13 @@ input[type=number]::-webkit-outer-spin-button {
     box-shadow: 0 0px 15px rgba(49, 49, 49, 0.7);
 }
 
-.error_msg, .unit {
-    display: inline;
-}
-
-/* .tick {
-    float: left;
-    margin-left: 10px;
-    color: green;
-    display: inline;
-}
-
-.cross {
-    float: left;
-    clear: both;
+.error_msg, .unit, .mark {
     display: inline;
 }
 
 .not {
     visibility: hidden;
-} */
+}
 
 /* fix how cross and tick are displayed */
 
