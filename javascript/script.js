@@ -3,6 +3,7 @@ const name = document.querySelector('#name');
 const age = document.querySelector('#age');
 const gender = document.getElementsByName('gender');
 const height = document.querySelector('#height');
+const height2_box = document.querySelector('#height2_box');
 const height_unit = document.querySelector('#height_unit');
 const weight = document.querySelector('#weight'); 
 const weight_unit = document.querySelector('#weight_unit');
@@ -82,9 +83,9 @@ if (window.location.pathname === "/html/user_details.html") {
         if ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) && sessionStorage.name.length < 35) {
             name.value += event.key;
             sessionStorage.name = name.value;
-            error_msg[0].innerText = '';
-        }
+            error_msg[0].classList.add('not');        }
         else {
+            error_msg[0].classList.remove('not');
             error_msg[0].innerText = '(Please use letters only)';
         }
     });
@@ -95,25 +96,28 @@ if (window.location.pathname === "/html/user_details.html") {
         if (age.value === '') {
             wrong(age);
             sessionStorage.age = '';
+            error_msg[1].classList.remove('not');
             error_msg[1].innerText = "(Required, please provide a valid age)";
             mark[0].innerHTML = '&#10006;'
         }
         else if (age.value > 150) {
             wrong(age);
             sessionStorage.age = '';
+            error_msg[1].classList.remove('not');
             error_msg[1].innerText = "(Nobody's that old. Please provide an age lower than 150)";
             mark[0].innerHTML = '&#10006;'
         }
         else if (age.value < 0) {
             wrong(age);
             sessionStorage.age = '';
+            error_msg[1].classList.remove('not');
             error_msg[1].innerText = "(You're not even born yet. Please provide a positive age)";
             mark[0].innerHTML = '&#10006;'
         }
         else {
             right(age);
             sessionStorage.age = age.value;
-            error_msg[1].innerText = '';
+            error_msg[1].classList.add('not');
             mark[0].innerHTML = '&#10004;'
         }
     })
@@ -124,12 +128,12 @@ if (window.location.pathname === "/html/user_details.html") {
         gender[i].addEventListener('click', () => {
             if (i === 0) {
                 sessionStorage.gender = 'male';
-                error_msg[2].innerText = '';
+                error_msg[2].classList.add('not');
                 mark[1].innerHTML = '&#10004;'
             }
             else {
                 sessionStorage.gender = 'female';
-                error_msg[2].innerText = '';
+                error_msg[2].classList.add('not');
                 mark[1].innerHTML = '&#10004;'
             }
         })
@@ -141,12 +145,13 @@ if (window.location.pathname === "/html/user_details.html") {
         if (height_unit.value === 'Choose') {
             wrong(height_unit);
             sessionStorage.height_unit = '';
+            error_msg[3].classList.remove('not');
             error_msg[3].innerText = '(Required, please fill in)';
             mark[2].innerHTML = '&#10006;'
         }
         else {
             sessionStorage.height_unit = height_unit.value;
-            error_msg[3].innerText = '';
+            error_msg[3].classList.add('not');
             right(height_unit);
             mark[2].innerHTML = '&#10004;'
         }
@@ -158,12 +163,13 @@ if (window.location.pathname === "/html/user_details.html") {
         if (weight_unit.value === 'Choose') {
             wrong(weight_unit);
             sessionStorage.weight_unit = '';
+            error_msg[4].classList.remove('not');
             error_msg[4].innerText = '(Required, please fill in)';
             mark[3].innerHTML = '&#10006;'
         }
         else {
             sessionStorage.weight_unit = weight_unit.value;
-            error_msg[4].innerText = '';
+            error_msg[4].classList.add('not');
             right(weight_unit);
             mark[3].innerHTML = '&#10004;'
         }
@@ -175,12 +181,13 @@ if (window.location.pathname === "/html/user_details.html") {
         if (bmr_unit.value === 'Choose') {
             wrong(bmr_unit);
             sessionStorage.bmr_unit = '';
+            error_msg[5].classList.remove('not');
             error_msg[5].innerText = '(Required, please fill in)';
             mark[4].innerHTML = '&#10006;'
         }
         else {
             sessionStorage.bmr_unit = bmr_unit.value;
-            error_msg[5].innerText = '';
+            error_msg[5].classList.add('not');
             right(bmr_unit);
             mark[4].innerHTML = '&#10004;'
         }
@@ -194,25 +201,30 @@ if (window.location.pathname === "/html/user_details.html") {
         else {
             if (sessionStorage.age === '') {
                 wrong(age);
+                error_msg[1].classList.remove('not');
                 error_msg[1].innerText = "(Required, please fill in)";
                 mark[0].innerHTML = '&#10006;'
             }
             if (sessionStorage.gender === '') {
+                error_msg[2].classList.remove('not');
                 error_msg[2].innerText = "(Required, please fill in)";
                 mark[1].innerHTML = '&#10006;'
             }
             if (sessionStorage.height_unit === '') {
                 wrong(height_unit);
+                error_msg[3].classList.remove('not');
                 error_msg[3].innerText = "(Required, please fill in)";
                 mark[2].innerHTML = '&#10006;'
             }
             if (sessionStorage.weight_unit === '') {
                 wrong(weight_unit);
+                error_msg[4].classList.remove('not');
                 error_msg[4].innerText = "(Required, please fill in)";
                 mark[3].innerHTML = '&#10006;'
             }
             if (sessionStorage.bmr_unit === '') {
                 wrong(bmr_unit);
+                error_msg[5].classList.remove('not');
                 error_msg[5].innerText = "(Required, please fill in)";
                 mark[4].innerHTML = '&#10006;'
             }
@@ -225,6 +237,9 @@ if (window.location.pathname === '/html/composition_details.html') {
     //Height:
     sessionStorage.height = '';
     unit[0].innerText = `(${sessionStorage.height_unit})`;
+    if (sessionStorage.height_unit === 'ft') {
+        unit[1].innerText = '(in)';
+    }
     height.addEventListener('focusout', function() {
         if (height.value === '') {
             wrong(height);
@@ -251,6 +266,7 @@ if (window.location.pathname === '/html/composition_details.html') {
             mark[0].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.height_unit === 'ft' && height.value > 9)) {
+            height2_box.classList.remove('not');
             wrong(height);
             sessionStorage.height = '';
             error_msg[0].innerText = "(That can't be right. Please provide a height lower than 9ft)";
@@ -266,13 +282,13 @@ if (window.location.pathname === '/html/composition_details.html') {
 
     //Weight:
     sessionStorage.weight = '';
-    unit[1].innerText = `(${sessionStorage.weight_unit})`;
+    unit[2].innerText = `(${sessionStorage.weight_unit})`;
     weight.addEventListener('focusout', function() {
         if (weight.value === '') {
             wrong(weight);
             sessionStorage.weight = '';
-            error_msg[1].innerText = '(Required, please fill in)';
-            mark[1].innerHTML = '&#10006;'
+            error_msg[2].innerText = '(Required, please fill in)';
+            mark[2].innerHTML = '&#10006;'
         }
         else if (weight.value < 0) {
             wrong(weight);
@@ -629,8 +645,10 @@ if (window.location.pathname === '/html/composition_details.html') {
 if (window.location.pathname === '/html/progress.html') {
 }
 
-//enter must trigger focus out
+//format issues
 
+//enter must trigger focus out
+//maybe quiker errror messages
 //make a table that saves all the use details that uses local storage like excel
 //if name is undefined then address user as you
 //if the website see's that the user has already used the website then it just goes to updating info
