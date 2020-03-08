@@ -40,7 +40,7 @@ const user_details_filled = () => {
     }
     return false;
 }
-const composition_details_filled = () => { //update so that it uses sessionstorage
+const composition_details_filled = () => {
     if (
         sessionStorage.height !== '' &&
         sessionStorage.weight !== '' &&
@@ -313,7 +313,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                     right(height2);
                     sessionStorage.height = height.value * 12 + height2.value * 1;
                     error_msg[0].classList.add('not');
-                    error_msg[0].innerText = '';
                     mark[1].innerHTML = '&#10004;'
                 }
                 else {
@@ -328,7 +327,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                 right(height);
                 sessionStorage.height = height.value;
                 error_msg[0].classList.add('not');
-                error_msg[0].innerText = '';
                 mark[0].innerHTML = '&#10004;' 
             }
         }
@@ -367,7 +365,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                 right(height2);
                 sessionStorage.height = height.value * 12 + height2.value * 1;
                 error_msg[0].classList.add('not');
-                error_msg[0].innerText = '';
                 mark[1].innerHTML = '&#10004;'
             }
             else {
@@ -453,7 +450,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                     right(weight2);
                     sessionStorage.weight = weight.value * 14 + weight2.value * 1;
                     error_msg[1].classList.add('not');
-                    error_msg[1].innerText = '';
                     mark[3].innerHTML = '&#10004;'
                 }
                 else {
@@ -468,7 +464,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                 right(weight);
                 sessionStorage.weight = weight.value;
                 error_msg[1].classList.add('not');
-                error_msg[1].innerText = '';
                 mark[2].innerHTML = '&#10004;'
             }    
         }
@@ -507,7 +502,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                 right(weight2);
                 sessionStorage.weight = weight.value * 14 + weight2.value * 1;
                 error_msg[1].classList.add('not');
-                error_msg[1].innerText = '';
                 mark[3].innerHTML = '&#10004;'
             }
             else {
@@ -548,7 +542,6 @@ if (window.location.pathname === '/html/composition_details.html') {
             right(body_fat);
             sessionStorage.body_fat = body_fat.value;
             error_msg[2].classList.add('not');
-            error_msg[2].innerText = '';
             mark[4].innerHTML = '&#10004;'
         }
     })
@@ -581,7 +574,6 @@ if (window.location.pathname === '/html/composition_details.html') {
             right(visceral_fat);
             sessionStorage.visceral_fat = visceral_fat.value;
             error_msg[3].classList.add('not');
-            error_msg[3].innerText = '';
             mark[5].innerHTML = '&#10004;'
         }
     })
@@ -659,7 +651,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                     right(muscle_mass2);
                     sessionStorage.muscle_mass = muscle_mass.value * 14 + muscle_mass2.value * 1;
                     error_msg[4].classList.add('not');
-                    error_msg[4].innerText = '';
                     mark[7].innerHTML = '&#10004;'
                 }
                 else {
@@ -674,7 +665,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                 right(muscle_mass);
                 sessionStorage.muscle_mass = muscle_mass.value;
                 error_msg[4].classList.add('not');
-                error_msg[4].innerText = '';
                 mark[6].innerHTML = '&#10004;'
             }
            
@@ -715,7 +705,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                 right(muscle_mass2);
                 sessionStorage.muscle_mass = muscle_mass.value * 14 + muscle_mass2.value * 1;
                 error_msg[4].classList.add('not');
-                error_msg[4].innerText = '';
                 mark[7].innerHTML = '&#10004;'
             }
             else {
@@ -821,7 +810,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                     right(bone_mass2);
                     sessionStorage.bone_mass = bone_mass.value * 14 + bone_mass2.value * 1;
                     error_msg[6].classList.add('not');
-                    error_msg[6].innerText = '';
                     mark[10].innerHTML = '&#10004;'   
                 }
                 else {
@@ -836,7 +824,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                 right(bone_mass);
                 sessionStorage.bone_mass = bone_mass;
                 error_msg[6].classList.add('not');
-                error_msg[6].innerText = '';
                 mark[9].innerHTML = '&#10004;'
             }    
         }
@@ -875,7 +862,6 @@ if (window.location.pathname === '/html/composition_details.html') {
                 right(bone_mass2);
                 sessionStorage.bone_mass = bone_mass.value * 14 + bone_mass2.value * 1;
                 error_msg[6].classList.add('not');
-                error_msg[6].innerText = '';
                 mark[10].innerHTML = '&#10004;'   
             }
             else {
@@ -923,8 +909,7 @@ if (window.location.pathname === '/html/composition_details.html') {
         else {
             right(bmr);
             sessionStorage.bmr = bmr.value;
-            error_msg[7].classList.remove('not');
-            error_msg[7].innerText = '';
+            error_msg[7].classList.add('not');
             mark[11].innerHTML = '&#10004;'
         }
     })
@@ -956,8 +941,7 @@ if (window.location.pathname === '/html/composition_details.html') {
         else {
             right(metabolic_age)
             sessionStorage.metabolic_age = metabolic_age.value;
-            error_msg[8].classList.remove('not');
-            error_msg[8].innerText = '';
+            error_msg[8].classList.add('not');
             mark[12].innerHTML = '&#10004;'
         }
     })
@@ -989,8 +973,7 @@ if (window.location.pathname === '/html/composition_details.html') {
         else {
             right(body_water);
             sessionStorage.body_water = body_water.value;
-            error_msg[9].classList.remove('not');
-            error_msg[9].innerText = '';
+            error_msg[9].classList.add('not');
             mark[13].innerHTML = '&#10004;'
         }
     })
@@ -1114,18 +1097,15 @@ if (window.location.pathname === '/html/composition_details.html') {
 if (window.location.pathname === '/html/progress.html') {
 }
 
-//if people do too much in second box then it automatically fills 1st box properly
 //edit to have the same error msg's as the top
+
+//if people do too much in second box then it automatically fills 1st box properly
 //enter must trigger focus out
-//maybe quiker errror messages
+//quicker errror messages for example on focus
+//colors for tick and cross
 //make a table that saves all the use details that uses local storage like excel
 //if name is undefined then address user as you
 //if the website see's that the user has already used the website then it just goes to updating info
 //weekly reminder to add input
 //if user browser does not support then show images of browsers that do 
-//Have better wording on the website 
-//Remove error message when someone unfocusses
-//helpful error messages like what a person needs to do
-
-//done:
-//semantic html and fixing format issues
+//Have better wording on the website
