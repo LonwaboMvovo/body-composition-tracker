@@ -87,7 +87,7 @@ input[type=number]::-webkit-outer-spin-button {
     display: none;
 }
 
-#height_box, #height2_box, #weight_box, #weight2_box, #muscle_mass_box, #muscle_mass2_box, #bone_mass_box, #bone_mass2_box {
+#gender_options_box, #height_box, #height2_box, #weight_box, #weight2_box, #muscle_mass_box, #muscle_mass2_box, #bone_mass_box, #bone_mass2_box {
     display: inline-block;
 }
 

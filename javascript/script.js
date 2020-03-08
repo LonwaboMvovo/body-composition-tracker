@@ -1,6 +1,7 @@
 //Variables from HTML files:
 const name = document.querySelector('#name');
 const age = document.querySelector('#age');
+const gender_options_box = document.querySelector('#gender_options_box');
 const gender = document.getElementsByName('gender');
 const height = document.querySelector('#height');
 const height2 = document.querySelector('#height2');
@@ -129,11 +130,13 @@ if (window.location.pathname === "/html/user_details.html") {
     for (let i = 0; i < gender.length; i++) {
         gender[i].addEventListener('click', () => {
             if (i === 0) {
+                gender_options_box.style.background = '';
                 sessionStorage.gender = 'male';
                 error_msg[2].classList.add('not');
                 mark[1].innerHTML = '&#10004;'
             }
             else {
+                gender_options_box.style.background = '';
                 sessionStorage.gender = 'female';
                 error_msg[2].classList.add('not');
                 mark[1].innerHTML = '&#10004;'
@@ -208,6 +211,7 @@ if (window.location.pathname === "/html/user_details.html") {
                 mark[0].innerHTML = '&#10006;'
             }
             if (sessionStorage.gender === '') {
+                wrong(gender_options_box);
                 error_msg[2].classList.remove('not');
                 error_msg[2].innerText = "(Required, please choose a gender)";
                 mark[1].innerHTML = '&#10006;'
@@ -1110,7 +1114,6 @@ if (window.location.pathname === '/html/composition_details.html') {
 if (window.location.pathname === '/html/progress.html') {
 }
 
-//visable colour error for when gender not filled in on the next button
 //if people do too much in second box then it automatically fills 1st box properly
 //edit to have the same error msg's as the top
 //enter must trigger focus out
