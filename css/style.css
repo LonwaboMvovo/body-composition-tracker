@@ -77,7 +77,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .error_msg {
-    display: inline-block;
+    display: block;
     font-size: 1rem;
     clear: right;
     margin: 0px;
@@ -87,7 +87,7 @@ input[type=number]::-webkit-outer-spin-button {
     display: none;
 }
 
-#height2_box, #height_box {
+#height2_box, #height_box, #weight2_box, #weight_box, #muscle_mass_box, #muscle_mass2_box, #bone_mass_box, #bone_mass2_box {
     display: inline-block;
 }
 

@@ -3,13 +3,15 @@ const name = document.querySelector('#name');
 const age = document.querySelector('#age');
 const gender = document.getElementsByName('gender');
 const height = document.querySelector('#height');
-const height2_box = document.querySelector('#height2_box');
+const height2 = document.querySelector('#height2');
 const height_unit = document.querySelector('#height_unit');
 const weight = document.querySelector('#weight'); 
+const weight2 = document.querySelector('#weight2');
 const weight_unit = document.querySelector('#weight_unit');
 const body_fat = document.querySelector('#body_fat');
 const visceral_fat = document.querySelector('#visceral_fat');
 const muscle_mass = document.querySelector('#muscle_mass');
+const muscle_mass2 = document.querySelector('#muscle_mass2');
 const physique_rating = document.querySelector('#physique_rating');
 const bone_mass = document.querySelector('#bone_mass');
 const bmr = document.querySelector('#bmr');
@@ -97,7 +99,7 @@ if (window.location.pathname === "/html/user_details.html") {
             wrong(age);
             sessionStorage.age = '';
             error_msg[1].classList.remove('not');
-            error_msg[1].innerText = "(Required, please provide a valid age)";
+            error_msg[1].innerText = "(Please provide a valid age)";
             mark[0].innerHTML = '&#10006;'
         }
         else if (age.value > 150) {
@@ -146,7 +148,7 @@ if (window.location.pathname === "/html/user_details.html") {
             wrong(height_unit);
             sessionStorage.height_unit = '';
             error_msg[3].classList.remove('not');
-            error_msg[3].innerText = '(Required, please fill in)';
+            error_msg[3].innerText = '(Please choose preferred unit for height)';
             mark[2].innerHTML = '&#10006;'
         }
         else {
@@ -164,7 +166,7 @@ if (window.location.pathname === "/html/user_details.html") {
             wrong(weight_unit);
             sessionStorage.weight_unit = '';
             error_msg[4].classList.remove('not');
-            error_msg[4].innerText = '(Required, please fill in)';
+            error_msg[4].innerText = '(Please choose preferred unit for weight)';
             mark[3].innerHTML = '&#10006;'
         }
         else {
@@ -182,7 +184,7 @@ if (window.location.pathname === "/html/user_details.html") {
             wrong(bmr_unit);
             sessionStorage.bmr_unit = '';
             error_msg[5].classList.remove('not');
-            error_msg[5].innerText = '(Required, please fill in)';
+            error_msg[5].innerText = '(Please choose preferred unit for BMR)';
             mark[4].innerHTML = '&#10006;'
         }
         else {
@@ -202,30 +204,30 @@ if (window.location.pathname === "/html/user_details.html") {
             if (sessionStorage.age === '') {
                 wrong(age);
                 error_msg[1].classList.remove('not');
-                error_msg[1].innerText = "(Required, please fill in)";
+                error_msg[1].innerText = "(Please provide a valid age)";
                 mark[0].innerHTML = '&#10006;'
             }
             if (sessionStorage.gender === '') {
                 error_msg[2].classList.remove('not');
-                error_msg[2].innerText = "(Required, please fill in)";
+                error_msg[2].innerText = "(Please choose a gender)";
                 mark[1].innerHTML = '&#10006;'
             }
             if (sessionStorage.height_unit === '') {
                 wrong(height_unit);
                 error_msg[3].classList.remove('not');
-                error_msg[3].innerText = "(Required, please fill in)";
+                error_msg[3].innerText = "(Please choose preferred unit for height)";
                 mark[2].innerHTML = '&#10006;'
             }
             if (sessionStorage.weight_unit === '') {
                 wrong(weight_unit);
                 error_msg[4].classList.remove('not');
-                error_msg[4].innerText = "(Required, please fill in)";
+                error_msg[4].innerText = "(Please choose preferred unit for weight)";
                 mark[3].innerHTML = '&#10006;'
             }
             if (sessionStorage.bmr_unit === '') {
                 wrong(bmr_unit);
                 error_msg[5].classList.remove('not');
-                error_msg[5].innerText = "(Required, please fill in)";
+                error_msg[5].innerText = "(Please choose preferred unit for BMR)";
                 mark[4].innerHTML = '&#10006;'
             }
         }
@@ -237,46 +239,64 @@ if (window.location.pathname === '/html/composition_details.html') {
     //Height:
     sessionStorage.height = '';
     unit[0].innerText = `(${sessionStorage.height_unit})`;
-    if (sessionStorage.height_unit === 'ft') {
-        unit[1].innerText = '(in)';
-    }
     height.addEventListener('focusout', function() {
         if (height.value === '') {
             wrong(height);
             sessionStorage.height = '';
-            error_msg[0].innerText = '(Required, please provide a valid height)';
+            error_msg[0].classList.remove('not');
+            error_msg[0].innerText = '(Please provide a valid height)';
             mark[0].innerHTML = '&#10006;'
         }
         else if (height.value < 0) {
             wrong(height);
             sessionStorage.height = '';
+            error_msg[0].classList.remove('not');
             error_msg[0].innerText = "(Please provide a positive height)";
             mark[0].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.height_unit === 'cm' && height.value > 275)) {
             wrong(height);
             sessionStorage.height = '';
-            error_msg[0].innerText = "(NThat can't be right. Please provide a height lower than 275cm)";
+            error_msg[0].classList.remove('not');
+            error_msg[0].innerText = "(That can't be right. Please provide a height lower than 275cm)";
             mark[0].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.height_unit === 'm' && height.value > 2.75)) {
             wrong(height);
             sessionStorage.height = '';
+            error_msg[0].classList.remove('not');
             error_msg[0].innerText = "(That can't be right. Please provide a height lower than 2.75m)";
             mark[0].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.height_unit === 'ft' && height.value > 9)) {
-            height2_box.classList.remove('not');
+            height.classList.remove('not');
             wrong(height);
             sessionStorage.height = '';
+            error_msg[0].classList.remove('not');
             error_msg[0].innerText = "(That can't be right. Please provide a height lower than 9ft)";
             mark[0].innerHTML = '&#10006;'
         }
         else {
             right(height);
+            right(height2)
             sessionStorage.height = height.value;
+            error_msg[0].classList.add('not');
             error_msg[0].innerText = '';
             mark[0].innerHTML = '&#10004;'
+        }
+    })
+    sessionStorage.height2 = '';
+    if (sessionStorage.height_unit === 'ft') {
+        unit[1].classList.remove('not');
+        height2.classList.remove('not');
+    }
+    height2.addEventListener('focusout', () => {
+        if (height2.value === '') {
+            wrong(height2);
+            sessionStorage.height2 = '';
+            error_msg[0].classList.remove('not');
+            error_msg[0].innerText = '(Please provide a valid height)';
+            mark[1].innerHTML = '&#10006;'
         }
     })
 
@@ -287,38 +307,58 @@ if (window.location.pathname === '/html/composition_details.html') {
         if (weight.value === '') {
             wrong(weight);
             sessionStorage.weight = '';
-            error_msg[2].innerText = '(Required, please fill in)';
+            error_msg[1].classList.remove('not');
+            error_msg[1].innerText = '(Please provide a valid weight)';
             mark[2].innerHTML = '&#10006;'
         }
         else if (weight.value < 0) {
             wrong(weight);
             sessionStorage.weight = '';
+            error_msg[1].classList.remove('not');
             error_msg[1].innerText = '(Please provide a positive weight)';
-            mark[1].innerHTML = '&#10006;'
+            mark[2].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'kg' && weight.value > 908)) {
             wrong(weight);
             sessionStorage.weight = '';
+            error_msg[1].classList.remove('not');
             error_msg[1].innerText = "(That can't be right. Please provide a weight lower than 908kg)";
-            mark[1].innerHTML = '&#10006;'
+            mark[2].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'lbs' && weight.value > 2000)) {
             wrong(weight);
             sessionStorage.weight = '';
+            error_msg[1].classList.remove('not');
             error_msg[1].innerText = "(That can't be right. Please provide a weight lower than 2000lbs)";
-            mark[1].innerHTML = '&#10006;'
+            mark[2].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'st' && weight.value > 143)) {
             wrong(weight);
             sessionStorage.weight = '';
+            error_msg[1].classList.remove('not');
             error_msg[1].innerText = "(That can't be right. Please provide a weight lower than 143st)";
-            mark[1].innerHTML = '&#10006;'
+            mark[2].innerHTML = '&#10006;'
         }
         else {
             right(weight);
             sessionStorage.weight = weight.value;
+            error_msg[1].classList.remove('not');
             error_msg[1].innerText = '';
-            mark[1].innerHTML = '&#10004;'
+            mark[2].innerHTML = '&#10004;'
+        }
+    })
+    sessionStorage.weight2 = '';
+    if (sessionStorage.weight_unit === 'st') {
+        unit[3].classList.remove('not');
+        weight2.classList.remove('not');
+    }
+    weight2.addEventListener('focusout', () => {
+        if (weight2.value === '') {
+            wrong(weight2);
+            sessionStorage.weight2 = '';
+            error_msg[1].classList.remove('not');
+            error_msg[1].innerText = '(Please provide a valid weight)';
+            mark[3].innerHTML = '&#10006;'
         }
     })
 
@@ -328,26 +368,30 @@ if (window.location.pathname === '/html/composition_details.html') {
         if (body_fat.value === '') {
             wrong(body_fat);
             sessionStorage.body_fat = '';
-            error_msg[2].innerText = '(Required, please fill in)';
-            mark[2].innerHTML = '&#10006;'
+            error_msg[2].classList.remove('not');
+            error_msg[2].innerText = '(Please provide a valid body fat %)';
+            mark[4].innerHTML = '&#10006;'
         }
         else if (body_fat.value < 0) {
             wrong(body_fat);
             sessionStorage.body_fat = '';
-            error_msg[2].innerText = '(Please provide a positive body fat)';
-            mark[2].innerHTML = '&#10006;'
+            error_msg[2].classList.remove('not');
+            error_msg[2].innerText = '(Please provide a positive body fat %)';
+            mark[4].innerHTML = '&#10006;'
         }
         else if (body_fat.value > 70) {
             wrong(body_fat);
             sessionStorage.body_fat = '';
-            error_msg[2].innerText = "(That can't be right. Please provide a body fat percentage lower than 70%)";
-            mark[2].innerHTML = '&#10006;'
+            error_msg[2].classList.remove('not');
+            error_msg[2].innerText = "(That can't be right. Please provide a body fat % lower than 70%)";
+            mark[4].innerHTML = '&#10006;'
         }
         else {
             right(body_fat);
             sessionStorage.body_fat = body_fat.value;
+            error_msg[2].classList.remove('not');
             error_msg[2].innerText = '';
-            mark[2].innerHTML = '&#10004;'
+            mark[4].innerHTML = '&#10004;'
         }
     })
     
@@ -357,68 +401,92 @@ if (window.location.pathname === '/html/composition_details.html') {
         if (visceral_fat.value === '') {
             wrong(visceral_fat);
             sessionStorage.visceral_fat = '';
-            error_msg[3].innerText = '(Required, please fill in)';
-            mark[3].innerHTML = '&#10006;'
+            error_msg[3].classList.remove('not');
+            error_msg[3].innerText = '(Please provide a valid visceral fat)';
+            mark[5].innerHTML = '&#10006;'
         }
         else if (visceral_fat.value < 0) {
             wrong(visceral_fat);
             sessionStorage.visceral_fat = '';
+            error_msg[3].classList.remove('not');
             error_msg[3].innerText = '(Please provide a positive visceral fat)';
-            mark[3].innerHTML = '&#10006;'
+            mark[5].innerHTML = '&#10006;'
         }
         else if (visceral_fat.value > 59) {
             wrong(visceral_fat);
             sessionStorage.visceral_fat = '';
+            error_msg[3].classList.remove('not');
             error_msg[3].innerText = "(That can't be right. Please provide a visceral fat lower than 59)";
-            mark[3].innerHTML = '&#10006;'
+            mark[5].innerHTML = '&#10006;'
         }
         else {
             right(visceral_fat);
             sessionStorage.visceral_fat = visceral_fat.value;
+            error_msg[3].classList.remove('not');
             error_msg[3].innerText = '';
-            mark[3].innerHTML = '&#10004;'
+            mark[5].innerHTML = '&#10004;'
         }
     })
     
     //Muscle Mass:
     sessionStorage.muscle_mass = '';
-    unit[2].innerText = `(${sessionStorage.weight_unit})`;
+    unit[4].innerText = `(${sessionStorage.weight_unit})`;
     muscle_mass.addEventListener('focusout', function() {
         if (muscle_mass.value === '') {
             wrong(muscle_mass);
             sessionStorage.muscle_mass = '';
-            error_msg[4].innerText = "(Required, please fill in)";
-            mark[4].innerHTML = '&#10006;'
+            error_msg[4].classList.remove('not');
+            error_msg[4].innerText = "(Please provide a valid muscle mass)";
+            mark[6].innerHTML = '&#10006;'
         }
         else if (muscle_mass.value < 0) {
             wrong(muscle_mass);
             sessionStorage.muscle_mass = '';
+            error_msg[4].classList.remove('not');
             error_msg[4].innerText = "(Please provide a positive muscle mass)";
-            mark[4].innerHTML = '&#10006;'
+            mark[6].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'kg' && muscle_mass.value > 908)) {
             wrong(muscle_mass);
             sessionStorage.muscle_mass = '';
+            error_msg[4].classList.remove('not');
             error_msg[4].innerText = "(That can't be right. Please provide a muscle mass lower than 908kg)";
-            mark[4].innerHTML = '&#10006;'
+            mark[6].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'lbs' && muscle_mass.value > 2000)) {
             wrong(muscle_mass);
             sessionStorage.muscle_mass = '';
+            error_msg[4].classList.remove('not');
             error_msg[4].innerText = "(That can't be right. Please provide a muscle mass lower than 2000lbs)";
-            mark[4].innerHTML = '&#10006;'
+            mark[6].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'st' && muscle_mass.value > 143)) {
             wrong(muscle_mass);
             sessionStorage.muscle_mass = '';
+            error_msg[4].classList.remove('not');
             error_msg[4].innerText = "(That can't be right. Please provide a muscle mass lower than 143st)";
-            mark[4].innerHTML = '&#10006;'
+            mark[6].innerHTML = '&#10006;'
         }
         else {
             right(muscle_mass);
             sessionStorage.muscle_mass = muscle_mass.value;
+            error_msg[4].classList.remove('not');
             error_msg[4].innerText = '';
-            mark[4].innerHTML = '&#10004;'
+            mark[6].innerHTML = '&#10004;'
+        }
+    })
+    sessionStorage.muscle_mass2 = '';
+    if (sessionStorage.weight_unit === 'st') {
+        unit[5].classList.remove('not');
+        muscle_mass2.classList.remove('not');
+    }
+    muscle_mass2.addEventListener('focusout', () => {
+        if (muscle_mass.value === '') {
+            wrong(muscle_mass2);
+            sessionStorage.muscle_mass = '';
+            error_msg[4].classList.remove('not');
+            error_msg[4].innerText = "(Please provide a valid muscle mass)";
+            mark[7].innerHTML = '&#10006;'
         }
     })
     
@@ -428,93 +496,120 @@ if (window.location.pathname === '/html/composition_details.html') {
         if (physique_rating.value === 'Choose') {
             wrong(physique_rating);
             sessionStorage.physique_rating = '';
-            error_msg[5].innerText = '(Required, please fill in)';
-            mark[5].innerHTML = '&#10006;'
+            error_msg[5].classList.remove('not');
+            error_msg[5].innerText = '(Please choose a physique rating)';
+            mark[8].innerHTML = '&#10006;'
         }
         else {
             sessionStorage.physique_rating = physique_rating.value;
-            error_msg[5].innerText = '';
             right(physique_rating);
-            mark[5].innerHTML = '&#10004;'
+            error_msg[5].classList.remove('not');
+            error_msg[5].innerText  = '';
+            mark[8].innerHTML = '&#10004;'
         }
         
     })
     
     //Bone Mass
     sessionStorage.bone_mass = '';
-    unit[3].innerText = `(${sessionStorage.weight_unit})`;
+    unit[6].innerText = `(${sessionStorage.weight_unit})`;
     bone_mass.addEventListener('focusout', function() {
         if (bone_mass.value === '') {
             wrong(bone_mass);
             sessionStorage.bone_mass = '';
-            error_msg[6].innerText = "(Required, please fill in)";
-            mark[6].innerHTML = '&#10006;'
+            error_msg[6].classList.remove('not');
+            error_msg[6].innerText = "(Please provide a valid bone mass)";
+            mark[9].innerHTML = '&#10006;'
         }
         else if (bone_mass.value < 0) {
             wrong(bone_mass);
             sessionStorage.bone_mass = '';
+            error_msg[6].classList.remove('not');
             error_msg[6].innerText = "(Please provide a positive bone mass)";
-            mark[6].innerHTML = '&#10006;'
+            mark[9].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'kg' && bone_mass.value > 36)) {
             wrong(bone_mass);
             sessionStorage.bone_mass = '';
+            error_msg[6].classList.remove('not');
             error_msg[6].innerText = "(That can't be right. Please provide a bone mass lower than 36kg)";
-            mark[6].innerHTML = '&#10006;'
+            mark[9].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'lbs' && bone_mass.value > 80)) {
             wrong(bone_mass);
             sessionStorage.bone_mass = '';
+            error_msg[6].classList.remove('not');
             error_msg[6].innerText = "(That can't be right. Please provide a bone mass lower than 80lbs)";
-            mark[6].innerHTML = '&#10006;'
+            mark[9].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.weight_unit === 'st' && bone_mass.value > 6)) {
             wrong(bone_mass);
             sessionStorage.bone_mass = '';
+            error_msg[6].classList.remove('not');
             error_msg[6].innerText = "(That can't be right. Please provide a bone mass lower than 6st)";
-            mark[6].innerHTML = '&#10006;'
+            mark[9].innerHTML = '&#10006;'
         }
         else {
             right(bone_mass);
             sessionStorage.bone_mass = bone_mass;
+            error_msg[6].classList.remove('not');
             error_msg[6].innerText = '';
-            mark[6].innerHTML = '&#10004;'
+            mark[9].innerHTML = '&#10004;'
+        }
+    })
+    sessionStorage.bone_mass2 = '';
+    if (sessionStorage.weight_unit === 'st') {
+        unit[7].classList.remove('not');
+        bone_mass2.classList.remove('not');
+    }
+    bone_mass2.addEventListener('focusout', () => {
+        if (bone_mass2.value === '') {
+            wrong(bone_mass2);
+            sessionStorage.bone_mass2 = '';
+            error_msg[6].classList.remove('not');
+            error_msg[6].innerText = "(Please provide a valid bone mass)";
+            mark[10].innerHTML = '&#10006;'
         }
     })
     
     //BMR:
     sessionStorage.bmr = '';
-    unit[4].innerText = `(${sessionStorage.bmr_unit})`;
+    unit[8].innerText = `(${sessionStorage.bmr_unit})`;
     bmr.addEventListener('focusout', function() {
         if (bmr.value === '') {
             wrong(bmr);
             sessionStorage.bmr = '';
-            error_msg[7].innerText = "(Required, please fill in)";
-            mark[7].innerHTML = '&#10006;'
+            error_msg[7].classList.remove('not');
+            error_msg[7].innerText = "(Please provide a valid BMR)";
+            mark[11].innerHTML = '&#10006;'
         }
         else if (bmr.value < 0) {
             wrong(bmr);
             sessionStorage.bmr = '';
+            error_msg[7].classList.remove('not');
             error_msg[7].innerText = "(Please provide a positive BMR)";
-            mark[7].innerHTML = '&#10006;'
+            mark[11].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.bmr_unit === 'kcal' && bmr.value > 5000)) {
             wrong(bmr);
             sessionStorage.bmr = '';
+            error_msg[7].classList.remove('not');
             error_msg[7].innerText = "(That can't be right. Please provide a BMR lower than 5000kcal)";
-            mark[7].innerHTML = '&#10006;'
+            mark[11].innerHTML = '&#10006;'
         }
         else if ((sessionStorage.bmr_unit === 'kJ' && bmr.value > 21000)) {
             wrong(bmr);
             sessionStorage.bmr = '';
+            error_msg[7].classList.remove('not');
             error_msg[7].innerText = "(That can't be right. Please provide a BMR lower than 21000kJ)";
-            mark[7].innerHTML = '&#10006;'
+            mark[11].innerHTML = '&#10006;'
         }
         else {
             right(bmr);
             sessionStorage.bmr = bmr.value;
+            error_msg[7].classList.remove('not');
             error_msg[7].innerText = '';
-            mark[7].innerHTML = '&#10004;'
+            mark[11].innerHTML = '&#10004;'
         }
     })
     
@@ -524,26 +619,30 @@ if (window.location.pathname === '/html/composition_details.html') {
         if (metabolic_age.value === '') {
             wrong(metabolic_age);
             sessionStorage.metabolic_age = '';
-            error_msg[8].innerText = "(Required, please fill in)";
-            mark[8].innerHTML = '&#10006;'
+            error_msg[8].classList.remove('not');
+            error_msg[8].innerText = "(Please provide a valid metabolic age)";
+            mark[12].innerHTML = '&#10006;'
         }
         else if (metabolic_age.value < 0) {
             wrong(metabolic_age);
             sessionStorage.metabolic_age = '';
+            error_msg[8].classList.remove('not');
             error_msg[8].innerText = "(Please provide a positive metabolic age)";
-            mark[8].innerHTML = '&#10006;'
+            mark[12].innerHTML = '&#10006;'
         }
         else if (metabolic_age.value > 200) {
             wrong(metabolic_age);
             sessionStorage.metabolic_age = '';
+            error_msg[8].classList.remove('not');
             error_msg[8].innerText = "(That can't be right. Please provide a metabolic age lower than 200)";
-            mark[8].innerHTML = '&#10006;'
+            mark[12].innerHTML = '&#10006;'
         }
         else {
             right(metabolic_age)
             sessionStorage.metabolic_age = metabolic_age.value;
+            error_msg[8].classList.remove('not');
             error_msg[8].innerText = '';
-            mark[8].innerHTML = '&#10004;'
+            mark[12].innerHTML = '&#10004;'
         }
     })
     
@@ -553,26 +652,30 @@ if (window.location.pathname === '/html/composition_details.html') {
         if (body_water.value === '') {
             wrong(body_water);
             sessionStorage.body_water = '';
-            error_msg[9].innerText = "(Required, please fill in)";
-            mark[9].innerHTML = '&#10006;'
+            error_msg[9].classList.remove('not');
+            error_msg[9].innerText = "(Please provide a valid body water %)";
+            mark[13].innerHTML = '&#10006;'
         }
         else if (body_water.value < 0) {
             wrong(body_water);
             sessionStorage.body_water = '';
-            error_msg[9].innerText = "(Please provide a positive body water)";
-            mark[9].innerHTML = '&#10006;'
+            error_msg[9].classList.remove('not');
+            error_msg[9].innerText = "(Please provide a positive body water %)";
+            mark[13].innerHTML = '&#10006;'
         }
         else if (body_water.value > 100) {
             wrong(body_water);
             sessionStorage.body_water = '';
-            error_msg[9].innerText = "(That can't be right. Please provide a body water percentage lower than 100%)";
-            mark[9].innerHTML = '&#10006;'
+            error_msg[9].classList.remove('not');
+            error_msg[9].innerText = "(That can't be right. Please provide a body % lower than 100%)";
+            mark[13].innerHTML = '&#10006;'
         }
         else {
             right(body_water);
             sessionStorage.body_water = body_water.value;
+            error_msg[9].classList.remove('not');
             error_msg[9].innerText = '';
-            mark[9].innerHTML = '&#10004;'
+            mark[13].innerHTML = '&#10004;'
         }
     })
     
@@ -583,54 +686,104 @@ if (window.location.pathname === '/html/composition_details.html') {
         }
         else {
             if (sessionStorage.height === '') {
-                wrong(height);
-                error_msg[0].innerText = "(Required, please fill in)";
-                mark[0].innerHTML = '&#10006;'
+                if (sessionStorage.height_unit === 'ft' && sessionStorage.height2 === '') {
+                    wrong(height);
+                    wrong(height2);
+                    error_msg[0].classList.remove('not');
+                    error_msg[0].innerText = "(Required, please provide a valid height)";
+                    mark[0].innerHTML = '&#10006;'
+                    mark[1].innerHTML = '&#10006;'
+                }
+                else {
+                    wrong(height);
+                    error_msg[0].classList.remove('not');
+                    error_msg[0].innerText = "(Required, please provide a valid height)";
+                    mark[0].innerHTML = '&#10006;'
+                }
             }
             if (sessionStorage.weight === '') {
-                wrong(weight);
-                error_msg[1].innerText = "(Required, please fill in)";
-                mark[1].innerHTML = '&#10006;'
+                if (sessionStorage.weight_unit === 'st' && sessionStorage.weight2 === '') {
+                    wrong(weight);
+                    wrong(weight2);
+                    error_msg[1].classList.remove('not');
+                    error_msg[1].innerText = "(Required, please provide a valid weight)";
+                    mark[2].innerHTML = '&#10006;'
+                    mark[3].innerHTML = '&#10006;'
+                }
+                else {
+                    wrong(height);
+                    error_msg[1].classList.remove('not');
+                    error_msg[1].innerText = "(Required, please provide a valid weight)";
+                    mark[2].innerHTML = '&#10006;'
+                }
             }
             if (sessionStorage.body_fat === '') {
                 wrong(body_fat);
-                error_msg[2].innerText = "(Required, please fill in)";
-                mark[2].innerHTML = '&#10006;'
+                error_msg[2].classList.remove('not');
+                error_msg[2].innerText = "(Required, please provide a valid body fat %)";
+                mark[4].innerHTML = '&#10006;'
             }
             if (sessionStorage.visceral_fat === '') {
                 wrong(visceral_fat);
-                error_msg[3].innerText = "(Required, please fill in)";
-                mark[3].innerHTML = '&#10006;'
+                error_msg[3].classList.remove('not');
+                error_msg[3].innerText = "(Required, please provide a valid visceral fat)";
+                mark[5].innerHTML = '&#10006;'
             }
             if (sessionStorage.muscle_mass === '') {
-                wrong(muscle_mass);
-                error_msg[4].innerText = "(Required, please fill in)";
-                mark[4].innerHTML = '&#10006;'
+                if (sessionStorage.weight_unit === 'st' && sessionStorage.muscle_mass2 === '') {
+                    wrong(muscle_mass);
+                    wrong(muscle_mass2);
+                    error_msg[4].classList.remove('not');
+                    error_msg[4].innerText = "(Required, please provide a valid muscle mass)";
+                    mark[6].innerHTML = '&#10006;'
+                    mark[7].innerHTML = '&#10006;'
+                }
+                else {
+                    wrong(muscle_mass);
+                    error_msg[4].classList.remove('not');
+                    error_msg[4].innerText = "(Required, please provide a valid muscle mass)";
+                    mark[6].innerHTML = '&#10006;'
+                }
             }
             if (sessionStorage.physique_rating === '') {
                 wrong(physique_rating);
-                error_msg[5].innerText = "(Required, please fill in)";
-                mark[5].innerHTML = '&#10006;'
+                error_msg[5].classList.remove('not');
+                error_msg[5].innerText = "(Required, please choose a physique rating)";
+                mark[8].innerHTML = '&#10006;'
             }
             if (sessionStorage.bone_mass === '') {
-                wrong(bone_mass);
-                error_msg[6].innerText = "(Required, please fill in)";
-                mark[6].innerHTML = '&#10006;'
+                if (sessionStorage.weight_unit === 'st' && sessionStorage.bone_mass2 === '') {
+                    wrong(bone_mass);
+                    wrong(bone_mass2);
+                    error_msg[6].classList.remove('not');
+                    error_msg[6].innerText = "(Required, please provide a valid bone mass)";
+                    mark[9].innerHTML = '&#10006;'
+                    mark[10].innerHTML = '&#10006;'
+                }
+                else {
+                    wrong(bone_mass);
+                    error_msg[6].classList.remove('not');
+                    error_msg[6].innerText = "(Required, please provide a valid bone mass)";
+                    mark[9].innerHTML = '&#10006;'
+                }
             }
             if (sessionStorage.bmr === '') {
                 wrong(bmr);
-                error_msg[7].innerText = "(Required, please fill in)";
-                mark[7].innerHTML = '&#10006;'
+                error_msg[7].classList.remove('not');
+                error_msg[7].innerText = "(Required, please provide a valid BMR)";
+                mark[11].innerHTML = '&#10006;'
             }
             if (sessionStorage.metabolic_age === '') {
                 wrong(metabolic_age);
-                error_msg[8].innerText = "(Required, please fill in)";
-                mark[8].innerHTML = '&#10006;'
+                error_msg[8].classList.remove('not');
+                error_msg[8].innerText = "(Required, please provide a valid metabolic age)";
+                mark[12].innerHTML = '&#10006;'
             }
             if (sessionStorage.body_water === '') {
                 wrong(body_water);
-                error_msg[9].innerText = "(Required, please fill in)";
-                mark[9].innerHTML = '&#10006;'
+                error_msg[9].classList.remove('not');
+                error_msg[9].innerText = "(Required, please provide a valid body water %)";
+                mark[13].innerHTML = '&#10006;'
             }
         }
     })
@@ -646,7 +799,10 @@ if (window.location.pathname === '/html/progress.html') {
 }
 
 //format issues
+//all second fields don't have to be filled in so their initial values must be 0 or can be left blank
 
+//edit to have the same error msg's as the top
+//if box 2 is not needed then the display must be box
 //enter must trigger focus out
 //maybe quiker errror messages
 //make a table that saves all the use details that uses local storage like excel
@@ -657,3 +813,6 @@ if (window.location.pathname === '/html/progress.html') {
 //Have better wording on the website 
 //Remove error message when someone unfocusses
 //helpful error messages like what a person needs to do
+
+//done:
+//semantic html and fixing format issues
