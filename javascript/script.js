@@ -798,11 +798,8 @@ if (window.location.pathname === '/html/composition_details.html') {
 if (window.location.pathname === '/html/progress.html') {
 }
 
-//format issues
-//all second fields don't have to be filled in so their initial values must be 0 or can be left blank
-
 //edit to have the same error msg's as the top
-//if box 2 is not needed then the display must be box
+
 //enter must trigger focus out
 //maybe quiker errror messages
 //make a table that saves all the use details that uses local storage like excel
