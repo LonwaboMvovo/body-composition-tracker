@@ -19,6 +19,8 @@ const bmr = document.querySelector('#bmr');
 const bmr_unit = document.querySelector('#bmr_unit');
 const metabolic_age = document.querySelector('#metabolic_age');
 const body_water = document.querySelector('#body_water');
+const bmi = document.querySelector('#bmi');
+const progress_table = document.querySelector('#progress_table');
 const unit = document.querySelectorAll('.unit')
 const error_msg = document.querySelectorAll('.error_msg');
 const mark = document.querySelectorAll('.mark'); 
@@ -472,7 +474,7 @@ if (window.location.pathname === '/html/composition_details.html') {
                 if (weight2.value >= 0) {
                     right(weight);
                     right(weight2);
-                    sessionStorage.weight = weight.value * 14 + weight2.value * 1;
+                    sessionStorage.weight = (weight.value * 14 + weight2.value * 1) / 14;
                     error_msg[1].classList.add('not');
                     mark[3].innerHTML = '&#10004;'
                 }
@@ -524,7 +526,7 @@ if (window.location.pathname === '/html/composition_details.html') {
             if (weight.value >= 0) {
                 right(weight);
                 right(weight2);
-                sessionStorage.weight = weight.value * 14 + weight2.value * 1;
+                sessionStorage.weight = (weight.value * 14 + weight2.value * 1) / 14;
                 error_msg[1].classList.add('not');
                 mark[3].innerHTML = '&#10004;'
             }
@@ -673,7 +675,7 @@ if (window.location.pathname === '/html/composition_details.html') {
                 if (muscle_mass2.value >= 0) {
                     right(muscle_mass);
                     right(muscle_mass2);
-                    sessionStorage.muscle_mass = muscle_mass.value * 14 + muscle_mass2.value * 1;
+                    sessionStorage.muscle_mass = (muscle_mass.value * 14 + muscle_mass2.value * 1) / 14;
                     error_msg[4].classList.add('not');
                     mark[7].innerHTML = '&#10004;'
                 }
@@ -727,7 +729,7 @@ if (window.location.pathname === '/html/composition_details.html') {
             if (muscle_mass.value >= 0) {
                 right(muscle_mass);
                 right(muscle_mass2);
-                sessionStorage.muscle_mass = muscle_mass.value * 14 + muscle_mass2.value * 1;
+                sessionStorage.muscle_mass = (muscle_mass.value * 14 + muscle_mass2.value * 1) / 14;
                 error_msg[4].classList.add('not');
                 mark[7].innerHTML = '&#10004;'
             }
@@ -832,7 +834,7 @@ if (window.location.pathname === '/html/composition_details.html') {
                 if (bone_mass2.value >= 0) {
                     right(bone_mass);
                     right(bone_mass2);
-                    sessionStorage.bone_mass = bone_mass.value * 14 + bone_mass2.value * 1;
+                    sessionStorage.bone_mass = (bone_mass.value * 14 + bone_mass2.value * 1) / 14;
                     error_msg[6].classList.add('not');
                     mark[10].innerHTML = '&#10004;'   
                 }
@@ -884,7 +886,7 @@ if (window.location.pathname === '/html/composition_details.html') {
             if (bone_mass.value >= 0) {
                 right(bone_mass);
                 right(bone_mass2);
-                sessionStorage.bone_mass = bone_mass.value * 14 + bone_mass2.value * 1;
+                sessionStorage.bone_mass = (bone_mass.value * 14 + bone_mass2.value * 1) / 14;
                 error_msg[6].classList.add('not');
                 mark[10].innerHTML = '&#10004;'   
             }
@@ -1250,15 +1252,112 @@ if (window.location.pathname === '/html/composition_details.html') {
 
 //Progress page:
 if (window.location.pathname === '/html/progress.html') {
+    // if (sessionStorage.numberRows !== undefined) {
+    //     sessionStorage.numberRows++;                          //WORKING ON THIS
+    // }
+    // if (sessionStorage.numberRows === undefined) {
+    //     sessionStorage.numberRows = 0;
+    // }
+    console.log(sessionStorage.numberRows);
+    //Progress Table:
+    let rows = progress_table.rows.length;
+    let rowAdd = progress_table.insertRow(rows);
+    rows++;
+    for (let i = 0; i < 11; i++) {
+        rowAdd.insertCell(i);
+    }
+    const date = new Date();
+    
+    //Name:
+    progress_table.rows[0].cells[0].innerText = sessionStorage.name;
+
+    //Age:
+    progress_table.rows[0].cells[1].innerText = `Age: ${sessionStorage.age}`;
+    
+    //Height:
+    progress_table.rows[0].cells[2].innerText = `Height: ${sessionStorage.height} ${sessionStorage.height_unit}`;
+
+    //Date:
+    progress_table.rows[rows - 1].cells[0].innerText = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+
+    //Weight:
+    progress_table.rows[1].cells[1].innerText += ` (${sessionStorage.weight_unit})`;
+    progress_table.rows[rows - 1].cells[1].innerText = sessionStorage.weight;
+
+    //BMI:
+    if (sessionStorage.height_unit === 'm') {
+        if (sessionStorage.weight_unit === 'kg') {
+            progress_table.rows[rows - 1].cells[2].innerText = (sessionStorage.weight/Math.pow(sessionStorage.height, 2)).toFixed(1);
+        }
+        else if (sessionStorage.weight_unit === 'lbs') {
+            progress_table.rows[rows - 1].cells[2].innerText = ((sessionStorage.weight/2.205)/Math.pow(sessionStorage.height, 2)).toFixed(1);
+        }
+        else if (sessionStorage.weight_unit === 'st') {
+            progress_table.rows[rows - 1].cells[2].innerText = ((sessionStorage.weight*6.35)/Math.pow(sessionStorage.height, 2)).toFixed(1);
+        }
+    }
+    if (sessionStorage.height_unit === 'cm') {
+        if (sessionStorage.weight_unit === 'kg') {
+            progress_table.rows[rows - 1].cells[2].innerText = (sessionStorage.weight/Math.pow((sessionStorage.height/100), 2)).toFixed(1);
+        }
+        else if (sessionStorage.weight_unit === 'lbs') {
+            progress_table.rows[rows - 1].cells[2].innerText = ((sessionStorage.weight/2.205)/Math.pow((sessionStorage.height/100), 2)).toFixed(1);
+        }
+        else if (sessionStorage.weight_unit === 'st') {
+            progress_table.rows[rows - 1].cells[2].innerText = ((sessionStorage.weight*6.35)/Math.pow((sessionStorage.height/100), 2)).toFixed(1);
+        }
+    }
+    if (sessionStorage.height_unit === 'ft') {
+        if (sessionStorage.weight_unit === 'kg') {
+            progress_table.rows[rows - 1].cells[2].innerText = (sessionStorage.weight/Math.pow((sessionStorage.height/3.281), 2)).toFixed(1);
+        }
+        else if (sessionStorage.weight_unit === 'lbs') {
+            progress_table.rows[rows - 1].cells[2].innerText = ((sessionStorage.weight/2.205)/Math.pow((sessionStorage.height/3.281), 2)).toFixed(1);
+        }
+        else if (sessionStorage.weight_unit === 'st') {
+            progress_table.rows[rows - 1].cells[2].innerText = ((sessionStorage.weight*6.35)/Math.pow((sessionStorage.height/3.281), 2)).toFixed(1);
+        }
+    }
+
+    //Body Fat:
+    progress_table.rows[rows - 1].cells[3].innerText = sessionStorage.body_fat;
+
+    //Visceral Fat:
+    progress_table.rows[rows - 1].cells[4].innerText = sessionStorage.visceral_fat;
+
+    //Muscle Mass:
+    progress_table.rows[1].cells[5].innerText += ` (${sessionStorage.weight_unit})`;
+    progress_table.rows[rows - 1].cells[5].innerText = sessionStorage.muscle_mass;
+
+    //Physique Rating:
+    progress_table.rows[rows - 1].cells[6].innerText = sessionStorage.physique_rating;
+
+    //Bone Mass:
+    progress_table.rows[1].cells[7].innerText += ` (${sessionStorage.weight_unit})`;
+    progress_table.rows[rows - 1].cells[7].innerText = sessionStorage.physique_rating;
+
+    //BMR:
+    progress_table.rows[1].cells[8].innerText += ` (${sessionStorage.bmr_unit})`;
+    progress_table.rows[rows - 1].cells[8].innerText = sessionStorage.bmr;
+
+    //Metabolic Age:
+    progress_table.rows[rows - 1].cells[9].innerText = sessionStorage.metabolic_age;
+
+    //Body Water:
+    progress_table.rows[rows - 1].cells[10].innerText = sessionStorage.body_water;
+
 }
 
+//if an enty has been made a new table row must be made 
+
+//allow user to choose date format
+//message to show that there are no enteries if use has not added anything. Maybe use session storage for everything
 //if people do too much in second box then it automatically fills 1st box properly
 //enter must trigger focus out
-//quicker errror messages for example on focus
 //colors for tick and cross
-//make a table that saves all the use details that uses local storage like excel
 //if name is undefined then address user as you
 //if the website see's that the user has already used the website then it just goes to updating info
 //weekly reminder to add input
 //if user browser does not support then show images of browsers that do 
 //Have better wording on the website
+//Date format settings
