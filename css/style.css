@@ -4,6 +4,11 @@ body {
     margin: 0px;
 }
 
+#page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
 ::selection {
     background: rgb(204, 204, 204);
 }
@@ -12,20 +17,46 @@ header {
     background-color: #1B998B;
     text-align: center;
     padding: 10px;
+    box-shadow: 0 0 10px 5px rgb(15, 88, 79);
+}
+
+header.home {
+    margin-bottom: 100px;
+}
+
+header a:hover {
+    color: white;
+    text-decoration: underline;
 }
 
 .header_msg {
     text-align: center;
 }
 
+.header_msg.home {
+    font-size: 3.2rem;
+}
+
 a {
     color: black;
-    margin: 0px 10px
+    margin: 0px 10px;
+    text-decoration: none;
 }
 
 footer {
     text-align: center;
-    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(206, 206, 222);
+    height: 28px;
+    padding: 10px 0px 10px 0px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+footer a:hover {
+    color: #1B998B;
+    text-decoration: underline;
 }
 
 h1 {
@@ -35,6 +66,11 @@ h1 {
 
 main {
     margin-left: 500px;
+    padding-bottom: 48px;
+}
+
+main.home {
+    margin-left: 550px;
 }
 
 section {
@@ -43,6 +79,7 @@ section {
 
 .button {
     text-decoration: none;
+    text-align: center;
     color: black;
     display: inline-block;
     width: 100px;
@@ -51,8 +88,17 @@ section {
     border: 2px solid #2D3047;
     background-color: rgb(129, 226, 49);
     cursor: pointer;
-    margin-left: 50px;
+    margin: 10px 30px 10px 15px;
     outline: none;
+    transition: 0.2s;
+}
+
+.button:hover {
+    transform: scale(1.1,1.1);
+}
+
+.button:active {
+    background-color: rgb(69, 121, 27);
 }
 
 input[type=number]::-webkit-inner-spin-button, 
