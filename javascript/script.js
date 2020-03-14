@@ -22,6 +22,7 @@ const metabolic_age = document.querySelector('#metabolic_age');
 const body_water = document.querySelector('#body_water');
 const bmi = document.querySelector('#bmi');
 const progress_table = document.querySelector('#progress_table');
+const breakdown = document.querySelector('#breakdown');
 const unit = document.querySelectorAll('.unit')
 const error_msg = document.querySelectorAll('.error_msg');
 const mark = document.querySelectorAll('.mark');
@@ -1147,10 +1148,14 @@ if (window.location.pathname === '/html/progress.html') {
     //Progress Table:
     if (numberRows() === true) {
         //Name:
-        progress_table.rows[0].cells[0].innerText = sessionStorage.name;
-
+        if (sessionStorage.name === undefined) {
+            progress_table.rows[0].cells[0].innerText = 'You';
+        }
+        else {
+            progress_table.rows[0].cells[0].innerText = sessionStorage.name;
+        }
         //Age:
-        progress_table.rows[0].cells[1].innerText = `Age: ${sessionStorage.age}`;
+        progress_table.rows[0].cells[1].innerText = `Age: ${(sessionStorage.age * 1).toFixed(1)}`;
 
         //Height:
         progress_table.rows[0].cells[2].innerText = `Height: ${(sessionStorage.height * 1).toFixed(1)} ${sessionStorage.height_unit}`;
@@ -1197,7 +1202,7 @@ if (window.location.pathname === '/html/progress.html') {
             progress_table.rows[currentRow.int].cells[5].innerText = (currentRow.muscle_mass * 1).toFixed(1);
 
             //Physique Rating:
-            progress_table.rows[currentRow.int].cells[6].innerText = (currentRow.physique_rating * 1).toFixed(1);
+            progress_table.rows[currentRow.int].cells[6].innerText = currentRow.physique_rating;
 
             //Bone Mass:
             progress_table.rows[currentRow.int].cells[7].innerText = (currentRow.bone_mass * 1).toFixed(1);
@@ -1217,7 +1222,7 @@ if (window.location.pathname === '/html/progress.html') {
             progress_table.rows[currentRow.int].cells[11].style.border = 'none';
             progress_table.rows[currentRow.int].cells[11].style.cursor = 'pointer';
             progress_table.rows[currentRow.int].cells[11].addEventListener('click', () => {
-                let confirmation = window.confirm('Are you sure?');
+                let confirmation = window.confirm(`Are you sure you want to delete this entry done ${currentRow.date}?`);
                 if (confirmation) {
                     numberRowsArrayFixGap = numberRowsArray.splice(currentRow.int - 2, numberRowsArray.length);
                     numberRowsArrayFixGap.shift();
@@ -1235,6 +1240,7 @@ if (window.location.pathname === '/html/progress.html') {
     else {
         document.querySelector('.header_msg').innerHTML = 'No entries to show';
         progress_table.classList.add('not');
+        breakdown.classList.add('not');
     }
     
     //Add Entry:
@@ -1249,10 +1255,12 @@ if (window.location.pathname === '/html/progress.html') {
 
     //Clear Entries:
     clear.addEventListener('click', () => {
-        let confirmation = window.confirm('Are you sure?');
-        if (confirmation) {
-            sessionStorage.removeItem('numberRows');
-            location.reload()
+        if (numberRows() === true) {
+            let confirmation = window.confirm(`Are you sure you want to delete all of your entries? \nWarning! All information will be lost and unretreivable`);
+            if (confirmation) {
+                sessionStorage.removeItem('numberRows');
+                location.reload()
+            }
         }
     })
 }
@@ -1262,15 +1270,14 @@ if (window.location.pathname === '/html/progress.html') {
 //change sessionStorage to localStorage
 //can't add entries on the same day
 //if people do too much in second box then it automatically fills 1st box properly
+//put all information on how breakdowns are done in more information just like tanita understanding your body details page 
 //settings page
+//allow user to choose which entry they want to be broken down and the selected row must show with color also the one being hovered
 //allow user to choose date format
 //allow user to change units 
-//enter must trigger focus out
-//remove blue line around links
-//if name is undefined then address user as you
-//if the website see's that the user has already used the website then it just goes to updating info
+//allow printing or downloading of user details
 //weekly reminder to add input
 //if user browser does not support then show images of browsers that do 
 //Have better wording on the website
-//Have better error messsages for name
+//Name error message must go when user is unfocussed
 
