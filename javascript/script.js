@@ -1227,7 +1227,6 @@ if (window.location.pathname === '/html/progress.html') {
     })
 }
 
-//message to show that there are no enteries if user has not added anything. Maybe use session storage for everything
 
 //detailed analysis of last entry with graphs
 //change sessionStorage to localStorage
