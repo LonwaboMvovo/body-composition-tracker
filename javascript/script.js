@@ -24,7 +24,7 @@ const bmi = document.querySelector('#bmi');
 const progress_table = document.querySelector('#progress_table');
 const unit = document.querySelectorAll('.unit')
 const error_msg = document.querySelectorAll('.error_msg');
-const mark = document.querySelectorAll('.mark'); 
+const mark = document.querySelectorAll('.mark');
 const start = document.querySelector('#start');
 const next = document.querySelector('#next');
 const back = document.querySelector('#back');
@@ -85,11 +85,13 @@ const ageValue = () => {
 const maleValue = () => {
     right(male, 2, 1)
     gender_options_box.style.background = '';
+    gender_options_box.classList.remove('mistake');
     sessionStorage.gender = 'male';
 }
 const femaleValue = () => {
     right(female, 2, 1)
     gender_options_box.style.background = '';
+    gender_options_box.classList.remove('mistake');
     sessionStorage.gender = 'female';
 }
 const heightUnitValue = () => {
@@ -170,6 +172,7 @@ const canNext = () => {
             wrong(bmr_unit, 5, 4);
             error_msg[5].innerText = "(Required, please choose preferred unit for BMR)";
         }
+        document.querySelectorAll('.mistake')[0].scrollIntoView();
     }
 }
 const heightValue = () => {
@@ -904,7 +907,7 @@ const canDone = () => {
         if (error_msg[9].innerText === "(That can't be right. Please provide a body % lower than 100%)") {
             error_msg[9].innerText = "(Required, please provide a body % lower than 100%)";
         }
-
+        document.querySelectorAll('.mistake')[0].scrollIntoView();
     }
 }
 const wrong = (detail, emi, marki) => {
@@ -918,6 +921,7 @@ const wrong = (detail, emi, marki) => {
         mark[marki].innerHTML = '&#10006;'
         mark[marki].style.color = 'red';
     }
+    detail.classList.add('mistake');
 }
 const right = (detail, emi, marki) => {
     if (detail !== undefined) {
@@ -930,6 +934,7 @@ const right = (detail, emi, marki) => {
         mark[marki].innerHTML = '&#10004;'
         mark[marki].style.color = 'green';
     }
+    detail.classList.remove('mistake');
 }
 let numberRowsArray;
 let numberRowsArrayFixGap;
@@ -1252,7 +1257,6 @@ if (window.location.pathname === '/html/progress.html') {
     })
 }
 
-//scroll to highest error msg
 //detailed analysis of last entry with graphs
 
 //change sessionStorage to localStorage
