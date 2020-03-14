@@ -697,6 +697,7 @@ const body_waterValue = () => {
 const canDone = () => {
     if (composition_details_filled()) {
         window.open('/html/progress.html', '_self');
+        sessionStorage.canAddEntry = 'yes';
     }
     else {
         //Height:
@@ -927,6 +928,7 @@ const right = (detail, emi, marki) => {
     }
 }
 let numberRowsArray;
+let numberRowsArrayExceptLast = [];
 const date = new Date();
 const bmiValue = () => {
     if (sessionStorage.height_unit === 'm') {
@@ -964,7 +966,25 @@ const bmiValue = () => {
     }
 }
 const numberRows = () => { 
-    if (sessionStorage.numberRows !== "undefined") {
+    if (sessionStorage.numberRows === undefined) {
+        sessionStorage.numberRows = JSON.stringify([{
+            int: 2,
+            date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
+            weight: sessionStorage.weight,
+            bmi: bmiValue(),
+            body_fat: sessionStorage.body_fat,
+            visceral_fat: sessionStorage.visceral_fat,
+            muscle_mass: sessionStorage.muscle_mass,
+            physique_rating: sessionStorage.physique_rating,
+            bone_mass: sessionStorage.bone_mass,
+            bmr: sessionStorage.bmr,
+            metabolic_age: sessionStorage.metabolic_age,
+            body_water: sessionStorage.body_water
+        }]);
+        numberRowsArray = JSON.parse(sessionStorage.numberRows);
+        console.log(1);
+    }
+    else if (sessionStorage.numberRows !== undefined && sessionStorage.canAddEntry === 'yes') {
         numberRowsArray = JSON.parse(sessionStorage.numberRows);
         numberRowsArray.push({
             int: numberRowsArray.length + 2,
@@ -981,28 +1001,12 @@ const numberRows = () => {
             body_water: sessionStorage.body_water
         });
         sessionStorage.numberRows = JSON.stringify(numberRowsArray);
-        console.log('if 1: ' + sessionStorage.numberRows);
+        console.log(2);
     }
     else {
-        // sessionStorage.numberRows = JSON.stringify([
-        //     2
-        // ]);
-        sessionStorage.numberRows = JSON.stringify([{
-            int: 2,
-            date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
-            weight: sessionStorage.weight,
-            bmi: bmiValue(),
-            body_fat: sessionStorage.body_fat,
-            visceral_fat: sessionStorage.visceral_fat,
-            muscle_mass: sessionStorage.muscle_mass,
-            physique_rating: sessionStorage.physique_rating,
-            bone_mass: sessionStorage.bone_mass,
-            bmr: sessionStorage.bmr,
-            metabolic_age: sessionStorage.metabolic_age,
-            body_water: sessionStorage.body_water
-        }]);
         numberRowsArray = JSON.parse(sessionStorage.numberRows);
-        console.log('if 2: ' + sessionStorage.numberRows);
+        sessionStorage.numberRows = JSON.stringify(numberRowsArray);
+        console.log(3);
     }
 }
 
@@ -1152,8 +1156,10 @@ if (window.location.pathname === '/html/progress.html') {
     progress_table.rows[0].cells[2].innerText = `Height: ${sessionStorage.height} ${sessionStorage.height_unit}`;
 
     numberRowsArray.forEach(currentRow => {
+        //Insert Row:
         let rowAdd = progress_table.insertRow(currentRow.int);
 
+        //Insert Cells:
         for (let i = 0; i < 11; i++) {
             rowAdd.insertCell(i);
         }
@@ -1191,11 +1197,14 @@ if (window.location.pathname === '/html/progress.html') {
         //Body Water:
         progress_table.rows[currentRow.int].cells[10].innerText = currentRow.body_water;
 
+        sessionStorage.canAddEntry = 'no';
     });
 }
 
 
 
+//change sessionStorage to localStorage
+//limit characters entered
 //allow user to choose date format
 //message to show that there are no enteries if use has not added anything. Maybe use session storage for everything
 //if people do too much in second box then it automatically fills 1st box properly
