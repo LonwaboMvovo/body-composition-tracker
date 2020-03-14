@@ -29,6 +29,8 @@ const start = document.querySelector('#start');
 const next = document.querySelector('#next');
 const back = document.querySelector('#back');
 const done = document.querySelector('#done');
+const add = document.querySelector('#add');
+const clear = document.querySelector('#clear');
 
 //Functions for javascript file:
 const user_details_filled = () => {
@@ -966,7 +968,10 @@ const bmiValue = () => {
     }
 }
 const numberRows = () => { 
-    if (sessionStorage.numberRows === undefined) {
+    if (sessionStorage.numberRows === undefined && sessionStorage.canAddEntry !== 'yes') {
+        return false;
+    }
+    else if (sessionStorage.numberRows === undefined && sessionStorage.canAddEntry === 'yes') {
         sessionStorage.numberRows = JSON.stringify([{
             int: 2,
             date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
@@ -982,7 +987,7 @@ const numberRows = () => {
             body_water: sessionStorage.body_water
         }]);
         numberRowsArray = JSON.parse(sessionStorage.numberRows);
-        console.log(1);
+        return true;
     }
     else if (sessionStorage.numberRows !== undefined && sessionStorage.canAddEntry === 'yes') {
         numberRowsArray = JSON.parse(sessionStorage.numberRows);
@@ -1001,12 +1006,12 @@ const numberRows = () => {
             body_water: sessionStorage.body_water
         });
         sessionStorage.numberRows = JSON.stringify(numberRowsArray);
-        console.log(2);
+        return true;
     }
     else {
         numberRowsArray = JSON.parse(sessionStorage.numberRows);
         sessionStorage.numberRows = JSON.stringify(numberRowsArray);
-        console.log(3);
+        return true;
     }
 }
 
@@ -1125,7 +1130,7 @@ if (window.location.pathname === '/html/composition_details.html') {
     done.addEventListener('click', canDone)
     
     //Back:
-    back.addEventListener('click', function() {
+    back.addEventListener('click', () => {
         window.open('/html/user_details.html', '_self');
     })
 }
@@ -1133,8 +1138,8 @@ if (window.location.pathname === '/html/composition_details.html') {
 //Progress page:
 if (window.location.pathname === '/html/progress.html') {
     //Progress Table:
-    numberRows();
-    //Weight Unit:
+    if (numberRows() === true) {
+        //Weight Unit:
     progress_table.rows[1].cells[1].innerText += ` (${sessionStorage.weight_unit})`;
 
     //Muscle Mass Unit:
@@ -1154,6 +1159,8 @@ if (window.location.pathname === '/html/progress.html') {
     
     //Height:
     progress_table.rows[0].cells[2].innerText = `Height: ${sessionStorage.height} ${sessionStorage.height_unit}`;
+
+    sessionStorage.canAddEntry = 'no';
 
     numberRowsArray.forEach(currentRow => {
         //Insert Row:
@@ -1196,17 +1203,39 @@ if (window.location.pathname === '/html/progress.html') {
 
         //Body Water:
         progress_table.rows[currentRow.int].cells[10].innerText = currentRow.body_water;
-
-        sessionStorage.canAddEntry = 'no';
     });
+
+    }
+
+    else {
+        document.querySelector('.header_msg').innerHTML = 'No entries to show';
+        progress_table.classList.add('not');
+    }
+    
+    //Add Entry:
+    add.addEventListener('click', () => {
+        window.open('/html/composition_details.html', '_self');
+    })
+
+    //Clear Entries:
+    clear.addEventListener('click', () => {
+        let confirmation = window.confirm('Are you sure?');
+        if (confirmation) {
+            sessionStorage.removeItem('numberRows');
+            location.reload()
+        }
+    })
 }
 
+//message to show that there are no enteries if user has not added anything. Maybe use session storage for everything
 
-
+//detailed analysis of last entry with graphs
 //change sessionStorage to localStorage
 //limit characters entered
 //allow user to choose date format
-//message to show that there are no enteries if use has not added anything. Maybe use session storage for everything
+//allow user to change units 
+//scroll to highest error msg
+//can't add entries on the same day
 //if people do too much in second box then it automatically fills 1st box properly
 //enter must trigger focus out
 //colors for tick and cross
@@ -1216,5 +1245,4 @@ if (window.location.pathname === '/html/progress.html') {
 //weekly reminder to add input
 //if user browser does not support then show images of browsers that do 
 //Have better wording on the website
-//Date format settings
 //Have better error messsages for name

@@ -83,7 +83,6 @@ section {
     color: black;
     display: inline-block;
     width: 100px;
-    height: 30px;
     padding-top: 0px;
     border: 2px solid #2D3047;
     background-color: rgb(129, 226, 49);
@@ -91,6 +90,11 @@ section {
     margin: 10px 30px 10px 15px;
     outline: none;
     transition: 0.2s;
+}
+
+#clear {
+    background-color: rgb(226, 49, 49);
+    width: 180px;
 }
 
 .button:hover {
