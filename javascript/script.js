@@ -930,7 +930,7 @@ const right = (detail, emi, marki) => {
     }
 }
 let numberRowsArray;
-let numberRowsArrayExceptLast = [];
+let numberRowsArrayFixGap;
 const date = new Date();
 const bmiValue = () => {
     if (sessionStorage.height_unit === 'm') {
@@ -968,7 +968,7 @@ const bmiValue = () => {
     }
 }
 const numberRows = () => { 
-    if (sessionStorage.numberRows === undefined && sessionStorage.canAddEntry !== 'yes') {
+    if ((sessionStorage.numberRows === undefined && sessionStorage.canAddEntry !== 'yes') || sessionStorage.numberRows === '[]') {
         return false;
     }
     else if (sessionStorage.numberRows === undefined && sessionStorage.canAddEntry === 'yes') {
@@ -1010,7 +1010,7 @@ const numberRows = () => {
     }
     else {
         numberRowsArray = JSON.parse(sessionStorage.numberRows);
-        sessionStorage.numberRows = JSON.stringify(numberRowsArray);
+        // sessionStorage.numberRows = JSON.stringify(numberRowsArray);
         return true;
     }
 }
@@ -1167,7 +1167,7 @@ if (window.location.pathname === '/html/progress.html') {
         let rowAdd = progress_table.insertRow(currentRow.int);
 
         //Insert Cells:
-        for (let i = 0; i < 11; i++) {
+        for (let i = 0; i < 12; i++) {
             rowAdd.insertCell(i);
         }
     
@@ -1203,8 +1203,26 @@ if (window.location.pathname === '/html/progress.html') {
 
         //Body Water:
         progress_table.rows[currentRow.int].cells[10].innerText = currentRow.body_water;
-    });
 
+        //Delete Entry:
+        progress_table.rows[currentRow.int].cells[11].innerText = '❌';
+        progress_table.rows[currentRow.int].cells[11].style.background = 'white';
+        progress_table.rows[currentRow.int].cells[11].style.border = 'none';
+        progress_table.rows[currentRow.int].cells[11].style.cursor = 'pointer';
+        progress_table.rows[currentRow.int].cells[11].addEventListener('click', () => {
+            let confirmation = window.confirm('Are you sure?');
+            if (confirmation) {
+                numberRowsArrayFixGap = numberRowsArray.splice(currentRow.int - 2, numberRowsArray.length);
+                numberRowsArrayFixGap.shift();
+                numberRowsArrayFixGap.forEach(currentRow => {
+                    currentRow.int--;
+                })
+                numberRowsArray = numberRowsArray.concat(numberRowsArrayFixGap)
+                sessionStorage.numberRows = JSON.stringify(numberRowsArray);
+                location.reload();
+            }
+        })
+    });
     }
 
     else {
@@ -1214,7 +1232,12 @@ if (window.location.pathname === '/html/progress.html') {
     
     //Add Entry:
     add.addEventListener('click', () => {
-        window.open('/html/composition_details.html', '_self');
+        if (user_details_filled()) {
+            window.open('/html/composition_details.html', '_self');
+        }
+        else {
+            window.open('/html/user_details.html', '_self');
+        }
     })
 
     //Clear Entries:
@@ -1228,9 +1251,13 @@ if (window.location.pathname === '/html/progress.html') {
 }
 
 
+//auto focus on the first height when page loads
+//must show inches if if ft weren't filled bug
+//no typo in text input for name
+//settings page
 //detailed analysis of last entry with graphs
 //change sessionStorage to localStorage
-//limit characters entered
+//limit characters entered in table
 //allow user to choose date format
 //allow user to change units 
 //scroll to highest error msg

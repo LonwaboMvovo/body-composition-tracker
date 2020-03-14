@@ -92,17 +92,21 @@ section {
     transition: 0.2s;
 }
 
-#clear {
-    background-color: rgb(226, 49, 49);
-    width: 180px;
-}
-
 .button:hover {
     transform: scale(1.1,1.1);
 }
 
 .button:active {
     background-color: rgb(69, 121, 27);
+}
+
+#clear {
+    background-color: rgb(226, 49, 49);
+    width: 180px;
+}
+
+#clear:active {
+    background-color: rgb(121, 27, 27);
 }
 
 input[type=number]::-webkit-inner-spin-button, 
@@ -143,13 +147,13 @@ input[type=number]::-webkit-outer-spin-button {
 
 table {
     width: 1300px;
-    background-color: rgb(216, 216, 216);
     text-align: center;
     margin: auto;
 }
 
 td, th {
     border: 1px solid black;
+    background-color: rgb(216, 216, 216);
 }
 
 th {
