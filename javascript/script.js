@@ -225,7 +225,7 @@ const heightValue = () => {
             if (height2.value >= 0) {
                 right(height, 0, 1);
                 right(height2);
-                sessionStorage.height = height.value * 12 + height2.value * 1;
+                sessionStorage.height = (height.value * 12 + height2.value * 1) / 12;
             }
             else {
                 right(height);
@@ -262,7 +262,7 @@ const height2Value = () => {
         if (height.value >= 0) {
             right(height);
             right(height2, 0, 1);
-            sessionStorage.height = height.value * 12 + height2.value * 1;
+            sessionStorage.height = (height.value * 12 + height2.value * 1) / 12;
         }
         else {
             right(height2);
@@ -916,6 +916,7 @@ const wrong = (detail, emi, marki) => {
     }
     if (marki !== undefined) {
         mark[marki].innerHTML = '&#10006;'
+        mark[marki].style.color = 'red';
     }
 }
 const right = (detail, emi, marki) => {
@@ -927,6 +928,7 @@ const right = (detail, emi, marki) => {
     }
     if (marki !== undefined) {
         mark[marki].innerHTML = '&#10004;'
+        mark[marki].style.color = 'green';
     }
 }
 let numberRowsArray;
@@ -1139,90 +1141,90 @@ if (window.location.pathname === '/html/composition_details.html') {
 if (window.location.pathname === '/html/progress.html') {
     //Progress Table:
     if (numberRows() === true) {
-        //Weight Unit:
-    progress_table.rows[1].cells[1].innerText += ` (${sessionStorage.weight_unit})`;
+        //Name:
+        progress_table.rows[0].cells[0].innerText = sessionStorage.name;
 
-    //Muscle Mass Unit:
-    progress_table.rows[1].cells[5].innerText += ` (${sessionStorage.weight_unit})`;
+        //Age:
+        progress_table.rows[0].cells[1].innerText = `Age: ${sessionStorage.age}`;
 
-    //Bone Mass Unit:
-    progress_table.rows[1].cells[7].innerText += ` (${sessionStorage.weight_unit})`;
-
-    //BMR Unit:
-    progress_table.rows[1].cells[8].innerText += ` (${sessionStorage.bmr_unit})`;
-    
-    //Name:
-    progress_table.rows[0].cells[0].innerText = sessionStorage.name;
-
-    //Age:
-    progress_table.rows[0].cells[1].innerText = `Age: ${sessionStorage.age}`;
-    
-    //Height:
-    progress_table.rows[0].cells[2].innerText = `Height: ${sessionStorage.height} ${sessionStorage.height_unit}`;
-
-    sessionStorage.canAddEntry = 'no';
-
-    numberRowsArray.forEach(currentRow => {
-        //Insert Row:
-        let rowAdd = progress_table.insertRow(currentRow.int);
-
-        //Insert Cells:
-        for (let i = 0; i < 12; i++) {
-            rowAdd.insertCell(i);
-        }
-    
-        //Date:
-        progress_table.rows[currentRow.int].cells[0].innerText = currentRow.date;
+        //Height:
+        progress_table.rows[0].cells[2].innerText = `Height: ${(sessionStorage.height * 1).toFixed(1)} ${sessionStorage.height_unit}`;
         
-        //Weight:
-        progress_table.rows[currentRow.int].cells[1].innerText = currentRow.weight;
+        //Weight Unit:
+        progress_table.rows[1].cells[1].innerText += ` (${sessionStorage.weight_unit})`;
 
-        //BMI:
-        progress_table.rows[currentRow.int].cells[2].innerText = currentRow.bmi;
+        //Muscle Mass Unit:
+        progress_table.rows[1].cells[5].innerText += ` (${sessionStorage.weight_unit})`;
 
-        //Body Fat:
-        progress_table.rows[currentRow.int].cells[3].innerText = currentRow.body_fat;
+        //Bone Mass Unit:
+        progress_table.rows[1].cells[7].innerText += ` (${sessionStorage.weight_unit})`;
 
-        //Visceral Fat:
-        progress_table.rows[currentRow.int].cells[4].innerText = currentRow.visceral_fat;
+        //BMR Unit:
+        progress_table.rows[1].cells[8].innerText += ` (${sessionStorage.bmr_unit})`;
+        
+        sessionStorage.canAddEntry = 'no';
 
-        //Muscle Mass:
-        progress_table.rows[currentRow.int].cells[5].innerText = currentRow.muscle_mass;
+        numberRowsArray.forEach(currentRow => {
+            //Insert Row:
+            let rowAdd = progress_table.insertRow(currentRow.int);
 
-        //Physique Rating:
-        progress_table.rows[currentRow.int].cells[6].innerText = currentRow.physique_rating;
-
-        //Bone Mass:
-        progress_table.rows[currentRow.int].cells[7].innerText = currentRow.bone_mass;
-
-        //BMR:
-        progress_table.rows[currentRow.int].cells[8].innerText = currentRow.bmr;
-
-        //Metabolic Age:
-        progress_table.rows[currentRow.int].cells[9].innerText = currentRow.metabolic_age;
-
-        //Body Water:
-        progress_table.rows[currentRow.int].cells[10].innerText = currentRow.body_water;
-
-        //Delete Entry:
-        progress_table.rows[currentRow.int].cells[11].innerText = '❌';
-        progress_table.rows[currentRow.int].cells[11].style.background = 'white';
-        progress_table.rows[currentRow.int].cells[11].style.border = 'none';
-        progress_table.rows[currentRow.int].cells[11].style.cursor = 'pointer';
-        progress_table.rows[currentRow.int].cells[11].addEventListener('click', () => {
-            let confirmation = window.confirm('Are you sure?');
-            if (confirmation) {
-                numberRowsArrayFixGap = numberRowsArray.splice(currentRow.int - 2, numberRowsArray.length);
-                numberRowsArrayFixGap.shift();
-                numberRowsArrayFixGap.forEach(currentRow => {
-                    currentRow.int--;
-                })
-                numberRowsArray = numberRowsArray.concat(numberRowsArrayFixGap)
-                sessionStorage.numberRows = JSON.stringify(numberRowsArray);
-                location.reload();
+            //Insert Cells:
+            for (let i = 0; i < 12; i++) {
+                rowAdd.insertCell(i);
             }
-        })
-    });
+        
+            //Date:
+            progress_table.rows[currentRow.int].cells[0].innerText = currentRow.date;
+            
+            //Weight:
+            progress_table.rows[currentRow.int].cells[1].innerText = (currentRow.weight * 1).toFixed(1);
+
+            //BMI:
+            progress_table.rows[currentRow.int].cells[2].innerText = (currentRow.bmi * 1).toFixed(1);
+
+            //Body Fat:
+            progress_table.rows[currentRow.int].cells[3].innerText = (currentRow.body_fat * 1).toFixed(1);
+
+            //Visceral Fat:
+            progress_table.rows[currentRow.int].cells[4].innerText = (currentRow.visceral_fat * 1).toFixed(1);
+
+            //Muscle Mass:
+            progress_table.rows[currentRow.int].cells[5].innerText = (currentRow.muscle_mass * 1).toFixed(1);
+
+            //Physique Rating:
+            progress_table.rows[currentRow.int].cells[6].innerText = (currentRow.physique_rating * 1).toFixed(1);
+
+            //Bone Mass:
+            progress_table.rows[currentRow.int].cells[7].innerText = (currentRow.bone_mass * 1).toFixed(1);
+
+            //BMR:
+            progress_table.rows[currentRow.int].cells[8].innerText = (currentRow.bmr * 1).toFixed(1);
+
+            //Metabolic Age:
+            progress_table.rows[currentRow.int].cells[9].innerText = (currentRow.metabolic_age * 1).toFixed(1);
+
+            //Body Water:
+            progress_table.rows[currentRow.int].cells[10].innerText = (currentRow.body_water * 1).toFixed(1);
+
+            //Delete Entry:
+            progress_table.rows[currentRow.int].cells[11].innerText = '❌';
+            progress_table.rows[currentRow.int].cells[11].style.background = 'white';
+            progress_table.rows[currentRow.int].cells[11].style.border = 'none';
+            progress_table.rows[currentRow.int].cells[11].style.cursor = 'pointer';
+            progress_table.rows[currentRow.int].cells[11].addEventListener('click', () => {
+                let confirmation = window.confirm('Are you sure?');
+                if (confirmation) {
+                    numberRowsArrayFixGap = numberRowsArray.splice(currentRow.int - 2, numberRowsArray.length);
+                    numberRowsArrayFixGap.shift();
+                    numberRowsArrayFixGap.forEach(currentRow => {
+                        currentRow.int--;
+                    })
+                    numberRowsArray = numberRowsArray.concat(numberRowsArrayFixGap)
+                    sessionStorage.numberRows = JSON.stringify(numberRowsArray);
+                    location.reload();
+                }
+            })
+        });
     }
 
     else {
@@ -1250,21 +1252,16 @@ if (window.location.pathname === '/html/progress.html') {
     })
 }
 
-
-//auto focus on the first height when page loads
-//must show inches if if ft weren't filled bug
-//no typo in text input for name
-//settings page
-//detailed analysis of last entry with graphs
-//change sessionStorage to localStorage
-//limit characters entered in table
-//allow user to choose date format
-//allow user to change units 
 //scroll to highest error msg
+//detailed analysis of last entry with graphs
+
+//change sessionStorage to localStorage
 //can't add entries on the same day
 //if people do too much in second box then it automatically fills 1st box properly
+//settings page
+//allow user to choose date format
+//allow user to change units 
 //enter must trigger focus out
-//colors for tick and cross
 //remove blue line around links
 //if name is undefined then address user as you
 //if the website see's that the user has already used the website then it just goes to updating info
@@ -1272,3 +1269,4 @@ if (window.location.pathname === '/html/progress.html') {
 //if user browser does not support then show images of browsers that do 
 //Have better wording on the website
 //Have better error messsages for name
+
