@@ -22,7 +22,9 @@ const metabolic_age = document.querySelector('#metabolic_age');
 const body_water = document.querySelector('#body_water');
 const bmi = document.querySelector('#bmi');
 const progress_table = document.querySelector('#progress_table');
-const breakdown = document.querySelector('#breakdown');
+const full_breakdown = document.querySelector('#full_breakdown');
+const breakdown_header = document.querySelectorAll('.breakdown_header');
+const breakdown = document.querySelectorAll('.breakdown');
 const unit = document.querySelectorAll('.unit')
 const error_msg = document.querySelectorAll('.error_msg');
 const mark = document.querySelectorAll('.mark');
@@ -36,11 +38,11 @@ const clear = document.querySelector('#clear');
 //Functions for javascript file:
 const user_details_filled = () => {
     if (
-        sessionStorage.age !== '' && sessionStorage.age !== undefined &&
-        sessionStorage.gender !== '' && sessionStorage.gender !== undefined &&
-        sessionStorage.height_unit !== '' && sessionStorage.height_unit !== undefined &&
-        sessionStorage.weight_unit !== '' && sessionStorage.weight_unit !== undefined &&
-        sessionStorage.bmr_unit !== '' && sessionStorage.bmr_unit !== undefined
+        localStorage.age !== '' && localStorage.age !== undefined &&
+        localStorage.gender !== '' && localStorage.gender !== undefined &&
+        localStorage.height_unit !== '' && localStorage.height_unit !== undefined &&
+        localStorage.weight_unit !== '' && localStorage.weight_unit !== undefined &&
+        localStorage.bmr_unit !== '' && localStorage.bmr_unit !== undefined
         ) {
         return true;
     }
@@ -48,15 +50,15 @@ const user_details_filled = () => {
 }
 const composition_details_filled = () => {
     if (
-        sessionStorage.height !== '' && sessionStorage.height !== undefined &&
-        sessionStorage.weight !== '' && sessionStorage.weight !== undefined &&
-        sessionStorage.body_fat !== '' && sessionStorage.body_fat !== undefined &&
-        sessionStorage.visceral_fat !== '' && sessionStorage.visceral_fat !== undefined &&
-        sessionStorage.muscle_mass !== '' && sessionStorage.muscle_mass !== undefined &&
-        sessionStorage.bone_mass !== '' && sessionStorage.bone_mass !== undefined &&
-        sessionStorage.bmr !== '' && sessionStorage.bmr !== undefined &&
-        sessionStorage.metabolic_age !== '' && sessionStorage.metabolic_age !== undefined &&
-        sessionStorage.body_water !== '' && sessionStorage.body_water !== undefined
+        localStorage.height !== '' && localStorage.height !== undefined &&
+        localStorage.weight !== '' && localStorage.weight !== undefined &&
+        localStorage.body_fat !== '' && localStorage.body_fat !== undefined &&
+        localStorage.visceral_fat !== '' && localStorage.visceral_fat !== undefined &&
+        localStorage.muscle_mass !== '' && localStorage.muscle_mass !== undefined &&
+        localStorage.bone_mass !== '' && localStorage.bone_mass !== undefined &&
+        localStorage.bmr !== '' && localStorage.bmr !== undefined &&
+        localStorage.metabolic_age !== '' && localStorage.metabolic_age !== undefined &&
+        localStorage.body_water !== '' && localStorage.body_water !== undefined
         ) {
         return true;
     }
@@ -65,67 +67,67 @@ const composition_details_filled = () => {
 const ageValue = () => {
     if (age.value === '') {
         wrong(age, 1, 0);
-        sessionStorage.age = '';
+        localStorage.age = '';
         error_msg[1].innerText = 'Please provide a valid age';
     }
     else if (age.value >= 150) {
         wrong(age, 1, 0);
-        sessionStorage.age = '';
+        localStorage.age = '';
         error_msg[1].innerText = "(Nobody's that old. Please provide an age lower than 150)";
     }
     else if (age.value < 0) {
         wrong(age, 1, 0);
-        sessionStorage.age = '';
+        localStorage.age = '';
         error_msg[1].innerText = "(You're not even born yet. Please provide a positive age)";
     }
     else {
         right(age, 1, 0);
-        sessionStorage.age = age.value;
+        localStorage.age = age.value;
     }
 }
 const maleValue = () => {
     right(male, 2, 1)
     gender_options_box.style.background = '';
     gender_options_box.classList.remove('mistake');
-    sessionStorage.gender = 'male';
+    localStorage.gender = 'male';
 }
 const femaleValue = () => {
     right(female, 2, 1)
     gender_options_box.style.background = '';
     gender_options_box.classList.remove('mistake');
-    sessionStorage.gender = 'female';
+    localStorage.gender = 'female';
 }
 const heightUnitValue = () => {
     if (height_unit.value === 'Choose') {
         wrong(height_unit, 3, 2);
-        sessionStorage.height_unit = '';
+        localStorage.height_unit = '';
         error_msg[3].innerText = '(Please choose preferred unit for height)';
     }
     else {
         right(height_unit, 3, 2);
-        sessionStorage.height_unit = height_unit.value;
+        localStorage.height_unit = height_unit.value;
     }
 }
 const weightUnitValue = () => {
     if (weight_unit.value === 'Choose') {
         wrong(weight_unit, 4, 3);
-        sessionStorage.weight_unit = '';
+        localStorage.weight_unit = '';
         error_msg[4].innerText = '(Please choose preferred unit for weight)';
     }
     else {
         right(weight_unit, 4, 3);
-        sessionStorage.weight_unit = weight_unit.value;
+        localStorage.weight_unit = weight_unit.value;
     }
 }
 const bmrUnitValue = () => {
     if (bmr_unit.value === 'Choose') {
         wrong(bmr_unit, 5, 4);
-        sessionStorage.bmr_unit = '';
+        localStorage.bmr_unit = '';
         error_msg[5].innerText = '(Please choose preferred unit for BMR)';
     }
     else {
         right(bmr_unit, 5, 4);
-        sessionStorage.bmr_unit = bmr_unit.value;
+        localStorage.bmr_unit = bmr_unit.value;
     }
 }
 const canNext = () => {
@@ -136,22 +138,22 @@ const canNext = () => {
         //Age:
         if (age.value === '') {
             wrong(age, 1, 0);
-            sessionStorage.age = '';
+            localStorage.age = '';
             error_msg[1].innerText = "(Required, please provide a valid age)";
         }
         else if (age.value > 150) {
             wrong(age, 1, 0);
-            sessionStorage.age = '';
+            localStorage.age = '';
             error_msg[1].innerText = "(Required, please provide an age lower than 150)";
         }
         else if (age.value < 0) {
             wrong(age, 1, 0);
-            sessionStorage.age = '';
+            localStorage.age = '';
             error_msg[1].innerText = "(Required, please provide a positive age)";
         }
 
         //Gender:
-        if (sessionStorage.gender === '' || sessionStorage.gender === undefined) {
+        if (localStorage.gender === '' || localStorage.gender === undefined) {
             wrong(gender_options_box, 2, 1);
             error_msg[2].innerText = "(Required, please choose a gender)";
         }
@@ -178,69 +180,69 @@ const canNext = () => {
 }
 const heightValue = () => {
     if (height.value === '') {
-        if (sessionStorage.height_unit === 'ft' && height2.value === '') {
+        if (localStorage.height_unit === 'ft' && height2.value === '') {
             wrong(height, 0, 1);
             wrong(height2);
-            sessionStorage.height = '';
+            localStorage.height = '';
             error_msg[0].innerText = '(Please provide a valid height)';
         }
         if (height2.value < 0) {
             right(height);
             wrong(height2, 0, 1)
-            sessionStorage.height = '';
+            localStorage.height = '';
             error_msg[0].innerText = '(Please provide a positive height)';
         }
-        else if (sessionStorage.height_unit !== 'ft') {
+        else if (localStorage.height_unit !== 'ft') {
             wrong(height, 0, 0);
-            sessionStorage.height = '';
+            localStorage.height = '';
             error_msg[0].innerText = '(Please provide a valid height)';
         }
     }
     else if (height.value < 0) {
-        if (sessionStorage.height_unit === 'ft') {
+        if (localStorage.height_unit === 'ft') {
             wrong(height, 0, 1);
-            sessionStorage.height = '';
+            localStorage.height = '';
             error_msg[0].innerText = "(Please provide a positive height)";
         }
         else {
             wrong(height, 0, 0);
-            sessionStorage.height = '';
+            localStorage.height = '';
             error_msg[0].innerText = "(Please provide a positive height)";
         }
     }
-    else if (sessionStorage.height_unit === 'cm' && height.value >= 275) {
+    else if (localStorage.height_unit === 'cm' && height.value >= 275) {
         wrong(height, 0, 0);
-        sessionStorage.height = '';
+        localStorage.height = '';
         error_msg[0].innerText = "(That can't be right. Please provide a height lower than 275cm)";
     }
-    else if (sessionStorage.height_unit === 'm' && height.value >= 2.75) {
+    else if (localStorage.height_unit === 'm' && height.value >= 2.75) {
         wrong(height, 0, 0);
-        sessionStorage.height = '';
+        localStorage.height = '';
         error_msg[0].innerText = "(That can't be right. Please provide a height lower than 2.75m)";
     }
-    else if (sessionStorage.height_unit === 'ft' && (height.value * 12 + height2.value * 1 >= 108)) {
+    else if (localStorage.height_unit === 'ft' && (height.value * 12 + height2.value * 1 >= 108)) {
         wrong(height, 0, 1);
         wrong(height2);
-        sessionStorage.height = '';
+        localStorage.height = '';
         error_msg[0].innerText = "(That can't be right. Please provide a height lower than 9ft)";
     }
     else {
-        if (sessionStorage.height_unit === 'ft') {
+        if (localStorage.height_unit === 'ft') {
             if (height2.value >= 0) {
                 right(height, 0, 1);
                 right(height2);
-                sessionStorage.height = (height.value * 12 + height2.value * 1) / 12;
+                localStorage.height = (height.value * 12 + height2.value * 1) / 12;
             }
             else {
                 right(height);
                 wrong(height2, 0, 1)
-                sessionStorage.height = '';
+                localStorage.height = '';
                 error_msg[0].innerText = '(Please provide a positive height)';
             }
         }
-        else if (sessionStorage.height_unit !== 'ft') {
+        else if (localStorage.height_unit !== 'ft') {
             right(height, 0, 0);
-            sessionStorage.height = height.value;
+            localStorage.height = height.value;
         }
     }
 }
@@ -248,99 +250,99 @@ const height2Value = () => {
     if (height2.value === '' && height.value === '') {
         wrong(height);
         wrong(height2, 0, 1);
-        sessionStorage.height = '';
+        localStorage.height = '';
         error_msg[0].innerText = '(Please provide a valid height)';
     }
     else if (height2.value < 0) {
         wrong(height2, 0, 1);
-        sessionStorage.height = '';
+        localStorage.height = '';
         error_msg[0].innerText = "(Please provide a positive height)";
     }
     else if (height.value * 12 + height2.value * 1 >= 108) {
         wrong(height);
         wrong(height2, 0, 1);
-        sessionStorage.height = '';
+        localStorage.height = '';
         error_msg[0].innerText = "(That can't be right. Please provide a height lower than 9ft)";
     }
     else {
         if (height.value >= 0) {
             right(height);
             right(height2, 0, 1);
-            sessionStorage.height = (height.value * 12 + height2.value * 1) / 12;
+            localStorage.height = (height.value * 12 + height2.value * 1) / 12;
         }
         else {
             right(height2);
             wrong(height, 0, 1)
-            sessionStorage.height = '';
+            localStorage.height = '';
             error_msg[0].innerText = '(Please provide a positive height)';
         }
     }
 }
 const weightValue = () => {
     if (weight.value === '') {
-        if (sessionStorage.weight_unit === 'st' && weight2.value === '') {
+        if (localStorage.weight_unit === 'st' && weight2.value === '') {
             wrong(weight, 1, 3);
             wrong(weight2);
-            sessionStorage.weight = '';
+            localStorage.weight = '';
             error_msg[1].innerText = '(Please provide a valid weight)';
         }
         if (weight2.value < 0) {
             right(weight);
             wrong(weight2, 1, 3)
-            sessionStorage.weight = '';
+            localStorage.weight = '';
             error_msg[1].innerText = '(Please provide a positive weight)';
         }
-        else if (sessionStorage.weight_unit !== 'st') {
+        else if (localStorage.weight_unit !== 'st') {
             wrong(weight, 1, 2);
-            sessionStorage.weight = '';
+            localStorage.weight = '';
             error_msg[1].innerText = '(Please provide a valid weight)';
         }
     }
     else if (weight.value < 0) {
-        if (sessionStorage.weight_unit === 'st') {
+        if (localStorage.weight_unit === 'st') {
             wrong(weight, 1, 3);
-            sessionStorage.weight = '';
+            localStorage.weight = '';
             error_msg[1].innerText = '(Please provide a positive weight)';
         }
         else {
             wrong(weight, 1, 2);
-            sessionStorage.weight = '';
+            localStorage.weight = '';
             error_msg[1].innerText = '(Please provide a positive weight)';
         }
     }
-    else if (sessionStorage.weight_unit === 'kg' && weight.value >= 908) {
+    else if (localStorage.weight_unit === 'kg' && weight.value >= 908) {
         wrong(weight, 1, 2);
-        sessionStorage.weight = '';
+        localStorage.weight = '';
         error_msg[1].innerText = "(That can't be right. Please provide a weight lower than 908kg)";
     }
-    else if (sessionStorage.weight_unit === 'lbs' && weight.value >= 2000) {
+    else if (localStorage.weight_unit === 'lbs' && weight.value >= 2000) {
         wrong(weight, 1, 2);
-        sessionStorage.weight = '';
+        localStorage.weight = '';
         error_msg[1].innerText = "(That can't be right. Please provide a weight lower than 2000lbs)";
     }
-    else if (sessionStorage.weight_unit === 'st' && (weight.value * 14 + weight2.value * 1 >= 2002)) {
+    else if (localStorage.weight_unit === 'st' && (weight.value * 14 + weight2.value * 1 >= 2002)) {
         wrong(weight, 1, 3);
         wrong(weight2);
-        sessionStorage.weight = '';
+        localStorage.weight = '';
         error_msg[1].innerText = "(That can't be right. Please provide a weight lower than 143st)";
     }
     else {
-        if (sessionStorage.weight_unit === 'st') {
+        if (localStorage.weight_unit === 'st') {
             if (weight2.value >= 0) {
                 right(weight, 1, 3);
                 right(weight2);
-                sessionStorage.weight = (weight.value * 14 + weight2.value * 1) / 14;
+                localStorage.weight = (weight.value * 14 + weight2.value * 1) / 14;
             }
             else {
                 right(weight);
                 wrong(weight2, 1, 3)
-                sessionStorage.weight = '';
+                localStorage.weight = '';
                 error_msg[1].innerText = '(Please provide a positive weight)';
             }
         }
-        else if (sessionStorage.weight_unit !== 'st') {
+        else if (localStorage.weight_unit !== 'st') {
             right(weight, 1, 2);
-            sessionStorage.weight = weight.value;
+            localStorage.weight = weight.value;
         }    
     }
 }
@@ -348,30 +350,30 @@ const weight2Value = () => {
     if (weight2.value === '' && weight.value === '') {
         wrong(weight);
         wrong(weight2, 1, 3);
-        sessionStorage.weight = '';
+        localStorage.weight = '';
         error_msg[1].innerText = '(Please provide a valid weight)';
     }
     else if (weight2.value < 0) {
         wrong(weight2, 1, 3);
-        sessionStorage.weight = '';
+        localStorage.weight = '';
         error_msg[1].innerText = '(Please provide a positive weight)';
     }
     else if (weight.value * 14 + weight2.value * 1 >= 2000) {
         wrong(weight);
         wrong(weight2, 1, 3);
-        sessionStorage.weight = '';
+        localStorage.weight = '';
         error_msg[1].innerText = "(That can't be right. Please provide a weight lower than 143st)";
     }
     else {
         if (weight.value >= 0) {
             right(weight);
             right(weight2, 1, 3);
-            sessionStorage.weight = (weight.value * 14 + weight2.value * 1) / 14;
+            localStorage.weight = (weight.value * 14 + weight2.value * 1) / 14;
         }
         else {
             right(weight2);
             wrong(weight, 1, 3)
-            sessionStorage.weight = '';
+            localStorage.weight = '';
             error_msg[1].innerText = '(Please provide a positive weight)';
         }
     }
@@ -379,110 +381,110 @@ const weight2Value = () => {
 const body_fatValue = () => {
     if (body_fat.value === '') {
         wrong(body_fat, 2, 4);
-        sessionStorage.body_fat = '';
+        localStorage.body_fat = '';
         error_msg[2].innerText = '(Please provide a valid body fat %)';
     }
     else if (body_fat.value < 0) {
         wrong(body_fat, 2, 4);
-        sessionStorage.body_fat = '';
+        localStorage.body_fat = '';
         error_msg[2].innerText = '(Please provide a positive body fat %)';
     }
     else if (body_fat.value >= 70) {
         wrong(body_fat, 2, 4);
-        sessionStorage.body_fat = '';
+        localStorage.body_fat = '';
         error_msg[2].innerText = "(That can't be right. Please provide a body fat % lower than 70%)";
         }
     else {
         right(body_fat, 2, 4);
-        sessionStorage.body_fat = body_fat.value;
+        localStorage.body_fat = body_fat.value;
     }
 }
 const visceral_fatValue = () => {
     if (visceral_fat.value === '') {
         wrong(visceral_fat, 3, 5);
-        sessionStorage.visceral_fat = '';
+        localStorage.visceral_fat = '';
         error_msg[3].innerText = '(Please provide a valid visceral fat)';
     }
     else if (visceral_fat.value < 0) {
         wrong(visceral_fat, 3, 5);
-        sessionStorage.visceral_fat = '';
+        localStorage.visceral_fat = '';
         error_msg[3].innerText = '(Please provide a positive visceral fat)';
     }
     else if (visceral_fat.value > 59) {
         wrong(visceral_fat, 3, 5);
-        sessionStorage.visceral_fat = '';
+        localStorage.visceral_fat = '';
         error_msg[3].innerText = "(That can't be right. Please provide a visceral fat lower than 59)";
     }
     else {
         right(visceral_fat, 3, 5);
-        sessionStorage.visceral_fat = visceral_fat.value;
+        localStorage.visceral_fat = visceral_fat.value;
     }
 }
 const muscle_massValue = () => {
     if (muscle_mass.value === '') {
-        if (sessionStorage.weight_unit === 'st' && muscle_mass2.value === '') {
+        if (localStorage.weight_unit === 'st' && muscle_mass2.value === '') {
             wrong(muscle_mass, 4, 7);
             wrong(muscle_mass2);
-            sessionStorage.muscle_mass = '';
+            localStorage.muscle_mass = '';
             error_msg[4].innerText = "(Please provide a valid muscle mass)";
         }
         if (muscle_mass2.value < 0) {
             right(muscle_mass);
             wrong(muscle_mass2, 4, 7)
-            sessionStorage.muscle_mass = '';
+            localStorage.muscle_mass = '';
             error_msg[4].innerText = '(Please provide a positive muscle mass)';
         }
-        else if (sessionStorage.weight_unit !== 'st') {
+        else if (localStorage.weight_unit !== 'st') {
             wrong(muscle_mass, 4, 6);
-            sessionStorage.muscle_mass = '';
+            localStorage.muscle_mass = '';
             error_msg[4].innerText = "(Please provide a valid muscle mass)";
         }
     }
     else if (muscle_mass.value < 0) {
-        if (sessionStorage.weight_unit === 'st') {
+        if (localStorage.weight_unit === 'st') {
             wrong(muscle_mass, 4, 7);
-            sessionStorage.muscle_mass = '';
+            localStorage.muscle_mass = '';
             error_msg[4].innerText = "(Please provide a positive muscle mass)";
         }
         else {
             wrong(muscle_mass, 4, 6);
-            sessionStorage.muscle_mass = '';
+            localStorage.muscle_mass = '';
             error_msg[4].innerText = "(Please provide a positive muscle mass)";
         }   
     }
-    else if (sessionStorage.weight_unit === 'kg' && muscle_mass.value > 908) {
+    else if (localStorage.weight_unit === 'kg' && muscle_mass.value > 908) {
         wrong(muscle_mass, 4, 6);
-        sessionStorage.muscle_mass = '';
+        localStorage.muscle_mass = '';
         error_msg[4].innerText = "(That can't be right. Please provide a muscle mass lower than 908kg)";
     }
-    else if (sessionStorage.weight_unit === 'lbs' && muscle_mass.value > 2000) {
+    else if (localStorage.weight_unit === 'lbs' && muscle_mass.value > 2000) {
         wrong(muscle_mass, 4, 6);
-        sessionStorage.muscle_mass = '';
+        localStorage.muscle_mass = '';
         error_msg[4].innerText = "(That can't be right. Please provide a muscle mass lower than 2000lbs)";
     }
-    else if (sessionStorage.weight_unit === 'st' && (muscle_mass.value * 14 + muscle_mass2.value * 1 > 2002)) {
+    else if (localStorage.weight_unit === 'st' && (muscle_mass.value * 14 + muscle_mass2.value * 1 > 2002)) {
         wrong(muscle_mass, 4, 7);
         wrong(muscle_mass2);
-        sessionStorage.muscle_mass = '';
+        localStorage.muscle_mass = '';
         error_msg[4].innerText = "(That can't be right. Please provide a muscle mass lower than 143st)";
     }
     else {
-        if (sessionStorage.weight_unit === 'st') {
+        if (localStorage.weight_unit === 'st') {
             if (muscle_mass2.value >= 0) {
                 right(muscle_mass, 4, 7);
                 right(muscle_mass2);
-                sessionStorage.muscle_mass = (muscle_mass.value * 14 + muscle_mass2.value * 1) / 14;
+                localStorage.muscle_mass = (muscle_mass.value * 14 + muscle_mass2.value * 1) / 14;
             }
             else {
                 right(muscle_mass);
                 wrong(muscle_mass2, 4, 7)
-                sessionStorage.muscle_mass = '';
+                localStorage.muscle_mass = '';
                 error_msg[4].innerText = '(Please provide a positive muscle mass)';
             }
         }
-        else if (sessionStorage.weight_unit !== 'st') {
+        else if (localStorage.weight_unit !== 'st') {
             right(muscle_mass, 4, 6);
-            sessionStorage.muscle_mass = muscle_mass.value;
+            localStorage.muscle_mass = muscle_mass.value;
         }
        
     }
@@ -491,31 +493,31 @@ const muscle_mass2Value = () => {
     if (muscle_mass2.value === '' && muscle_mass.value === '') {
         wrong(muscle_mass);
         wrong(muscle_mass2, 4, 7);
-        sessionStorage.muscle_mass = '';
+        localStorage.muscle_mass = '';
         error_msg[4].innerText = "(Please provide a valid muscle mass)";
     }
     else if (muscle_mass2.value < 0) {
         wrong(muscle_mass2, 4, 7);
-        sessionStorage.muscle_mass = '';
+        localStorage.muscle_mass = '';
         error_msg[4].innerText = "(Please provide a positive muscle mass)";
 
     }
     else if (muscle_mass.value * 14 + muscle_mass2.value * 1 > 2002) {
         wrong(muscle_mass);
         wrong(muscle_mass2, 4, 7);
-        sessionStorage.muscle_mass = '';
+        localStorage.muscle_mass = '';
         error_msg[4].innerText = "(That can't be right. Please provide a muscle mass lower than 143st)";
     }
     else {
         if (muscle_mass.value >= 0) {
             right(muscle_mass);
             right(muscle_mass2, 4, 7);
-            sessionStorage.muscle_mass = (muscle_mass.value * 14 + muscle_mass2.value * 1) / 14;
+            localStorage.muscle_mass = (muscle_mass.value * 14 + muscle_mass2.value * 1) / 14;
         }
         else {
             right(muscle_mass2);
             wrong(muscle_mass, 4, 7)
-            sessionStorage.muscle_mass = '';
+            localStorage.muscle_mass = '';
             error_msg[4].innerText = '(Please provide a positive muscle mass)';
         }
     }
@@ -523,80 +525,80 @@ const muscle_mass2Value = () => {
 const physique_ratingValue = () => {
     if (physique_rating.value === 'Choose') {
         wrong(physique_rating, 5, 8);
-        sessionStorage.physique_rating = '';
+        localStorage.physique_rating = '';
         error_msg[5].innerText = '(Please choose a physique rating)';
     }
     else {
-        sessionStorage.physique_rating = physique_rating.value;
+        localStorage.physique_rating = physique_rating.value;
         right(physique_rating, 5, 8);
     }
     
 }
 const bone_massValue = () => {
     if (bone_mass.value === '') {
-        if (sessionStorage.weight_unit === 'st' && bone_mass2.value === '') {
+        if (localStorage.weight_unit === 'st' && bone_mass2.value === '') {
             wrong(bone_mass, 6, 10);
             wrong(bone_mass2);
-            sessionStorage.bone_mass = '';
+            localStorage.bone_mass = '';
             error_msg[6].innerText = "(Please provide a valid bone mass)";
         }
         if (bone_mass2.value < 0) {
             right(bone_mass);
             wrong(bone_mass2, 6, 10)
-            sessionStorage.bone_mass = '';
+            localStorage.bone_mass = '';
             error_msg[6].innerText = '(Please provide a positive bone mass)';
         }
-        if (sessionStorage.weight_unit !== 'st') {
+        if (localStorage.weight_unit !== 'st') {
             wrong(bone_mass, 6, 9);
-            sessionStorage.bone_mass = '';
+            localStorage.bone_mass = '';
             error_msg[6].innerText = "(Please provide a valid bone mass)";
         }
     }
     else if (bone_mass.value < 0) {
-        if (sessionStorage.weight_unit === 'st') {
+        if (localStorage.weight_unit === 'st') {
             wrong(bone_mass, 6, 10);
-            sessionStorage.bone_mass = '';
+            localStorage.bone_mass = '';
             error_msg[6].innerText = "(Please provide a positive bone mass)";
         }
         else {
             wrong(bone_mass, 6, 9);
-            sessionStorage.bone_mass = '';
+            localStorage.bone_mass = '';
             error_msg[6].innerText = "(Please provide a positive bone mass)";
         }
     }
-    else if (sessionStorage.weight_unit === 'kg' && bone_mass.value >= 37) {
+    else if (localStorage.weight_unit === 'kg' && bone_mass.value >= 37) {
         wrong(bone_mass, 6, 9);
-        sessionStorage.bone_mass = '';
+        localStorage.bone_mass = '';
         error_msg[6].innerText = "(That can't be right. Please provide a bone mass lower than 37kg)";
     }
-    else if (sessionStorage.weight_unit === 'lbs' && bone_mass.value >= 80) {
+    else if (localStorage.weight_unit === 'lbs' && bone_mass.value >= 80) {
         wrong(bone_mass, 6, 9);
-        sessionStorage.bone_mass = '';
+        localStorage.bone_mass = '';
         error_msg[6].innerText = "(That can't be right. Please provide a bone mass lower than 80lbs)";
     }
-    else if (sessionStorage.weight_unit === 'st' && (bone_mass.value * 14 + bone_mass2.value * 1 >= 84)) {
+    else if (localStorage.weight_unit === 'st' && (bone_mass.value * 14 + bone_mass2.value * 1 >= 84)) {
         wrong(bone_mass, 6, 10);
         wrong(bone_mass2);
-        sessionStorage.bone_mass = '';
+        localStorage.bone_mass = '';
         error_msg[6].innerText = "(That can't be right. Please provide a bone mass lower than 6st)";
     }
     else {
-        if (sessionStorage.weight_unit === 'st') {
+        if (localStorage.weight_unit === 'st') {
             if (bone_mass2.value >= 0) {
                 right(bone_mass, 6, 10);
                 right(bone_mass2);
-                sessionStorage.bone_mass = (bone_mass.value * 14 + bone_mass2.value * 1) / 14;
+                localStorage.bone_mass = (bone_mass.value * 14 + bone_mass2.value * 1) / 14;
             }
             else {
                 right(bone_mass);
                 wrong(bone_mass2, 6, 10)
-                sessionStorage.bone_mass = '';
+                localStorage.bone_mass = '';
                 error_msg[6].innerText = '(Please provide a positive bone mass)';
             }
         }
-        else if (sessionStorage.weight_unit !== 'st') {
+        else if (localStorage.weight_unit !== 'st') {
             right(bone_mass, 6, 9);
-            sessionStorage.bone_mass = bone_mass.value;
+            localStorage.bone_mass = bone_mass.value;
         }    
     }
 }
@@ -604,30 +606,30 @@ const bone_mass2Value = () => {
     if (bone_mass2.value === '' && bone_mass.value === '') {
         wrong(bone_mass);
         wrong(bone_mass2, 6, 10);
-        sessionStorage.bone_mass = '';
+        localStorage.bone_mass = '';
         error_msg[6].innerText = "(Please provide a valid bone mass)";
     }
     else if (bone_mass2.value < 0) {
         wrong(bone_mass2, 6, 10);
-        sessionStorage.bone_mass = '';
+        localStorage.bone_mass = '';
         error_msg[6].innerText = "(Please provide a positive bone mass)";
     }
     else if (bone_mass.value * 14 + bone_mass2.value * 1 >= 84) {
         wrong(bone_mass);
         wrong(bone_mass2, 6, 10);
-        sessionStorage.bone_mass = '';
+        localStorage.bone_mass = '';
         error_msg[6].innerText = "(That can't be right. Please provide a bone mass lower than 6st)";
     }
     else {
         if (bone_mass.value >= 0) {
             right(bone_mass);
             right(bone_mass2, 6, 10);
-            sessionStorage.bone_mass = (bone_mass.value * 14 + bone_mass2.value * 1) / 14;
+            localStorage.bone_mass = (bone_mass.value * 14 + bone_mass2.value * 1) / 14;
         }
         else {
             right(bone_mass2);
             wrong(bone_mass, 6, 10);
-            sessionStorage.bone_mass = '';
+            localStorage.bone_mass = '';
             error_msg[6].innerText = '(Please provide a positive bone mass)';
         }
     }
@@ -635,83 +637,83 @@ const bone_mass2Value = () => {
 const bmrValue = () => {
     if (bmr.value === '') {
         wrong(bmr, 7, 11);
-        sessionStorage.bmr = '';
+        localStorage.bmr = '';
         error_msg[7].innerText = "(Please provide a valid BMR)";
     }
     else if (bmr.value < 0) {
         wrong(bmr, 7, 11);
-        sessionStorage.bmr = '';
+        localStorage.bmr = '';
         error_msg[7].innerText = "(Please provide a positive BMR)";
     }
-    else if (sessionStorage.bmr_unit === 'kcal' && bmr.value >= 5000) {
+    else if (localStorage.bmr_unit === 'kcal' && bmr.value >= 5000) {
         wrong(bmr, 7, 11);
-        sessionStorage.bmr = '';
+        localStorage.bmr = '';
         error_msg[7].innerText = "(That can't be right. Please provide a BMR lower than 5000kcal)";
     }
-    else if (sessionStorage.bmr_unit === 'kJ' && bmr.value >= 21000) {
+    else if (localStorage.bmr_unit === 'kJ' && bmr.value >= 21000) {
         wrong(bmr, 7, 11);
-        sessionStorage.bmr = '';
+        localStorage.bmr = '';
         error_msg[7].innerText = "(That can't be right. Please provide a BMR lower than 21000kJ)";
     }
     else {
         right(bmr, 7, 11);
-        sessionStorage.bmr = bmr.value;
+        localStorage.bmr = bmr.value;
     }
 }
 const metabolic_ageValue = () => {
     if (metabolic_age.value === '') {
         wrong(metabolic_age, 8, 12);
-        sessionStorage.metabolic_age = '';
+        localStorage.metabolic_age = '';
         error_msg[8].innerText = "(Please provide a valid metabolic age)";
     }
     else if (metabolic_age.value < 0) {
         wrong(metabolic_age, 8, 12);
-        sessionStorage.metabolic_age = '';
+        localStorage.metabolic_age = '';
         error_msg[8].innerText = "(Please provide a positive metabolic age)";
     }
     else if (metabolic_age.value >= 200) {
         wrong(metabolic_age, 8, 12);
-        sessionStorage.metabolic_age = '';
+        localStorage.metabolic_age = '';
         error_msg[8].innerText = "(That can't be right. Please provide a metabolic age lower than 200)";
     }
     else {
         right(metabolic_age, 8, 12)
-        sessionStorage.metabolic_age = metabolic_age.value;
+        localStorage.metabolic_age = metabolic_age.value;
     }
 }
 const body_waterValue = () => {
     if (body_water.value === '') {
         wrong(body_water, 9, 13);
-        sessionStorage.body_water = '';
+        localStorage.body_water = '';
         error_msg[9].innerText = "(Please provide a valid body water %)";
     }
     else if (body_water.value < 0) {
         wrong(body_water, 9, 13);
-        sessionStorage.body_water = '';
+        localStorage.body_water = '';
         error_msg[9].innerText = "(Please provide a positive body water %)";
     }
     else if (body_water.value >= 100) {
         wrong(body_water, 9, 13);
-        sessionStorage.body_water = '';
+        localStorage.body_water = '';
         error_msg[9].innerText = "(That can't be right. Please provide a body % lower than 100%)";
     }
     else {
         right(body_water, 9, 13);
-        sessionStorage.body_water = body_water.value;
+        localStorage.body_water = body_water.value;
     }
 }
 const canDone = () => {
     if (composition_details_filled()) {
         window.open('/html/progress.html', '_self');
-        sessionStorage.canAddEntry = 'yes';
+        localStorage.canAddEntry = 'yes';
     }
     else {
         //Height:
-        if (sessionStorage.height_unit === 'ft') {
+        if (localStorage.height_unit === 'ft') {
             if (height.value === '' && height2.value === '') {
                 wrong(height, 0, 1);
                 wrong(height2);
-                sessionStorage.height = '';
+                localStorage.height = '';
                 error_msg[0].innerText = '(Required, please provide a valid height)';
             }
             else if (error_msg[0].innerText === '(Please provide a positive height)') {
@@ -721,10 +723,10 @@ const canDone = () => {
                 error_msg[0].innerText = "(Required, please provide a height lower than 9ft)";
             }
         } 
-        if (sessionStorage.height_unit !== 'ft') {
+        if (localStorage.height_unit !== 'ft') {
             if (height.value === '') {
                 wrong(height, 0, 0);
-                sessionStorage.height = '';
+                localStorage.height = '';
                 error_msg[0].innerText = '(Required, please provide a valid height)';
             }
             else if (error_msg[0].innerText === "(Please provide a positive height)") {
@@ -739,11 +741,11 @@ const canDone = () => {
         }
 
         //Weight:
-        if (sessionStorage.weight_unit === 'st') {
+        if (localStorage.weight_unit === 'st') {
             if (weight.value === '' && weight2.value === '') {
                 wrong(weight, 1, 3);
                 wrong(weight2);
-                sessionStorage.weight = '';
+                localStorage.weight = '';
                 error_msg[1].innerText = '(Required, please provide a valid weight)';
             }
             else if (error_msg[1].innerText === '(Please provide a positive weight)') {
@@ -753,10 +755,10 @@ const canDone = () => {
                 error_msg[1].innerText = "(Required, please provide a weight lower than 143st)";
             }
         }
-        if (sessionStorage.weight_unit !== 'st') {
+        if (localStorage.weight_unit !== 'st') {
             if (weight.value === '') {
                 wrong(weight, 1, 2);
-                sessionStorage.weight = '';
+                localStorage.weight = '';
                 error_msg[1].innerText = '(Required, please provide a valid weight)';
             }
             else if (error_msg[1].innerText === '(Please provide a positive weight)') {
@@ -773,7 +775,7 @@ const canDone = () => {
         //Body Fat:
         if (body_fat.value === '') {
             wrong(body_fat, 2, 4);
-            sessionStorage.body_fat = '';
+            localStorage.body_fat = '';
             error_msg[2].innerText = '(Required, please provide a valid body fat %)';
         }
         if (error_msg[2].innerText === '(Please provide a positive body fat %)') {
@@ -786,7 +788,7 @@ const canDone = () => {
         //Visceral Fat:
         if (visceral_fat.value === '') {
             wrong(visceral_fat, 3, 5);
-            sessionStorage.visceral_fat = '';
+            localStorage.visceral_fat = '';
             error_msg[3].innerText = '(Required, please provide a valid visceral fat)';
         }
         if (error_msg[3].innerText === '(Please provide a positive visceral fat)') {
@@ -797,11 +799,11 @@ const canDone = () => {
         }
 
         //Muscle Mass:
-        if (sessionStorage.weight_unit === 'st') {
+        if (localStorage.weight_unit === 'st') {
             if (muscle_mass.value === '' && muscle_mass2.value === '') {
                 wrong(muscle_mass, 4, 7);
                 wrong(muscle_mass2);
-                sessionStorage.muscle_mass = '';
+                localStorage.muscle_mass = '';
                 error_msg[4].innerText = "(Required, please provide a valid muscle mass)";
             }
             else if (error_msg[4].innerText === '(Please provide a positive muscle mass)') {
@@ -811,10 +813,10 @@ const canDone = () => {
                 error_msg[4].innerText = "(Required, please provide a muscle mass lower than 143st)";
             }
         }
-        if (sessionStorage.weight_unit !== 'st') {
+        if (localStorage.weight_unit !== 'st') {
             if (muscle_mass.value === '') {
                 wrong(muscle_mass, 4, 6);
-                sessionStorage.muscle_mass = '';
+                localStorage.muscle_mass = '';
                 error_msg[4].innerText = "(Required, please provide a valid muscle mass)";
             }
             else if (error_msg[4].innerText === '(Please provide a positive muscle mass)') {
@@ -831,16 +833,16 @@ const canDone = () => {
         //Physique Rating:
         if (physique_rating.value === 'Choose') {
             wrong(physique_rating, 5, 8);
-            sessionStorage.physique_rating = '';
+            localStorage.physique_rating = '';
             error_msg[5].innerText = '(Required, please choose a physique rating)';
         }
 
         //Bone Mass
-        if (sessionStorage.weight_unit === 'st') {
+        if (localStorage.weight_unit === 'st') {
             if (bone_mass.value === '' && bone_mass2.value === '') {
                 wrong(bone_mass, 6, 10);
                 wrong(bone_mass2);
-                sessionStorage.bone_mass = '';
+                localStorage.bone_mass = '';
                 error_msg[6].innerText = "(Required, please provide a valid bone mass)";
             }
             else if (error_msg[6].innerText === '(Please provide a positive bone mass)') {
@@ -850,10 +852,10 @@ const canDone = () => {
                 error_msg[6].innerText = "(Required, please provide a bone mass lower than 6st)";
             }
         }
-        if (sessionStorage.weight_unit !== 'st') {
+        if (localStorage.weight_unit !== 'st') {
             if (bone_mass.value === '') {
                 wrong(bone_mass, 6, 9);
-                sessionStorage.bone_mass = '';
+                localStorage.bone_mass = '';
                 error_msg[6].innerText = "(Required, please provide a valid bone mass)";
             }
             else if (error_msg[6].innerText === '(Please provide a positive bone mass)') {
@@ -870,23 +872,23 @@ const canDone = () => {
         //BMR:
         if (bmr.value === '') {
             wrong(bmr, 7, 11);
-            sessionStorage.bmr = '';
+            localStorage.bmr = '';
             error_msg[7].innerText = "(Required, please provide a valid BMR)";
         }
         if (error_msg[7].innerText === "(Please provide a positive BMR)") {
             error_msg[7].innerText = "(Required, please provide a positive BMR)";
         }
-        if (sessionStorage.bmr_unit === 'kcal' && error_msg[7].innerText === "(That can't be right. Please provide a BMR lower than 5000kcal)") {
+        if (localStorage.bmr_unit === 'kcal' && error_msg[7].innerText === "(That can't be right. Please provide a BMR lower than 5000kcal)") {
             error_msg[7].innerText = "(Required, please provide a BMR lower than 5000kcal)";
         }
-        if (sessionStorage.bmr_unit === 'kJ' && error_msg[7].innerText === "(That can't be right. Please provide a BMR lower than 21000kJ)") {
+        if (localStorage.bmr_unit === 'kJ' && error_msg[7].innerText === "(That can't be right. Please provide a BMR lower than 21000kJ)") {
             error_msg[7].innerText = "(Required, please provide a BMR lower than 21000kJ)";
         }
 
         //Metabolic Age:
         if (metabolic_age.value === '') {
             wrong(metabolic_age, 8, 12);
-            sessionStorage.metabolic_age = '';
+            localStorage.metabolic_age = '';
             error_msg[8].innerText = "(Required, please provide a valid metabolic age)";
         }
         if (error_msg[8].innerText === "(Please provide a positive metabolic age)") {
@@ -899,7 +901,7 @@ const canDone = () => {
         //Body Water:
         if (body_water.value === '') {
             wrong(body_water, 9, 13);
-            sessionStorage.body_water = '';
+            localStorage.body_water = '';
             error_msg[9].innerText = "(Required, please provide a valid body water %)";
         }
         if (error_msg[9].innerText === "(Please provide a positive body water %)") {
@@ -941,84 +943,92 @@ let numberRowsArray;
 let numberRowsArrayFixGap;
 const date = new Date();
 const bmiValue = () => {
-    if (sessionStorage.height_unit === 'm') {
-        if (sessionStorage.weight_unit === 'kg') {
-            return (sessionStorage.weight/Math.pow(sessionStorage.height, 2)).toFixed(1);
+    if (localStorage.height_unit === 'm') {
+        if (localStorage.weight_unit === 'kg') {
+            localStorage.bmi = (localStorage.weight/Math.pow(localStorage.height, 2)).toFixed(1);
+            return localStorage.bmi;
         }
-        else if (sessionStorage.weight_unit === 'lbs') {
-            return ((sessionStorage.weight/2.205)/Math.pow(sessionStorage.height, 2)).toFixed(1);
+        else if (localStorage.weight_unit === 'lbs') {
+            localStorage.bmi = ((localStorage.weight/2.205)/Math.pow(localStorage.height, 2)).toFixed(1);
+            return localStorage.bmi;
         }
-        else if (sessionStorage.weight_unit === 'st') {
-            return ((sessionStorage.weight*6.35)/Math.pow(sessionStorage.height, 2)).toFixed(1);
-        }
-    }
-    else if (sessionStorage.height_unit === 'cm') {
-        if (sessionStorage.weight_unit === 'kg') {
-            return (sessionStorage.weight/Math.pow((sessionStorage.height/100), 2)).toFixed(1);
-        }
-        else if (sessionStorage.weight_unit === 'lbs') {
-            return ((sessionStorage.weight/2.205)/Math.pow((sessionStorage.height/100), 2)).toFixed(1);
-        }
-        else if (sessionStorage.weight_unit === 'st') {
-            return ((sessionStorage.weight*6.35)/Math.pow((sessionStorage.height/100), 2)).toFixed(1);
+        else if (localStorage.weight_unit === 'st') {
+            localStorage.bmi = ((localStorage.weight*6.35)/Math.pow(localStorage.height, 2)).toFixed(1);
+            return localStorage.bmi;
         }
     }
-    else if (sessionStorage.height_unit === 'ft') {
-        if (sessionStorage.weight_unit === 'kg') {
-            return (sessionStorage.weight/Math.pow((sessionStorage.height/3.281), 2)).toFixed(1);
+    else if (localStorage.height_unit === 'cm') {
+        if (localStorage.weight_unit === 'kg') {
+            localStorage.bmi = (localStorage.weight/Math.pow((localStorage.height/100), 2)).toFixed(1);
+            return localStorage.bmi;
         }
-        else if (sessionStorage.weight_unit === 'lbs') {
-            return ((sessionStorage.weight/2.205)/Math.pow((sessionStorage.height/3.281), 2)).toFixed(1);
+        else if (localStorage.weight_unit === 'lbs') {
+            localStorage.bmi = ((localStorage.weight/2.205)/Math.pow((localStorage.height/100), 2)).toFixed(1);
+            return localStorage.bmi;
         }
-        else if (sessionStorage.weight_unit === 'st') {
-            return ((sessionStorage.weight*6.35)/Math.pow((sessionStorage.height/3.281), 2)).toFixed(1);
+        else if (localStorage.weight_unit === 'st') {
+            localStorage.bmi = ((localStorage.weight*6.35)/Math.pow((localStorage.height/100), 2)).toFixed(1);
+            return localStorage.bmi;
+        }
+    }
+    else if (localStorage.height_unit === 'ft') {
+        if (localStorage.weight_unit === 'kg') {
+            localStorage.bmi = (localStorage.weight/Math.pow((localStorage.height/3.281), 2)).toFixed(1);
+            return localStorage.bmi;
+        }
+        else if (localStorage.weight_unit === 'lbs') {
+            localStorage.bmi = ((localStorage.weight/2.205)/Math.pow((localStorage.height/3.281), 2)).toFixed(1);
+            return localStorage.bmi;
+        }
+        else if (localStorage.weight_unit === 'st') {
+            localStorage.bmi = ((localStorage.weight*6.35)/Math.pow((localStorage.height/3.281), 2)).toFixed(1);
+            return localStorage.bmi;
         }
     }
 }
 const numberRows = () => { 
-    if ((sessionStorage.numberRows === undefined && sessionStorage.canAddEntry !== 'yes') || sessionStorage.numberRows === '[]') {
+    if ((localStorage.numberRows === undefined && localStorage.canAddEntry !== 'yes') || localStorage.numberRows === '[]') {
         return false;
     }
-    else if (sessionStorage.numberRows === undefined && sessionStorage.canAddEntry === 'yes') {
-        sessionStorage.numberRows = JSON.stringify([{
+    else if (localStorage.numberRows === undefined && localStorage.canAddEntry === 'yes') {
+        localStorage.numberRows = JSON.stringify([{
             int: 2,
             date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
-            weight: sessionStorage.weight,
+            weight: localStorage.weight,
             bmi: bmiValue(),
-            body_fat: sessionStorage.body_fat,
-            visceral_fat: sessionStorage.visceral_fat,
-            muscle_mass: sessionStorage.muscle_mass,
-            physique_rating: sessionStorage.physique_rating,
-            bone_mass: sessionStorage.bone_mass,
-            bmr: sessionStorage.bmr,
-            metabolic_age: sessionStorage.metabolic_age,
-            body_water: sessionStorage.body_water
+            body_fat: localStorage.body_fat,
+            visceral_fat: localStorage.visceral_fat,
+            muscle_mass: localStorage.muscle_mass,
+            physique_rating: localStorage.physique_rating,
+            bone_mass: localStorage.bone_mass,
+            bmr: localStorage.bmr,
+            metabolic_age: localStorage.metabolic_age,
+            body_water: localStorage.body_water
         }]);
-        numberRowsArray = JSON.parse(sessionStorage.numberRows);
+        numberRowsArray = JSON.parse(localStorage.numberRows);
         return true;
     }
-    else if (sessionStorage.numberRows !== undefined && sessionStorage.canAddEntry === 'yes') {
-        numberRowsArray = JSON.parse(sessionStorage.numberRows);
+    else if (localStorage.numberRows !== undefined && localStorage.canAddEntry === 'yes') {
+        numberRowsArray = JSON.parse(localStorage.numberRows);
         numberRowsArray.push({
             int: numberRowsArray.length + 2,
             date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
-            weight: sessionStorage.weight,
+            weight: localStorage.weight,
             bmi: bmiValue(),
-            body_fat: sessionStorage.body_fat,
-            visceral_fat: sessionStorage.visceral_fat,
-            muscle_mass: sessionStorage.muscle_mass,
-            physique_rating: sessionStorage.physique_rating,
-            bone_mass: sessionStorage.bone_mass,
-            bmr: sessionStorage.bmr,
-            metabolic_age: sessionStorage.metabolic_age,
-            body_water: sessionStorage.body_water
+            body_fat: localStorage.body_fat,
+            visceral_fat: localStorage.visceral_fat,
+            muscle_mass: localStorage.muscle_mass,
+            physique_rating: localStorage.physique_rating,
+            bone_mass: localStorage.bone_mass,
+            bmr: localStorage.bmr,
+            metabolic_age: localStorage.metabolic_age,
+            body_water: localStorage.body_water
         });
-        sessionStorage.numberRows = JSON.stringify(numberRowsArray);
+        localStorage.numberRows = JSON.stringify(numberRowsArray);
         return true;
     }
     else {
-        numberRowsArray = JSON.parse(sessionStorage.numberRows);
-        // sessionStorage.numberRows = JSON.stringify(numberRowsArray);
+        numberRowsArray = JSON.parse(localStorage.numberRows);
         return true;
     }
 }
@@ -1045,7 +1055,7 @@ if (window.location.pathname === "/html/user_details.html") {
         if ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) && name.value.length < 35) {
             right(name, 0)
             name.value += event.key;
-            sessionStorage.name = name.value;
+            localStorage.name = name.value;
         }
         else if (name.value.length === 35) {
             wrong(name, 0)
@@ -1080,18 +1090,18 @@ if (window.location.pathname === "/html/user_details.html") {
 //Composition Details page
 if (window.location.pathname === '/html/composition_details.html') {
     //Height:
-    unit[0].innerText = `(${sessionStorage.height_unit})`;
+    unit[0].innerText = `(${localStorage.height_unit})`;
     height.addEventListener('focusout', heightValue)
-    if (sessionStorage.height_unit === 'ft') {
+    if (localStorage.height_unit === 'ft') {
         unit[1].classList.remove('not');
         height2.classList.remove('not');
     }
     height2.addEventListener('focusout', height2Value)
 
     //Weight:
-    unit[2].innerText = `(${sessionStorage.weight_unit})`;
+    unit[2].innerText = `(${localStorage.weight_unit})`;
     weight.addEventListener('focusout', weightValue)
-    if (sessionStorage.weight_unit === 'st') {
+    if (localStorage.weight_unit === 'st') {
         unit[3].classList.remove('not');
         weight2.classList.remove('not');
     }
@@ -1104,9 +1114,9 @@ if (window.location.pathname === '/html/composition_details.html') {
     visceral_fat.addEventListener('focusout', visceral_fatValue)
     
     //Muscle Mass:
-    unit[4].innerText = `(${sessionStorage.weight_unit})`;
+    unit[4].innerText = `(${localStorage.weight_unit})`;
     muscle_mass.addEventListener('focusout', muscle_massValue)
-    if (sessionStorage.weight_unit === 'st') {
+    if (localStorage.weight_unit === 'st') {
         unit[5].classList.remove('not');
         muscle_mass2.classList.remove('not');
     }
@@ -1116,16 +1126,16 @@ if (window.location.pathname === '/html/composition_details.html') {
     physique_rating.addEventListener('focusout', physique_ratingValue)
     
     //Bone Mass
-    unit[6].innerText = `(${sessionStorage.weight_unit})`;
+    unit[6].innerText = `(${localStorage.weight_unit})`;
     bone_mass.addEventListener('focusout', bone_massValue)
-    if (sessionStorage.weight_unit === 'st') {
+    if (localStorage.weight_unit === 'st') {
         unit[7].classList.remove('not');
         bone_mass2.classList.remove('not');
     }
     bone_mass2.addEventListener('focusout', bone_mass2Value)
     
     //BMR:
-    unit[8].innerText = `(${sessionStorage.bmr_unit})`;
+    unit[8].innerText = `(${localStorage.bmr_unit})`;
     bmr.addEventListener('focusout', bmrValue)
     
     //Metabolic Age:
@@ -1148,31 +1158,31 @@ if (window.location.pathname === '/html/progress.html') {
     //Progress Table:
     if (numberRows() === true) {
         //Name:
-        if (sessionStorage.name === undefined) {
+        if (localStorage.name === undefined) {
             progress_table.rows[0].cells[0].innerText = 'You';
         }
         else {
-            progress_table.rows[0].cells[0].innerText = sessionStorage.name;
+            progress_table.rows[0].cells[0].innerText = localStorage.name;
         }
         //Age:
-        progress_table.rows[0].cells[1].innerText = `Age: ${(sessionStorage.age * 1).toFixed(1)}`;
+        progress_table.rows[0].cells[1].innerText = `Age: ${(localStorage.age * 1).toFixed(1)}`;
 
         //Height:
-        progress_table.rows[0].cells[2].innerText = `Height: ${(sessionStorage.height * 1).toFixed(1)} ${sessionStorage.height_unit}`;
+        progress_table.rows[0].cells[2].innerText = `Height: ${(localStorage.height * 1).toFixed(1)} ${localStorage.height_unit}`;
         
         //Weight Unit:
-        progress_table.rows[1].cells[1].innerText += ` (${sessionStorage.weight_unit})`;
+        progress_table.rows[1].cells[1].innerText += ` (${localStorage.weight_unit})`;
 
         //Muscle Mass Unit:
-        progress_table.rows[1].cells[5].innerText += ` (${sessionStorage.weight_unit})`;
+        progress_table.rows[1].cells[5].innerText += ` (${localStorage.weight_unit})`;
 
         //Bone Mass Unit:
-        progress_table.rows[1].cells[7].innerText += ` (${sessionStorage.weight_unit})`;
+        progress_table.rows[1].cells[7].innerText += ` (${localStorage.weight_unit})`;
 
         //BMR Unit:
-        progress_table.rows[1].cells[8].innerText += ` (${sessionStorage.bmr_unit})`;
+        progress_table.rows[1].cells[8].innerText += ` (${localStorage.bmr_unit})`;
         
-        sessionStorage.canAddEntry = 'no';
+        localStorage.canAddEntry = 'no';
 
         numberRowsArray.forEach(currentRow => {
             //Insert Row:
@@ -1230,17 +1240,21 @@ if (window.location.pathname === '/html/progress.html') {
                         currentRow.int--;
                     })
                     numberRowsArray = numberRowsArray.concat(numberRowsArrayFixGap)
-                    sessionStorage.numberRows = JSON.stringify(numberRowsArray);
+                    localStorage.numberRows = JSON.stringify(numberRowsArray);
                     location.reload();
                 }
             })
         });
+
+        //Full Breakdown:
+        //BMI Breakdown:
+        breakdown_header[0].innerText += ` ${numberRowsArray[numberRowsArray.length - 1].bmi}`;
     }
 
     else {
         document.querySelector('.header_msg').innerHTML = 'No entries to show';
         progress_table.classList.add('not');
-        breakdown.classList.add('not');
+        full_breakdown.classList.add('not');
     }
     
     //Add Entry:
@@ -1258,7 +1272,7 @@ if (window.location.pathname === '/html/progress.html') {
         if (numberRows() === true) {
             let confirmation = window.confirm(`Are you sure you want to delete all of your entries? \nWarning! All information will be lost and unretreivable`);
             if (confirmation) {
-                sessionStorage.removeItem('numberRows');
+                localStorage.removeItem('numberRows');
                 location.reload()
             }
         }
@@ -1267,7 +1281,6 @@ if (window.location.pathname === '/html/progress.html') {
 
 //detailed analysis of last entry with graphs
 
-//change sessionStorage to localStorage
 //can't add entries on the same day
 //if people do too much in second box then it automatically fills 1st box properly
 //put all information on how breakdowns are done in more information just like tanita understanding your body details page 
@@ -1275,6 +1288,7 @@ if (window.location.pathname === '/html/progress.html') {
 //allow user to choose which entry they want to be broken down and the selected row must show with color also the one being hovered
 //allow user to choose date format
 //allow user to change units 
+//in breakdown show improvement or decrease of performance since last
 //allow printing or downloading of user details
 //weekly reminder to add input
 //if user browser does not support then show images of browsers that do 

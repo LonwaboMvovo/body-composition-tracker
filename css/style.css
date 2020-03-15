@@ -17,7 +17,7 @@ body {
     background: rgb(204, 204, 204);
 }
 
-header {
+header.top_page {
     background-color: #1B998B;
     text-align: center;
     padding: 10px;
@@ -68,6 +68,10 @@ h1 {
     margin: 0px;
 }
 
+h2 {
+    text-decoration: underline;
+}
+
 main {
     margin-left: 500px;
     padding-bottom: 48px;
@@ -78,7 +82,8 @@ main.home {
 }
 
 main.progress {
-    margin-left: 450px;
+    /* width: 1100px; */
+    margin: auto;
 }
 
 section {
@@ -119,6 +124,11 @@ section {
 
 #clear:active {
     background-color: rgb(121, 27, 27);
+}
+
+#last_buttons {
+    width: 500px;
+    margin-left: 450px;
 }
 
 input[type=number]::-webkit-inner-spin-button, 
@@ -172,12 +182,11 @@ th {
     font-weight: normal;
 }
 
-#breakdown {
+tr:hover {
+    box-shadow: inset 0px 0px 8px 1px gray;
+}
+
+#full_breakdown {
     width: 1100px;
     margin: auto;
 }
-
-/* Colors:
-    color: rgb(161, 255, 166);
-    color: rgb(255, 160, 144);
- */
