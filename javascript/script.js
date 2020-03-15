@@ -1,15 +1,28 @@
 //Variables from HTML files:
+//All Pages:
+const unit = document.querySelectorAll('.unit')
+const error_msg = document.querySelectorAll('.error_msg');
+const mark = document.querySelectorAll('.mark');
+
+//Home Page:
+const start = document.querySelector('#start');
+
+//User Details Page:
 const name = document.querySelector('#name');
 const age = document.querySelector('#age');
 const gender_options_box = document.querySelector('#gender_options_box');
 const male = document.querySelector('#male');
 const female = document.querySelector('#female');
+const height_unit = document.querySelector('#height_unit');
+const weight_unit = document.querySelector('#weight_unit');
+const bmr_unit = document.querySelector('#bmr_unit');
+const next = document.querySelector('#next');
+
+//Composition Details Page:
 const height = document.querySelector('#height');
 const height2 = document.querySelector('#height2');
-const height_unit = document.querySelector('#height_unit');
 const weight = document.querySelector('#weight'); 
 const weight2 = document.querySelector('#weight2');
-const weight_unit = document.querySelector('#weight_unit');
 const body_fat = document.querySelector('#body_fat');
 const visceral_fat = document.querySelector('#visceral_fat');
 const muscle_mass = document.querySelector('#muscle_mass');
@@ -17,25 +30,22 @@ const muscle_mass2 = document.querySelector('#muscle_mass2');
 const physique_rating = document.querySelector('#physique_rating');
 const bone_mass = document.querySelector('#bone_mass');
 const bmr = document.querySelector('#bmr');
-const bmr_unit = document.querySelector('#bmr_unit');
 const metabolic_age = document.querySelector('#metabolic_age');
 const body_water = document.querySelector('#body_water');
-const bmi = document.querySelector('#bmi');
+const back = document.querySelector('#back');
+const done = document.querySelector('#done');
+
+//Progress Page:
 const progress_table = document.querySelector('#progress_table');
+const bmi = document.querySelector('#bmi');
+const full_breakdown_header = document.querySelector('#full_breakdown_header');
 const full_breakdown = document.querySelector('#full_breakdown');
 const breakdown_header = document.querySelectorAll('.breakdown_header');
 const breakdown = document.querySelectorAll('.breakdown');
-const unit = document.querySelectorAll('.unit')
-const error_msg = document.querySelectorAll('.error_msg');
-const mark = document.querySelectorAll('.mark');
-const start = document.querySelector('#start');
-const next = document.querySelector('#next');
-const back = document.querySelector('#back');
-const done = document.querySelector('#done');
 const add = document.querySelector('#add');
 const clear = document.querySelector('#clear');
 
-//Functions for javascript file:
+//Functions and variables for javascript file:
 const user_details_filled = () => {
     if (
         localStorage.age !== '' && localStorage.age !== undefined &&
@@ -939,6 +949,48 @@ const right = (detail, emi, marki) => {
     }
     detail.classList.remove('mistake');
 }
+let dates;
+let selectedDate;
+let selectedRow;
+const selectedDateBackground = () => {
+    for (let notK = 0; notK < dates.length; notK++) {
+        dates[notK].style.background = 'rgb(216, 216, 216)';
+    }
+    selectedDate.style.background = 'rgb(179, 179, 179)'
+    selectedDate.style.fontSize = '1.55rem';
+}
+const fullBreakdown = () => {
+    selectedRow = selectedDate.parentElement
+    //Header:
+    full_breakdown_header.innerText = `Full Breakdown (${selectedRow.cells[0].innerText})`;
+
+    //BMI:
+    breakdown_header[0].innerText = `BMI: ${selectedRow.cells[2].innerText}`;
+
+    //Body Fat:
+    breakdown_header[1].innerText = `Body Fat: ${selectedRow.cells[3].innerText}`;
+
+    //Visceral Fat:
+    breakdown_header[2].innerText = `Visceral Fat: ${selectedRow.cells[4].innerText}`;
+
+    //Muscle Mass:
+    breakdown_header[3].innerText = `Muscle Mass: ${selectedRow.cells[5].innerText}`;
+
+    //Physique Rating:
+    breakdown_header[4].innerText = `Physique Rating: ${selectedRow.cells[6].innerText}`;
+
+    //Bone Mass:
+    breakdown_header[5].innerText = `Bone Mass: ${selectedRow.cells[7].innerText}`;
+
+    //BMR:
+    breakdown_header[6].innerText = `BMR: ${selectedRow.cells[8].innerText}`;
+
+    //Metabolic Age:
+    breakdown_header[7].innerText = `Metabolic Age: ${selectedRow.cells[9].innerText}`;
+
+    //Body Water:
+    breakdown_header[8].innerText = `Body Water: ${selectedRow.cells[10].innerText}`;
+}
 let numberRowsArray;
 let numberRowsArrayFixGap;
 const date = new Date();
@@ -1195,6 +1247,7 @@ if (window.location.pathname === '/html/progress.html') {
         
             //Date:
             progress_table.rows[currentRow.int].cells[0].innerText = currentRow.date;
+            progress_table.rows[currentRow.int].cells[0].classList = 'date';
             
             //Weight:
             progress_table.rows[currentRow.int].cells[1].innerText = (currentRow.weight * 1).toFixed(1);
@@ -1245,10 +1298,19 @@ if (window.location.pathname === '/html/progress.html') {
                 }
             })
         });
-
-        //Full Breakdown:
-        //BMI Breakdown:
-        breakdown_header[0].innerText += ` ${numberRowsArray[numberRowsArray.length - 1].bmi}`;
+    
+        //Selected Date:
+        dates = document.querySelectorAll('.date');
+        selectedDate = dates[dates.length - 1];
+        selectedDateBackground();
+        fullBreakdown();
+        for (let notI = 2; notI < progress_table.rows.length; notI++) {
+            progress_table.rows[notI].addEventListener('click', () => {
+                selectedDate = dates[notI - 2];
+                selectedDateBackground();
+                fullBreakdown();
+            })
+        }  
     }
 
     else {
@@ -1272,8 +1334,8 @@ if (window.location.pathname === '/html/progress.html') {
         if (numberRows() === true) {
             let confirmation = window.confirm(`Are you sure you want to delete all of your entries? \nWarning! All information will be lost and unretreivable`);
             if (confirmation) {
-                localStorage.removeItem('numberRows');
-                location.reload()
+                localStorage.clear();
+                location.reload();
             }
         }
     })
@@ -1281,11 +1343,14 @@ if (window.location.pathname === '/html/progress.html') {
 
 //detailed analysis of last entry with graphs
 
+//no page refresh use a function
+//no decimals in age and bmr
+//automatically fill in details on page not expected to change like height and unit
+//add titles to elements
 //can't add entries on the same day
 //if people do too much in second box then it automatically fills 1st box properly
 //put all information on how breakdowns are done in more information just like tanita understanding your body details page 
 //settings page
-//allow user to choose which entry they want to be broken down and the selected row must show with color also the one being hovered
 //allow user to choose date format
 //allow user to change units 
 //in breakdown show improvement or decrease of performance since last
@@ -1294,4 +1359,4 @@ if (window.location.pathname === '/html/progress.html') {
 //if user browser does not support then show images of browsers that do 
 //Have better wording on the website
 //Name error message must go when user is unfocussed
-
+//Clean up code
