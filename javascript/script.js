@@ -949,47 +949,55 @@ const right = (detail, emi, marki) => {
     }
     detail.classList.remove('mistake');
 }
-let dates;
-let selectedDate;
-let selectedRow;
-const selectedDateBackground = () => {
+const selectedDateBackground = (dateIndex) => {
+    let dates = document.querySelectorAll('.date');
+    let selectedDate = dates[dateIndex];
     for (let notK = 0; notK < dates.length; notK++) {
         dates[notK].style.background = 'rgb(216, 216, 216)';
     }
     selectedDate.style.background = 'rgb(179, 179, 179)'
     selectedDate.style.fontSize = '1.55rem';
 }
-const fullBreakdown = () => {
-    selectedRow = selectedDate.parentElement
+const fullBreakdown = (rowIndex) => {
+    let selectedRow = progress_table.rows[rowIndex];
     //Header:
     full_breakdown_header.innerText = `Full Breakdown (${selectedRow.cells[0].innerText})`;
 
+    //Weight:
+    if (rowIndex === 2) {
+        breakdown_header[0].innerText = `Weight: ${selectedRow.cells[1].innerText}`;
+    }
+    else {
+        breakdown_header[0].innerText = `Weight: ${selectedRow.cells[1].innerText}`;
+    }
+
     //BMI:
-    breakdown_header[0].innerText = `BMI: ${selectedRow.cells[2].innerText}`;
+    breakdown_header[1].innerText = `BMI: ${selectedRow.cells[2].innerText}`;
+    breakdown[0].innerText = 'hello freak bishes';
 
     //Body Fat:
-    breakdown_header[1].innerText = `Body Fat: ${selectedRow.cells[3].innerText}`;
+    breakdown_header[2].innerText = `Body Fat: ${selectedRow.cells[3].innerText}`;
 
     //Visceral Fat:
-    breakdown_header[2].innerText = `Visceral Fat: ${selectedRow.cells[4].innerText}`;
+    breakdown_header[3].innerText = `Visceral Fat: ${selectedRow.cells[4].innerText}`;
 
     //Muscle Mass:
-    breakdown_header[3].innerText = `Muscle Mass: ${selectedRow.cells[5].innerText}`;
+    breakdown_header[4].innerText = `Muscle Mass: ${selectedRow.cells[5].innerText}`;
 
     //Physique Rating:
-    breakdown_header[4].innerText = `Physique Rating: ${selectedRow.cells[6].innerText}`;
+    breakdown_header[5].innerText = `Physique Rating: ${selectedRow.cells[6].innerText}`;
 
     //Bone Mass:
-    breakdown_header[5].innerText = `Bone Mass: ${selectedRow.cells[7].innerText}`;
+    breakdown_header[6].innerText = `Bone Mass: ${selectedRow.cells[7].innerText}`;
 
     //BMR:
-    breakdown_header[6].innerText = `BMR: ${selectedRow.cells[8].innerText}`;
+    breakdown_header[7].innerText = `BMR: ${selectedRow.cells[8].innerText}`;
 
     //Metabolic Age:
-    breakdown_header[7].innerText = `Metabolic Age: ${selectedRow.cells[9].innerText}`;
+    breakdown_header[8].innerText = `Metabolic Age: ${selectedRow.cells[9].innerText}`;
 
     //Body Water:
-    breakdown_header[8].innerText = `Body Water: ${selectedRow.cells[10].innerText}`;
+    breakdown_header[9].innerText = `Body Water: ${selectedRow.cells[10].innerText}`;
 }
 let numberRowsArray;
 let numberRowsArrayFixGap;
@@ -1300,15 +1308,12 @@ if (window.location.pathname === '/html/progress.html') {
         });
     
         //Selected Date:
-        dates = document.querySelectorAll('.date');
-        selectedDate = dates[dates.length - 1];
-        selectedDateBackground();
-        fullBreakdown();
+        selectedDateBackground(progress_table.rows.length - 3);
+        fullBreakdown(2);
         for (let notI = 2; notI < progress_table.rows.length; notI++) {
             progress_table.rows[notI].addEventListener('click', () => {
-                selectedDate = dates[notI - 2];
-                selectedDateBackground();
-                fullBreakdown();
+                selectedDateBackground(notI-2);
+                fullBreakdown(notI);
             })
         }  
     }
@@ -1343,6 +1348,7 @@ if (window.location.pathname === '/html/progress.html') {
 
 //detailed analysis of last entry with graphs
 
+//user must be able to select time period for graph
 //no page refresh use a function
 //no decimals in age and bmr
 //automatically fill in details on page not expected to change like height and unit
@@ -1353,10 +1359,12 @@ if (window.location.pathname === '/html/progress.html') {
 //settings page
 //allow user to choose date format
 //allow user to change units 
+//message to aware user that site uses localstorage
 //in breakdown show improvement or decrease of performance since last
 //allow printing or downloading of user details
 //weekly reminder to add input
 //if user browser does not support then show images of browsers that do 
-//Have better wording on the website
-//Name error message must go when user is unfocussed
+//have better wording on the website
+//reference and cite websites like the tanita website
+//name error message must go when user is unfocussed
 //Clean up code
