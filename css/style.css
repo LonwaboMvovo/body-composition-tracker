@@ -186,3 +186,11 @@ td:first-child.date:hover {
     width: 1100px;
     margin: auto;
 }
+
+.decrease {
+    color: red;
+}
+
+.increase {
+    color: green;
+}

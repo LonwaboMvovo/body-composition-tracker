@@ -58,6 +58,18 @@ const user_details_filled = () => {
     }
     return false;
 }
+const user_details_stored = () => {
+   if (
+    localStorage.age !== undefined &&
+    localStorage.gender !== undefined &&
+    localStorage.height_unit !== undefined &&
+    localStorage.weight_unit !== undefined &&
+    localStorage.bmr_unit !== undefined
+   ) {
+    return true;
+   }
+   return false;
+}
 const composition_details_filled = () => {
     if (
         localStorage.bmr_unit === 'kcal' &&
@@ -1082,74 +1094,113 @@ const fullBreakdown = (rowIndex) => {
     }
     else {
         //Weight:
-        if (parseFloat(selectedRow.cells[1].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)) {
-            breakdown_header[0].innerText = `Weight - ${selectedRow.cells[1].innerText} (↑ ${(parseFloat(selectedRow.cells[1].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)).toFixed(1)})`;
+        if (parseFloat(selectedRow.cells[1].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)) {
+            breakdown_header[0].innerText = `Weight - ${selectedRow.cells[1].innerText}`; 
+        }
+        else if (parseFloat(selectedRow.cells[1].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)) {
+            breakdown_header[0].innerHTML = `Weight - ${selectedRow.cells[1].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[1].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)).toFixed(1)})</span>`;
         }
         else {
-            breakdown_header[0].innerText = `Weight - ${selectedRow.cells[1].innerText} (↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText) - parseFloat(selectedRow.cells[1].innerText)).toFixed(1)})`;
+            breakdown_header[0].innerHTML = `Weight - ${selectedRow.cells[1].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText) - parseFloat(selectedRow.cells[1].innerText)).toFixed(1)})</span>`;
         }
+        
         //BMI:
-        if (parseFloat(selectedRow.cells[2].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)) {
-            breakdown_header[1].innerText = `BMI - ${selectedRow.cells[2].innerText} (↑ ${(parseFloat(selectedRow.cells[2].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)).toFixed(1)})`;
+        if (parseFloat(selectedRow.cells[2].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)) {
+            breakdown_header[1].innerText = `BMI - ${selectedRow.cells[2].innerText}`;
+        }
+        else if (parseFloat(selectedRow.cells[2].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)) {
+            breakdown_header[1].innerHTML = `BMI - ${selectedRow.cells[2].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[2].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)).toFixed(1)})</span>`;
         }
         else {
-            breakdown_header[1].innerText = `BMI - ${selectedRow.cells[2].innerText} (↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[2].innerText)).toFixed(1)})`;
+            breakdown_header[1].innerHTML = `BMI - ${selectedRow.cells[2].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[2].innerText)).toFixed(1)})</span>`;
         }
+
         //Body Fat:
-        if (parseFloat(selectedRow.cells[3].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)) {
-            breakdown_header[2].innerText = `Body Fat % - ${selectedRow.cells[3].innerText} (↑ ${(parseFloat(selectedRow.cells[3].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)).toFixed(1)})`;
+        if (parseFloat(selectedRow.cells[3].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)) {
+            breakdown_header[2].innerText = `Body Fat % - ${selectedRow.cells[3].innerText}`;
+        }
+        else if (parseFloat(selectedRow.cells[3].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)) {
+            breakdown_header[2].innerHTML = `Body Fat % - ${selectedRow.cells[3].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[3].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)).toFixed(1)})</span>`;
         }
         else {
-            breakdown_header[2].innerText = `Body Fat % - ${selectedRow.cells[3].innerText} (↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText) - parseFloat(selectedRow.cells[3].innerText)).toFixed(1)})`;
+            breakdown_header[2].innerHTML = `Body Fat % - ${selectedRow.cells[3].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText) - parseFloat(selectedRow.cells[3].innerText)).toFixed(1)})</span>`;
         }
+
         //Visceral Fat:
-        if (parseFloat(selectedRow.cells[4].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)) {
-            breakdown_header[3].innerText = `Visceral Fat - ${selectedRow.cells[4].innerText} (↑ ${(parseFloat(selectedRow.cells[4].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)).toFixed(1)})`;
+        if (parseFloat(selectedRow.cells[4].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)) {
+            breakdown_header[3].innerText = `Visceral Fat - ${selectedRow.cells[4].innerText}`;
+        }
+        else if (parseFloat(selectedRow.cells[4].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)) {
+            breakdown_header[3].innerHTML = `Visceral Fat - ${selectedRow.cells[4].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[4].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)).toFixed(1)})</span>`;
         }
         else {
-            breakdown_header[3].innerText = `Visceral Fat - ${selectedRow.cells[4].innerText} (↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText) - parseFloat(selectedRow.cells[4].innerText)).toFixed(1)})`;
+            breakdown_header[3].innerHTML = `Visceral Fat - ${selectedRow.cells[4].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText) - parseFloat(selectedRow.cells[4].innerText)).toFixed(1)})</span>`;
         }
+
         //Muscle Mass:
-        if (parseFloat(selectedRow.cells[5].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)) {
-            breakdown_header[4].innerText = `Muscle Mass - ${selectedRow.cells[5].innerText} (↑ ${(parseFloat(selectedRow.cells[5].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)).toFixed(1)})`;
+        if (parseFloat(selectedRow.cells[5].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)) {
+            breakdown_header[4].innerText = `Muscle Mass - ${selectedRow.cells[5].innerText}`;
+        }
+        else if (parseFloat(selectedRow.cells[5].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)) {
+            breakdown_header[4].innerHTML = `Muscle Mass - ${selectedRow.cells[5].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[5].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)).toFixed(1)})</span>`;
         }
         else {
-            breakdown_header[4].innerText = `Muscle Mass - ${selectedRow.cells[5].innerText} (↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText) - parseFloat(selectedRow.cells[5].innerText)).toFixed(1)})`;
+            breakdown_header[4].innerHTML = `Muscle Mass - ${selectedRow.cells[5].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText) - parseFloat(selectedRow.cells[5].innerText)).toFixed(1)})</span>`;
         }
+
         //Physique Rating:
-        if (parseFloat(selectedRow.cells[6].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)) {
-            breakdown_header[5].innerText = `Physique Rating - ${selectedRow.cells[6].innerText} (↑ ${parseFloat(selectedRow.cells[6].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)})`;
+        if (parseFloat(selectedRow.cells[6].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)) {
+            breakdown_header[5].innerText = `Physique Rating - ${selectedRow.cells[6].innerText}`;
+        }
+        else if (parseFloat(selectedRow.cells[6].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)) {
+            breakdown_header[5].innerHTML = `Physique Rating - ${selectedRow.cells[6].innerText} <span class='increase'>(↑ ${parseFloat(selectedRow.cells[6].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)})</span>`;
         }
         else {
-            breakdown_header[5].innerText = `Physique Rating - ${selectedRow.cells[6].innerText} (↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText) - parseFloat(selectedRow.cells[6].innerText)})`;
+            breakdown_header[5].innerHTML = `Physique Rating - ${selectedRow.cells[6].innerText} <span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText) - parseFloat(selectedRow.cells[6].innerText)})</span>`;
         }
+
         //Bone Mass:
-        if (parseFloat(selectedRow.cells[7].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)) {
-            breakdown_header[6].innerText = `Bone Mass - ${selectedRow.cells[7].innerText} (↑ ${(parseFloat(selectedRow.cells[7].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)).toFixed(1)})`;
+        if (parseFloat(selectedRow.cells[7].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)) {
+            breakdown_header[6].innerText = `Bone Mass - ${selectedRow.cells[7].innerText}`;
+        }
+        else if (parseFloat(selectedRow.cells[7].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)) {
+            breakdown_header[6].innerHTML = `Bone Mass - ${selectedRow.cells[7].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[7].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)).toFixed(1)})</span>`;
         }
         else {
-            breakdown_header[6].innerText = `Bone Mass - ${selectedRow.cells[7].innerText} (↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText) - parseFloat(selectedRow.cells[7].innerText)).toFixed(1)})`;
+            breakdown_header[6].innerHTML = `Bone Mass - ${selectedRow.cells[7].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText) - parseFloat(selectedRow.cells[7].innerText)).toFixed(1)})</span>`;
         }
+
         //BMR:
-        if (parseFloat(selectedRow.cells[8].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)) {
-            breakdown_header[7].innerText = `BMR - ${selectedRow.cells[8].innerText} (↑ ${parseFloat(selectedRow.cells[8].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)})`;
+        if (parseFloat(selectedRow.cells[8].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)) {
+            breakdown_header[7].innerText = `BMR - ${selectedRow.cells[8].innerText}`;
+        }
+        else if (parseFloat(selectedRow.cells[8].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)) {
+            breakdown_header[7].innerHTML = `BMR - ${selectedRow.cells[8].innerText} <span class='increase'>(↑ ${parseFloat(selectedRow.cells[8].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)})</span>`;
         }
         else {
-            breakdown_header[7].innerText = `BMR - ${selectedRow.cells[8].innerText} (↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText) - parseFloat(selectedRow.cells[8].innerText)})`;
+            breakdown_header[7].innerHTML = `BMR - ${selectedRow.cells[8].innerText} <span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText) - parseFloat(selectedRow.cells[8].innerText)})</span>`;
         }
+
         //Metabolic Age:
-        if (parseFloat(selectedRow.cells[9].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)) {
-            breakdown_header[8].innerText = `Metabolic Age - ${selectedRow.cells[9].innerText} (↑ ${parseFloat(selectedRow.cells[9].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)})`;
+        if (parseFloat(selectedRow.cells[9].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)) {
+            breakdown_header[8].innerText = `Metabolic Age - ${selectedRow.cells[9].innerText}`; 
+        }
+        else if (parseFloat(selectedRow.cells[9].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)) {
+            breakdown_header[8].innerHTML = `Metabolic Age - ${selectedRow.cells[9].innerText} <span class='increase'>(↑ ${parseFloat(selectedRow.cells[9].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)})</span>`;
         }
         else {
-            breakdown_header[8].innerText = `Metabolic Age - ${selectedRow.cells[9].innerText} (↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText) - parseFloat(selectedRow.cells[9].innerText)})`;
+            breakdown_header[8].innerHTML = `Metabolic Age - ${selectedRow.cells[9].innerText} <span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText) - parseFloat(selectedRow.cells[9].innerText)})</span>`;
         }
+
         //Body Water:
-        if (parseFloat(selectedRow.cells[10].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)) {
-            breakdown_header[9].innerText = `Body Water % - ${selectedRow.cells[10].innerText} (↑ ${(parseFloat(selectedRow.cells[10].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)).toFixed(1)})`;
+        if (parseFloat(selectedRow.cells[10].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)) {
+            breakdown_header[9].innerText = `Body Water % - ${selectedRow.cells[10].innerText}`;
+        }
+        else if (parseFloat(selectedRow.cells[10].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)) {
+            breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[10].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)).toFixed(1)})</span>`;
         }
         else {
-            breakdown_header[9].innerText = `Body Water % - ${selectedRow.cells[10].innerText} (↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[10].innerText)).toFixed(1)})`;
+            breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[10].innerText)).toFixed(1)})</span>`;
         }
     }
 }
@@ -1479,7 +1530,7 @@ if (window.location.pathname === '/html/progress.html') {
     
     //Add Entry:
     add.addEventListener('click', () => {
-        if (user_details_filled()) {
+        if (user_details_stored()) {
             window.open('/html/composition_details.html', '_self');
         }
         else {
@@ -1500,10 +1551,8 @@ if (window.location.pathname === '/html/progress.html') {
 }
 
 //detailed analysis of last entry with graphs
-//fix add entry button userdetailsfilled checks and compositionfilled checks because its sending to home page to add
 
-//if there's no increase or decrease in difference of values then don't show either arrow and just show whatever the stock people show for no change
-//colours to arrows
+//colours for change in breakdown must correlate with the users goals
 //user must be able to select time period for graph
 //no page refresh use a function
 //automatically fill in details on page not expected to change like height and unit
