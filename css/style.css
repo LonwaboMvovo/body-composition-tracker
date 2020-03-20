@@ -154,16 +154,15 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0px;
 }
 
-.not {
-    display: none;
-}
-
 #gender_options_box, #height_box, #height2_box, #weight_box, #weight2_box, #muscle_mass_box, #muscle_mass2_box, #bone_mass_box, #bone_mass2_box {
     display: inline-block;
 }
 
 table {
+    display: block;
     width: 1300px;
+    height: 300px;
+    overflow-y: scroll;
     text-align: center;
     margin: auto;
 }
@@ -182,9 +181,28 @@ td:first-child.date:hover {
     cursor: pointer;
 }
 
+h3 {
+    margin: 0px;
+}
+
 #full_breakdown {
-    width: 1100px;
+    width: 900px;
     margin: auto;
+    text-align: center;
+}
+
+#full_breakdown_header {
+    text-decoration: underline;
+}
+
+.graph_container {
+    width: 900px;
+    margin: auto;
+}
+
+canvas {
+    height: 300px;
+    width: 900px;
 }
 
 .decrease {
@@ -193,4 +211,8 @@ td:first-child.date:hover {
 
 .increase {
     color: green;
+}
+
+.not {
+    display: none;
 }

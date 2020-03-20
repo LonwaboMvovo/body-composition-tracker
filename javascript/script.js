@@ -37,11 +37,11 @@ const done = document.querySelector('#done');
 
 //Progress Page:
 const progress_table = document.querySelector('#progress_table');
-const bmi = document.querySelector('#bmi');
 const full_breakdown_header = document.querySelector('#full_breakdown_header');
 const full_breakdown = document.querySelector('#full_breakdown');
 const breakdown_header = document.querySelectorAll('.breakdown_header');
 const breakdown = document.querySelectorAll('.breakdown');
+const CHARTS = document.querySelectorAll('.myChart');
 const add = document.querySelector('#add');
 const clear = document.querySelector('#clear');
 
@@ -252,6 +252,10 @@ const ageValue = () => {
         wrong(age, 1, 0);
         error_msg[1].innerText = 'Please provide a valid age';
     }
+    else if (age.value.includes('.')) {
+        wrong(age, 1, 0);
+        error_msg[1].innerText = 'May not contain decimal point. Please provide a full age only';
+    }
     else if (age.value >= 150) {
         wrong(age, 1, 0);
         error_msg[1].innerText = "(Nobody's that old. Please provide an age lower than 150)";
@@ -259,10 +263,6 @@ const ageValue = () => {
     else if (age.value < 0) {
         wrong(age, 1, 0);
         error_msg[1].innerText = "(You're not even born yet. Please provide a positive age)";
-    }
-    if (age.value.includes('.')) {
-        wrong(age, 1, 0);
-        error_msg[1].innerText = 'May not contain decimal point. Please provide a full age only';
     }
     else {
         right(age, 1, 0);
@@ -747,6 +747,10 @@ const bmrValue = () => {
         wrong(bmr, 7, 11);
         error_msg[7].innerText = "(Please provide a valid BMR)";
     }
+    else if (bmr.value.includes('.')) {
+        wrong(bmr, 7, 11);
+        error_msg[7].innerText = 'May not contain decimal point. Please provide a full bmr only';
+    }
     else if (bmr.value < 0) {
         wrong(bmr, 7, 11);
         error_msg[7].innerText = "(Please provide a positive BMR)";
@@ -759,10 +763,6 @@ const bmrValue = () => {
         wrong(bmr, 7, 11);
         error_msg[7].innerText = "(That can't be right. Please provide a BMR lower than 21000kJ)";
     }
-    if (bmr.value.includes('.')) {
-        wrong(bmr, 7, 11);
-        error_msg[7].innerText = 'May not contain decimal point. Please provide a full bmr only';
-    }
     else {
         right(bmr, 7, 11);
     }
@@ -772,6 +772,10 @@ const metabolic_ageValue = () => {
         wrong(metabolic_age, 8, 12);
         error_msg[8].innerText = "(Please provide a valid metabolic age)";
     }
+    else if (metabolic_age.value.includes('.')) {
+        wrong(metabolic_age, 8, 12);
+        error_msg[8].innerText = 'May not contain decimal point. Please provide a full metablic age only';
+    }
     else if (metabolic_age.value < 0) {
         wrong(metabolic_age, 8, 12);
         error_msg[8].innerText = "(Please provide a positive metabolic age)";
@@ -779,10 +783,6 @@ const metabolic_ageValue = () => {
     else if (metabolic_age.value >= 200) {
         wrong(metabolic_age, 8, 12);
         error_msg[8].innerText = "(That can't be right. Please provide a metabolic age lower than 200)";
-    }
-    if (metabolic_age.value.includes('.')) {
-        wrong(metabolic_age, 8, 12);
-        error_msg[8].innerText = 'May not contain decimal point. Please provide a full metablic age only';
     }
     else {
         right(metabolic_age, 8, 12)
@@ -1065,142 +1065,903 @@ const selectedDateBackground = (dateIndex) => {
     selectedDate.style.background = 'rgb(179, 179, 179)'
     selectedDate.style.fontSize = '1.55rem';
 }
+const graph = (notJ, title, graphCap) => {
+    CHARTS[notJ].getContext('2d');
+    let chart = new Chart(CHARTS[notJ], {
+        type: 'line',
+        data: {
+            labels: numberRowsArray.filter((v, index) => {
+                return index < graphCap - 1;
+            }).map((value) => {
+                return value.date;
+            }),
+            datasets: [{
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                borderColor: 'orange',
+                pointBorderWidth: 5,
+                pointBackgroundColor: 'rgba(0, 0, 0, 0)',
+                pointBorderColor: 'rgba(0, 0, 0, 0)',
+                hoverBackgroundColor: 'orangered',
+                hoverBorderColor: 'orangered',
+                lineTension: 0.1,
+                data: numberRowsArray.filter((v, index) => {
+                    return index < graphCap - 1;
+                }).map((value) => {
+                    return value[title];
+                })
+            }]
+        },
+        options: {
+            legend: {
+                display: false
+            },
+            tooltips: {
+                titleFontSize: 16,
+                bodyFontSize: 16,
+                bodyAlign: 'center',
+                displayColors: false
+            }
+        }
+    });
+}
+const bmiBreakdown = (int) => {
+    if (numberRowsArray[int].bmi * 1 < 19) {
+        breakdown[1].innerText = 'Your BMI indicates that you are underweight';
+    }
+    else if (numberRowsArray[int].bmi * 1 < 25) {
+        breakdown[1].innerText = 'Your BMI indicates that you are normal';
+    }
+    else if (numberRowsArray[int].bmi * 1 < 30) {
+        breakdown[1].innerText = 'Your BMI indicates that you are overweight';
+    }
+    else {
+        breakdown[1].innerText = 'Your BMI indicates that you are obese';
+    }
+}
+const body_fatBreakdown = (int) => {
+    if (localStorage.gender === 'female') {
+        if (localStorage.age * 1 <= 5) {
+            if (numberRowsArray[int].body_fat  * 1 < 14) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 22) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 26) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 6) {
+            if (numberRowsArray[int].body_fat  * 1 < 14) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 23) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 27) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 7) {
+            if (numberRowsArray[int].body_fat  * 1 < 15) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 25) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 29) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        } 
+        else if (localStorage.age * 1 === 8) {
+            if (numberRowsArray[int].body_fat  * 1 < 15) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 26) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 30) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        } 
+        else if (localStorage.age * 1 === 9) {
+            if (numberRowsArray[int].body_fat  * 1 < 16) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 27) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 31) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        } 
+        else if (localStorage.age * 1 === 10) {
+            if (numberRowsArray[int].body_fat  * 1 < 16) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 28) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 32) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        } 
+        else if (localStorage.age * 1 < 14) {
+            if (numberRowsArray[int].body_fat  * 1 < 16) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 29) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 33) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 < 17) {
+            if (numberRowsArray[int].body_fat  * 1 < 16) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 30) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 34) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 17) {
+            if (numberRowsArray[int].body_fat  * 1 < 16) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 30) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 35) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 18) {
+            if (numberRowsArray[int].body_fat  * 1 < 17) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 31) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 36) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 19) {
+            if (numberRowsArray[int].body_fat  * 1 < 19) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 32) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 37) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 < 40) {
+            if (numberRowsArray[int].body_fat  * 1 < 21) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 33) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 39) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 < 60) {
+            if (numberRowsArray[int].body_fat  * 1 < 23) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 34) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 40) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else {
+            if (numberRowsArray[int].body_fat  * 1 < 24) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 36) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 42) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+    }
+    else if (localStorage.gender === 'male') {
+        if (localStorage.age * 1 <= 5) {
+            if (numberRowsArray[int].body_fat  * 1 < 12) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 19) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 23) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 6) {
+            if (numberRowsArray[int].body_fat  * 1 < 12) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 20) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 24) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 7) {
+            if (numberRowsArray[int].body_fat  * 1 < 13) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 20) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 25) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        } 
+        else if (localStorage.age * 1 === 8) {
+            if (numberRowsArray[int].body_fat  * 1 < 13) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 21) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 26) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        } 
+        else if (localStorage.age * 1 === 9) {
+            if (numberRowsArray[int].body_fat  * 1 < 13) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 22) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 27) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        } 
+        else if (localStorage.age * 1 < 12) {
+            if (numberRowsArray[int].body_fat  * 1 < 13) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 23) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 28) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 12) {
+            if (numberRowsArray[int].body_fat  * 1 < 12) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 23) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 28) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        } 
+        else if (localStorage.age * 1 === 13) {
+            if (numberRowsArray[int].body_fat  * 1 < 12  ) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 22) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 27) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        } 
+        else if (localStorage.age * 1 === 14) {
+            if (numberRowsArray[int].body_fat  * 1 < 11) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 21) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 26) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 15) {
+            if (numberRowsArray[int].body_fat  * 1 < 10) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 21) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 25) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        } 
+        else if (localStorage.age * 1 < 18) {
+            if (numberRowsArray[int].body_fat  * 1 < 10) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 20) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 24) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 18) {
+            if (numberRowsArray[int].body_fat  * 1 < 10) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 20) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 24) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 === 19) {
+            if (numberRowsArray[int].body_fat  * 1 < 9) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 20) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 24) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 < 40) {
+            if (numberRowsArray[int].body_fat  * 1 < 8) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 20) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 25) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else if (localStorage.age * 1 < 60) {
+            if (numberRowsArray[int].body_fat  * 1 < 11) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 22) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 28) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+        else {
+            if (numberRowsArray[int].body_fat  * 1 < 13) {
+                breakdown[2].innerText = 'Your body fat indicates that you are underfat';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 25) {
+                breakdown[2].innerText = 'Your body fat indicates that you are healthy';
+            }
+            else if (numberRowsArray[int].body_fat  * 1 < 30) {
+                breakdown[2].innerText = 'Your body fat indicates that you are overfat';
+            }
+            else{
+                breakdown[2].innerText = 'Your body fat indicates that you are obese';
+            }
+        }
+    }
+}
+const visceral_fatBreakdown = (int) => {
+    if (numberRowsArray[int].visceral_fat * 1 < 13) {
+        breakdown[3].innerText = 'You have a healthy level of visceral fat';
+    }
+    else {
+        breakdown[3].innerText = 'You have an excessive level of visceral fat';
+    }
+}
+const physique_ratingBreakdown = (int) => {
+    if (numberRowsArray[int].physique_rating * 1 === 1) {
+        breakdown[5].innerText = "You have a 'Hidden Obese' body type";
+    }
+    else if (numberRowsArray[int].physique_rating * 1 === 2) {
+        breakdown[5].innerText = "You have a 'Obese' body type";
+    }
+    else if (numberRowsArray[int].physique_rating * 1 === 3) {
+        breakdown[5].innerText = "You have a 'Solidly-built' body type";
+    }
+    else if (numberRowsArray[int].physique_rating * 1 === 4) {
+        breakdown[5].innerText = "You have a 'Under exercised' body type";
+    }
+    else if (numberRowsArray[int].physique_rating * 1 === 5) {
+        breakdown[5].innerText = "You have a 'Standard' body type";
+    }
+    else if (numberRowsArray[int].physique_rating * 1 === 6) {
+        breakdown[5].innerText = "You have a 'Standard Muscular' body type";
+    }
+    else if (numberRowsArray[int].physique_rating * 1 === 7) {
+        breakdown[5].innerText = "You have a 'Thin' body type";
+    }
+    else if (numberRowsArray[int].physique_rating * 1 === 8) {
+        breakdown[5].innerText = "You have a 'Thin and Muscular' body type";
+    }
+    else {
+        breakdown[5].innerText = "You have a 'Very Muscular' body type";
+    }
+}
+const bone_massBreakdown = (int) => {
+    if (localStorage.gender === 'female') {
+        if (localStorage.weight_unit === 'kg') {
+            if (numberRowsArray[int].weight * 1 >= 76) {
+                if (numberRowsArray[int].bone_mass * 1 >= 2.95) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else if (numberRowsArray[int].weight * 1 >= 50) {
+                if (numberRowsArray[int].bone_mass * 1 >= 2.4) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else {
+                if (numberRowsArray[int].bone_mass * 1 >= 1.95) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+        }
+        else if (localStorage.weight_unit === 'lbs') {
+            if (numberRowsArray[int].weight * 1 >= 167.551) {
+                if (numberRowsArray[int].bone_mass * 1 >= 6.503637) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else if (numberRowsArray[int].weight * 1 >= 110.231) {
+                if (numberRowsArray[int].bone_mass * 1 >= 5.29109) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else {
+                if (numberRowsArray[int].bone_mass * 1 >= 4.299014) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+        }
+        else if (localStorage.weight_unit === 'st') {
+            if (numberRowsArray[int].weight * 1 >= 11.968) {
+                if (numberRowsArray[int].bone_mass * 1 >= 0.4645455) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else if (numberRowsArray[int].weight * 1 >= 7.87365) {
+                if (numberRowsArray[int].bone_mass * 1 >= 0.377935) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else {
+                if (numberRowsArray[int].bone_mass * 1 >= 0.3070724) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }  
+        }
+    }
+    else if (localStorage.gender === 'male') {
+        if (localStorage.weight_unit === 'kg') {
+            if (numberRowsArray[int].weight * 1 >= 95) {
+                if (numberRowsArray[int].bone_mass * 1 >= 3.69) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else if (numberRowsArray[int].weight * 1 >= 65) {
+                if (numberRowsArray[int].bone_mass * 1 >= 3.29) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else {
+                if (numberRowsArray[int].bone_mass * 1 >= 2.65) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+        }
+        else if (localStorage.weight_unit === 'lbs') {
+            if (numberRowsArray[int].weight * 1 >= 209.439) {
+                if (numberRowsArray[int].bone_mass * 1 >= 8.135057) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else if (numberRowsArray[int].weight * 1 >= 143.3) {
+                if (numberRowsArray[int].bone_mass * 1 >= 7.253208) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else {
+                if (numberRowsArray[int].bone_mass * 1 >= 5.84225) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+        }
+        else if (localStorage.weight_unit === 'st') {
+            if (numberRowsArray[int].weight * 1 >= 14.9599) {
+                if (numberRowsArray[int].bone_mass * 1 >= 0.5810755) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else if (numberRowsArray[int].weight * 1 >= 10.2357) {
+                if (numberRowsArray[int].bone_mass * 1 >= 0.5180863) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+            else {
+                if (numberRowsArray[int].bone_mass * 1 >= 0.4173036) {
+                    breakdown[6].innerText = 'You have a healthy bone mass weight'; 
+                }
+                else {
+                    breakdown[6].innerText = 'You have a low bone mass weight'; 
+                }
+            }
+        }
+    }
+}
+const body_waterBreakdown = (int) => {
+    if (localStorage.gender === 'female') {
+        if (numberRowsArray[int].body_water * 1 < 45) {
+            breakdown[9].innerText = 'You have a low body water %'
+        }
+        else if (numberRowsArray[int].body_water * 1 < 60) {
+            breakdown[9].innerText = 'You have a healthy body water %'
+        }
+        else {
+            breakdown[9].innerText = 'You have a high body water %'
+        }
+    }
+    else if (localStorage.gender === 'male') {
+        if (numberRowsArray[int].body_water * 1 < 50) {
+            breakdown[9].innerText = 'You have a low body water %'
+        }
+        else if (numberRowsArray[int].body_water * 1 < 65) {
+            breakdown[9].innerText = 'You have a healthy body water %'
+        }
+        else {
+            breakdown[9].innerText = 'You have a high body water %'
+        }
+    }
+}
 const fullBreakdown = (rowIndex) => {
     let selectedRow = progress_table.rows[rowIndex];
     //Header:
-    full_breakdown_header.innerText = `Full Breakdown (${selectedRow.cells[0].innerText}):`;
-
+    full_breakdown_header.innerText = `Full Breakdown (${selectedRow.cells[0].innerText})`; 
     if (rowIndex === 2) {
+        for (let anythingButI = 0; anythingButI < 10; anythingButI++) {
+            CHARTS[anythingButI].style.display = 'none';
+        }
         //Weight:
         breakdown_header[0].innerText = `Weight - ${selectedRow.cells[1].innerText}`;
         //BMI:
         breakdown_header[1].innerText = `BMI - ${selectedRow.cells[2].innerText}`;
+        bmiBreakdown(rowIndex - 2);
         //Body Fat:
         breakdown_header[2].innerText = `Body Fat % - ${selectedRow.cells[3].innerText}`;
+        body_fatBreakdown(rowIndex - 2);
         //Visceral Fat:
         breakdown_header[3].innerText = `Visceral Fat - ${selectedRow.cells[4].innerText}`;
+        visceral_fatBreakdown(rowIndex - 2);
         //Muscle Mass:
         breakdown_header[4].innerText = `Muscle Mass - ${selectedRow.cells[5].innerText}`;
         //Physique Rating:
         breakdown_header[5].innerText = `Physique Rating - ${selectedRow.cells[6].innerText}`;
+        physique_ratingBreakdown(rowIndex - 2);
         //Bone Mass:
         breakdown_header[6].innerText = `Bone Mass - ${selectedRow.cells[7].innerText}`;
+        bone_massBreakdown(rowIndex - 2);
         //BMR:
         breakdown_header[7].innerText = `BMR - ${selectedRow.cells[8].innerText}`;
         //Metabolic Age:
         breakdown_header[8].innerText = `Metabolic Age - ${selectedRow.cells[9].innerText}`;
         //Body Water:
         breakdown_header[9].innerText = `Body Water % - ${selectedRow.cells[10].innerText}`;
+        body_waterBreakdown(rowIndex - 2);
     }
     else {
+        for (let anythingButI = 0; anythingButI < 10; anythingButI++) {
+            CHARTS[anythingButI].style.display = 'block';
+        }
         //Weight:
         if (parseFloat(selectedRow.cells[1].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)) {
-            breakdown_header[0].innerText = `Weight - ${selectedRow.cells[1].innerText}`; 
+            breakdown_header[0].innerText = `Weight - ${selectedRow.cells[1].innerText}`;
+            graph(0, 'weight', rowIndex);
         }
         else if (parseFloat(selectedRow.cells[1].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)) {
             breakdown_header[0].innerHTML = `Weight - ${selectedRow.cells[1].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[1].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)).toFixed(1)})</span>`;
+            graph(0, 'weight', rowIndex);
         }
         else {
             breakdown_header[0].innerHTML = `Weight - ${selectedRow.cells[1].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText) - parseFloat(selectedRow.cells[1].innerText)).toFixed(1)})</span>`;
+            graph(0, 'weight', rowIndex);
         }
         
         //BMI:
         if (parseFloat(selectedRow.cells[2].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)) {
             breakdown_header[1].innerText = `BMI - ${selectedRow.cells[2].innerText}`;
+            bmiBreakdown(rowIndex - 2);
+            graph(1, 'bmi', rowIndex);
         }
         else if (parseFloat(selectedRow.cells[2].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)) {
             breakdown_header[1].innerHTML = `BMI - ${selectedRow.cells[2].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[2].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)).toFixed(1)})</span>`;
+            bmiBreakdown(rowIndex - 2);
+            graph(1, 'bmi', rowIndex);
         }
         else {
             breakdown_header[1].innerHTML = `BMI - ${selectedRow.cells[2].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[2].innerText)).toFixed(1)})</span>`;
+            bmiBreakdown(rowIndex - 2);
+            graph(1, 'bmi', rowIndex);
         }
 
         //Body Fat:
         if (parseFloat(selectedRow.cells[3].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)) {
             breakdown_header[2].innerText = `Body Fat % - ${selectedRow.cells[3].innerText}`;
+            body_fatBreakdown(rowIndex - 2);
+            graph(2, 'body_fat', rowIndex);
         }
         else if (parseFloat(selectedRow.cells[3].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)) {
             breakdown_header[2].innerHTML = `Body Fat % - ${selectedRow.cells[3].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[3].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)).toFixed(1)})</span>`;
+            body_fatBreakdown(rowIndex - 2);
+            graph(2, 'body_fat', rowIndex);
         }
         else {
             breakdown_header[2].innerHTML = `Body Fat % - ${selectedRow.cells[3].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText) - parseFloat(selectedRow.cells[3].innerText)).toFixed(1)})</span>`;
+            body_fatBreakdown(rowIndex - 2);
+            graph(2, 'body_fat', rowIndex);
         }
 
         //Visceral Fat:
         if (parseFloat(selectedRow.cells[4].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)) {
             breakdown_header[3].innerText = `Visceral Fat - ${selectedRow.cells[4].innerText}`;
+            visceral_fatBreakdown(rowIndex - 2);
+            graph(3, 'visceral_fat', rowIndex);
         }
         else if (parseFloat(selectedRow.cells[4].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)) {
             breakdown_header[3].innerHTML = `Visceral Fat - ${selectedRow.cells[4].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[4].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)).toFixed(1)})</span>`;
+            visceral_fatBreakdown(rowIndex - 2);
+            graph(3, 'visceral_fat', rowIndex);
         }
         else {
             breakdown_header[3].innerHTML = `Visceral Fat - ${selectedRow.cells[4].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText) - parseFloat(selectedRow.cells[4].innerText)).toFixed(1)})</span>`;
+            visceral_fatBreakdown(rowIndex - 2);
+            graph(3, 'visceral_fat', rowIndex);
         }
 
         //Muscle Mass:
         if (parseFloat(selectedRow.cells[5].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)) {
             breakdown_header[4].innerText = `Muscle Mass - ${selectedRow.cells[5].innerText}`;
+            graph(4, 'muscle_mass', rowIndex);
         }
         else if (parseFloat(selectedRow.cells[5].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)) {
             breakdown_header[4].innerHTML = `Muscle Mass - ${selectedRow.cells[5].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[5].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)).toFixed(1)})</span>`;
+            graph(4, 'muscle_mass', rowIndex);
         }
         else {
             breakdown_header[4].innerHTML = `Muscle Mass - ${selectedRow.cells[5].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText) - parseFloat(selectedRow.cells[5].innerText)).toFixed(1)})</span>`;
+            graph(4, 'muscle_mass', rowIndex);
         }
 
         //Physique Rating:
         if (parseFloat(selectedRow.cells[6].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)) {
             breakdown_header[5].innerText = `Physique Rating - ${selectedRow.cells[6].innerText}`;
+            physique_ratingBreakdown(rowIndex - 2);
+            graph(5, 'physique_rating', rowIndex);
         }
         else if (parseFloat(selectedRow.cells[6].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)) {
             breakdown_header[5].innerHTML = `Physique Rating - ${selectedRow.cells[6].innerText} <span class='increase'>(↑ ${parseFloat(selectedRow.cells[6].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)})</span>`;
+            physique_ratingBreakdown(rowIndex - 2);
+            graph(5, 'physique_rating', rowIndex);
         }
         else {
             breakdown_header[5].innerHTML = `Physique Rating - ${selectedRow.cells[6].innerText} <span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText) - parseFloat(selectedRow.cells[6].innerText)})</span>`;
+            physique_ratingBreakdown(rowIndex - 2);
+            graph(5, 'physique_rating', rowIndex);
         }
 
         //Bone Mass:
         if (parseFloat(selectedRow.cells[7].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)) {
             breakdown_header[6].innerText = `Bone Mass - ${selectedRow.cells[7].innerText}`;
+            bone_massBreakdown(rowIndex - 2);
+            graph(6, 'bone_mass', rowIndex);
         }
         else if (parseFloat(selectedRow.cells[7].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)) {
             breakdown_header[6].innerHTML = `Bone Mass - ${selectedRow.cells[7].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[7].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)).toFixed(1)})</span>`;
+            bone_massBreakdown(rowIndex - 2);
+            graph(6, 'bone_mass', rowIndex);
         }
         else {
             breakdown_header[6].innerHTML = `Bone Mass - ${selectedRow.cells[7].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText) - parseFloat(selectedRow.cells[7].innerText)).toFixed(1)})</span>`;
+            bone_massBreakdown(rowIndex - 2);
+            graph(6, 'bone_mass', rowIndex);
         }
 
         //BMR:
         if (parseFloat(selectedRow.cells[8].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)) {
             breakdown_header[7].innerText = `BMR - ${selectedRow.cells[8].innerText}`;
+            graph(7, 'bmr', rowIndex);
         }
         else if (parseFloat(selectedRow.cells[8].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)) {
             breakdown_header[7].innerHTML = `BMR - ${selectedRow.cells[8].innerText} <span class='increase'>(↑ ${parseFloat(selectedRow.cells[8].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)})</span>`;
+            graph(7, 'bmr', rowIndex);
         }
         else {
             breakdown_header[7].innerHTML = `BMR - ${selectedRow.cells[8].innerText} <span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText) - parseFloat(selectedRow.cells[8].innerText)})</span>`;
+            graph(7, 'bmr', rowIndex);
         }
 
         //Metabolic Age:
         if (parseFloat(selectedRow.cells[9].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)) {
             breakdown_header[8].innerText = `Metabolic Age - ${selectedRow.cells[9].innerText}`; 
+            graph(8, 'metabolic_age', rowIndex);
         }
         else if (parseFloat(selectedRow.cells[9].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)) {
             breakdown_header[8].innerHTML = `Metabolic Age - ${selectedRow.cells[9].innerText} <span class='increase'>(↑ ${parseFloat(selectedRow.cells[9].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)})</span>`;
+            graph(8, 'metabolic_age', rowIndex);
         }
         else {
             breakdown_header[8].innerHTML = `Metabolic Age - ${selectedRow.cells[9].innerText} <span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText) - parseFloat(selectedRow.cells[9].innerText)})</span>`;
+            graph(8, 'metabolic_age', rowIndex);
         }
 
         //Body Water:
         if (parseFloat(selectedRow.cells[10].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)) {
             breakdown_header[9].innerText = `Body Water % - ${selectedRow.cells[10].innerText}`;
+            body_waterBreakdown(rowIndex - 2);
+            graph(9, 'body_water', rowIndex);
         }
         else if (parseFloat(selectedRow.cells[10].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)) {
             breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[10].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)).toFixed(1)})</span>`;
+            body_waterBreakdown(rowIndex - 2);
+            graph(9, 'body_water', rowIndex);
         }
         else {
             breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[10].innerText)).toFixed(1)})</span>`;
+            body_waterBreakdown(rowIndex - 2);
+            graph(9, 'body_water', rowIndex);
         }
     }
 }
@@ -1308,7 +2069,12 @@ if (window.location.pathname === "/html/index.html") {
 
     else {
         start.addEventListener('click', () => {
-            window.open('/html/user_details.html', '_self');
+            if (user_details_stored()) {
+                window.open('/html/composition_details.html', '_self');
+            }
+            else {
+                window.open('/html/user_details.html', '_self');
+            }
         })
     }
 }
@@ -1422,7 +2188,7 @@ if (window.location.pathname === '/html/progress.html') {
     //Progress Table:
     if (numberRows() === true) {
         //Name:
-        if (localStorage.name === undefined) {
+        if (localStorage.name === undefined || localStorage.name === '') {
             progress_table.rows[0].cells[0].innerText = 'You';
         }
         else {
@@ -1550,11 +2316,8 @@ if (window.location.pathname === '/html/progress.html') {
     })
 }
 
-//detailed analysis of last entry with graphs
-
-//colours for change in breakdown must correlate with the users goals
-//user must be able to select time period for graph
-//no page refresh use a function
+//scrollable table - maybe only have one tr in the table header but maybe also no outline in the header so the lineing up doesn't make it look weird
+//colours for change in breakdown must correlate with the users goals and green insinuates good and red insinuates bad
 //automatically fill in details on page not expected to change like height and unit
 //add titles to elements
 //can't add entries on the same day
@@ -1565,7 +2328,6 @@ if (window.location.pathname === '/html/progress.html') {
 //allow user to change units 
 //allow user to choose if they want current change or total change to display
 //message to aware user that site uses localstorage
-//in breakdown show improvement or decrease of performance since last
 //allow printing or downloading of user details
 //weekly reminder to add input
 //if user browser does not support then show images of browsers that do 
