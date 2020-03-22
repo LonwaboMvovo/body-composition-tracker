@@ -4,8 +4,22 @@ const unit = document.querySelectorAll('.unit')
 const error_msg = document.querySelectorAll('.error_msg');
 const mark = document.querySelectorAll('.mark');
 
+//Settings:
+const open_settings = document.querySelector('#open_settings'); 
+const settings_popup = document.querySelector('#settings_popup');
+const settings_height_unit = document.querySelector('#settings_height_unit');
+const settings_weight_unit = document.querySelector('#settings_weight_unit');
+const settings_bmr_unit = document.querySelector('#settings_bmr_unit');
+const settings_change = document.querySelector('#settings_change');
+const settings_age = document.querySelector('#settings_age');
+const settings_height = document.querySelector('#settings_height');
+const settings_done = document.querySelector('#settings_done');
+
 //Home Page:
 const start = document.querySelector('#start');
+const popup = document.querySelector("#myPopup");
+const start_okay = document.querySelector('#start_okay');
+const approve_localStorage = localStorage.localStorageMsg;
 
 //User Details Page:
 const name = document.querySelector('#name');
@@ -16,6 +30,7 @@ const female = document.querySelector('#female');
 const height_unit = document.querySelector('#height_unit');
 const weight_unit = document.querySelector('#weight_unit');
 const bmr_unit = document.querySelector('#bmr_unit');
+const date_format = document.querySelector('#date_format');
 const next = document.querySelector('#next');
 
 //Composition Details Page:
@@ -52,7 +67,8 @@ const user_details_filled = () => {
         gender !== undefined && 
         height_unit.value !== 'Choose' &&
         weight_unit.value !== 'Choose' &&
-        bmr_unit.value !== 'Choose'
+        bmr_unit.value !== 'Choose' && 
+        date_format.value !== 'Choose'
     ) {
         return true;
     }
@@ -64,11 +80,29 @@ const user_details_stored = () => {
     localStorage.gender !== undefined &&
     localStorage.height_unit !== undefined &&
     localStorage.weight_unit !== undefined &&
-    localStorage.bmr_unit !== undefined
+    localStorage.bmr_unit !== undefined && 
+    localStorage.date_format !== undefined
    ) {
     return true;
    }
    return false;
+}
+const composition_details_stored = () => {
+    if (
+        localStorage.height !== undefined && 
+        localStorage.weight !== undefined && 
+        localStorage.body_fat !== undefined && 
+        localStorage.visceral_fat !== undefined && 
+        localStorage.muscle_mass !== undefined &&
+        localStorage.physique_rating !== undefined &&
+        localStorage.bone_mass !== undefined &&
+        localStorage.bmr !== undefined &&
+        localStorage.metabolic_age !== undefined &&
+        localStorage.body_water !== undefined
+    ) {
+        return true;
+    }
+    return false;
 }
 const composition_details_filled = () => {
     if (
@@ -270,7 +304,7 @@ const ageValue = () => {
 }
 let gender;
 const maleValue = () => {
-    right(male, 2, 1)
+    right(male, 2, 1);
     gender_options_box.style.background = '';
     gender_options_box.classList.remove('mistake');
     gender = 'male';
@@ -290,6 +324,37 @@ const heightUnitValue = () => {
         right(height_unit, 3, 2);
     }
 }
+const settings_height_unitValue = () => {
+    numberRowsArray = JSON.parse(localStorage.numberRows);
+    if (localStorage.height_unit === settings_height_unit.value) {
+        return true;
+    }
+    if (localStorage.height_unit === 'cm') {
+        if (settings_height_unit.value === 'm') {
+            localStorage.height = (localStorage.height / 100).toFixed(1);
+        }
+        else if (settings_height_unit.value === 'ft') {
+            localStorage.height = (localStorage.height / 30.48).toFixed(1);
+        }
+    }
+    else if (localStorage.height_unit === 'm') {
+        if (settings_height_unit.value === 'cm') {
+            localStorage.height = (localStorage.height * 100).toFixed(1);
+        }
+        else if (settings_height_unit.value === 'ft') {
+            localStorage.height = (localStorage.height * 3.281).toFixed(1);
+        }
+    }
+    else if (localStorage.height_unit === 'ft') {
+        if (settings_height_unit.value === 'cm') {
+            localStorage.height = (localStorage.height * 30.48).toFixed(1);
+        }
+        else if (settings_height_unit.value === 'm') {
+            localStorage.height = (localStorage.height / 3.281).toFixed(1);
+        }
+    }
+    localStorage.height_unit = settings_height_unit.value;  
+}
 const weightUnitValue = () => {
     if (weight_unit.value === 'Choose') {
         wrong(weight_unit, 4, 3);
@@ -298,6 +363,67 @@ const weightUnitValue = () => {
     else {
         right(weight_unit, 4, 3);
     }
+}
+const settings_weight_unitValue = () => {
+    numberRowsArray = JSON.parse(localStorage.numberRows);
+    if (localStorage.weight_unit === settings_weight_unit.value) {
+        return true;
+    }
+    if (localStorage.weight_unit === 'kg') {
+        if (settings_weight_unit.value === 'lbs') {
+            numberRowsArray = numberRowsArray.forEach(value => {
+                value.weight = (value.weight * 2.205).toFixed(1);
+                value.muscle_mass = (value.muscle_mass * 2.205).toFixed(1);
+                value.bone_mass = (value.bone_mass * 2.205).toFixed(1);
+                localStorage.numberRows = JSON.stringify(numberRowsArray);
+            })
+        }
+        else if (settings_weight_unit.value === 'st') {
+            numberRowsArray = numberRowsArray.forEach(value => {
+                value.weight = (value.weight / 6.35).toFixed(1);
+                value.muscle_mass = (value.muscle_mass / 6.35).toFixed(1);
+                value.bone_mass = (value.bone_mass / 6.35).toFixed(1);
+                localStorage.numberRows = JSON.stringify(numberRowsArray);
+            })
+        }
+    }
+    else if (localStorage.weight_unit === 'lbs') {
+        if (settings_weight_unit.value === 'kg') {
+            numberRowsArray = numberRowsArray.forEach(value => {
+                value.weight = (value.weight / 2.205).toFixed(1);
+                value.muscle_mass = (value.muscle_mass / 2.205).toFixed(1);
+                value.bone_mass = (value.bone_mass / 2.205).toFixed(1);
+                localStorage.numberRows = JSON.stringify(numberRowsArray);
+            })
+        }
+        else if (settings_weight_unit.value === 'st') {
+            numberRowsArray = numberRowsArray.forEach(value => {
+                value.weight = (value.weight / 14).toFixed(1);
+                value.muscle_mass = (value.muscle_mass / 14).toFixed(1);
+                value.bone_mass = (value.bone_mass / 14).toFixed(1);
+                localStorage.numberRows = JSON.stringify(numberRowsArray);
+            })
+        }
+    }
+    else if (localStorage.weight_unit === 'st') {
+        if (settings_weight_unit.value === 'kg') {
+            numberRowsArray = numberRowsArray.forEach(value => {
+                value.weight = (value.weight * 6.35).toFixed(1);
+                value.muscle_mass = (value.muscle_mass * 6.35).toFixed(1);
+                value.bone_mass = (value.bone_mass * 6.35).toFixed(1);
+                localStorage.numberRows = JSON.stringify(numberRowsArray);
+            })
+        }
+        else if (settings_weight_unit.value === 'lbs') {
+            numberRowsArray = numberRowsArray.forEach(value => {
+                value.weight = (value.weight * 14).toFixed(1);
+                value.muscle_mass = (value.muscle_mass * 14).toFixed(1);
+                value.bone_mass = (value.bone_mass * 14).toFixed(1);
+                localStorage.numberRows = JSON.stringify(numberRowsArray);
+            })
+        }
+    }
+    localStorage.weight_unit = settings_weight_unit.value; 
 }
 const bmrUnitValue = () => {
     if (bmr_unit.value === 'Choose') {
@@ -308,6 +434,42 @@ const bmrUnitValue = () => {
         right(bmr_unit, 5, 4);
     }
 }
+const date_formatValue = () => {
+    if (date_format.value === 'Choose') {
+        wrong(date_format, 6, 5);
+        error_msg[6].innerText = '(Please choose preferred date format)';
+    }
+    else {
+        right(date_format, 6, 5);
+    }
+}
+const settings_bmr_unitValue = () => {
+    numberRowsArray = JSON.parse(localStorage.numberRows);
+    if (localStorage.bmr_unit === settings_bmr_unit.value) {
+        return true;
+    }
+    if (settings_bmr_unit.value === 'kJ') {
+        numberRowsArray = numberRowsArray.forEach(value => {
+            value.bmr = (value.bmr * 4.184).toFixed(1);
+            localStorage.numberRows = JSON.stringify(numberRowsArray);
+        })
+    } 
+    else if (settings_bmr_unit.value === 'kcal') {
+        numberRowsArray = numberRowsArray.forEach(value => {
+            value.bmr = (value.bmr / 4.184).toFixed(1);
+            localStorage.numberRows = JSON.stringify(numberRowsArray);
+        })
+    } 
+    localStorage.bmr_unit = settings_bmr_unit.value;
+}
+const settings_changeValue = () => {
+    numberRowsArray = JSON.parse(localStorage.numberRows);
+    if (localStorage.settings_change === settings_change.value) {
+        return true;
+    }
+    localStorage.settings_change = settings_change.value;
+
+}
 const canNext = () => {
     if (user_details_filled()) {
         localStorage.name = name.value;
@@ -316,6 +478,7 @@ const canNext = () => {
         localStorage.height_unit = height_unit.value;
         localStorage.weight_unit = weight_unit.value;
         localStorage.bmr_unit = bmr_unit.value;
+        localStorage.date_format = date_format.value;
         window.open('/html/composition_details.html', '_self');
     }
     else {
@@ -357,8 +520,29 @@ const canNext = () => {
             wrong(bmr_unit, 5, 4);
             error_msg[5].innerText = "(Required, please choose preferred unit for BMR)";
         }
+
+        //Date Format:
+        if (date_format.value === 'Choose') {
+            wrong(date_format, 6, 5);
+            error_msg[6].innerText = "(Required, please choose preferred date format)";
+        }
+
         document.querySelectorAll('.mistake')[0].scrollIntoView();
     }
+}
+const goSettings_age = () => {
+    settings_height_unitValue();
+    settings_weight_unitValue();
+    settings_bmr_unitValue();
+    settings_changeValue();
+    window.open('/html/user_details.html', '_self');
+}
+const goSettings_height = () => {
+    settings_height_unitValue();
+    settings_weight_unitValue();
+    settings_bmr_unitValue();
+    settings_changeValue();
+    window.open('/html/composition_details.html', '_self');
 }
 const heightValue = () => {
     if (height.value === '') {
@@ -418,6 +602,10 @@ const heightValue = () => {
     }
 }
 const height2Value = () => {
+    if (height2.value >= 12) {
+        height.value = height.value * 1 + Math.floor(height2.value / 12);
+        height2.value = (height2.value % 12);
+    }
     if (height2.value === '' && height.value === '') {
         wrong(height);
         wrong(height2, 0, 1);
@@ -502,6 +690,10 @@ const weightValue = () => {
     }
 }
 const weight2Value = () => {
+    if (weight2.value >= 14) {
+        weight.value = weight.value * 1 + Math.floor(weight2.value / 14);
+        weight2.value = (weight2.value % 14);
+    }
     if (weight2.value === '' && weight.value === '') {
         wrong(weight);
         wrong(weight2, 1, 3);
@@ -621,6 +813,10 @@ const muscle_massValue = () => {
     }
 }
 const muscle_mass2Value = () => {
+    if (muscle_mass2.value >= 14) {
+        muscle_mass.value = muscle_mass.value * 1 + Math.floor(muscle_mass2.value / 14);
+        muscle_mass2.value = (muscle_mass2.value % 14);
+    }
     if (muscle_mass2.value === '' && muscle_mass.value === '') {
         wrong(muscle_mass);
         wrong(muscle_mass2, 4, 7);
@@ -716,6 +912,10 @@ const bone_massValue = () => {
     }
 }
 const bone_mass2Value = () => {
+    if (bone_mass2.value >= 14) {
+        bone_mass.value = bone_mass.value * 1 + Math.floor(bone_mass2.value / 14);
+        bone_mass2.value = (bone_mass2.value % 14);
+    }
     if (bone_mass2.value === '' && bone_mass.value === '') {
         wrong(bone_mass);
         wrong(bone_mass2, 6, 10);
@@ -808,6 +1008,7 @@ const body_waterValue = () => {
 const canDone = () => {
     if (composition_details_filled()) {
         localStorage.canAddEntry = 'yes';
+        localStorage.settings_change = 'current';
         if (localStorage.height_unit === 'ft') {
             localStorage.height = (height.value * 12 + height2.value * 1) / 12;
         }
@@ -1103,6 +1304,9 @@ const graph = (notJ, title, graphCap) => {
             }
         }
     });
+}
+const weightBreakdown = (int) => {
+    breakdown[0].innerText = `Your total body weight is ${numberRowsArray[int].weight}`;
 }
 const bmiBreakdown = (int) => {
     if (numberRowsArray[int].bmi * 1 < 19) {
@@ -1552,6 +1756,9 @@ const visceral_fatBreakdown = (int) => {
         breakdown[3].innerText = 'You have an excessive level of visceral fat';
     }
 }
+const muscle_massBreakdown = (int) => {
+    breakdown[4].innerText = `Your total muscle mass is ${numberRowsArray[int].muscle_mass}`;
+}
 const physique_ratingBreakdown = (int) => {
     if (numberRowsArray[int].physique_rating * 1 === 1) {
         breakdown[5].innerText = "You have a 'Hidden Obese' body type";
@@ -1743,6 +1950,12 @@ const bone_massBreakdown = (int) => {
         }
     }
 }
+const bmrBreakdown = (int) => {
+    breakdown[7].innerText = `Your basal metabolic rate is ${numberRowsArray[int].bmr}`;
+}
+const metabolic_ageBreakdown = (int) => {
+    breakdown[8].innerText = `Your metabolic age is ${numberRowsArray[int].metabolic_age}`;
+}
 const body_waterBreakdown = (int) => {
     if (localStorage.gender === 'female') {
         if (numberRowsArray[int].body_water * 1 < 45) {
@@ -1777,6 +1990,7 @@ const fullBreakdown = (rowIndex) => {
         }
         //Weight:
         breakdown_header[0].innerText = `Weight - ${selectedRow.cells[1].innerText}`;
+        weightBreakdown(rowIndex - 2);
         //BMI:
         breakdown_header[1].innerText = `BMI - ${selectedRow.cells[2].innerText}`;
         bmiBreakdown(rowIndex - 2);
@@ -1788,6 +2002,7 @@ const fullBreakdown = (rowIndex) => {
         visceral_fatBreakdown(rowIndex - 2);
         //Muscle Mass:
         breakdown_header[4].innerText = `Muscle Mass - ${selectedRow.cells[5].innerText}`;
+        muscle_massBreakdown(rowIndex - 2);
         //Physique Rating:
         breakdown_header[5].innerText = `Physique Rating - ${selectedRow.cells[6].innerText}`;
         physique_ratingBreakdown(rowIndex - 2);
@@ -1796,8 +2011,10 @@ const fullBreakdown = (rowIndex) => {
         bone_massBreakdown(rowIndex - 2);
         //BMR:
         breakdown_header[7].innerText = `BMR - ${selectedRow.cells[8].innerText}`;
+        bmrBreakdown(rowIndex - 2);
         //Metabolic Age:
         breakdown_header[8].innerText = `Metabolic Age - ${selectedRow.cells[9].innerText}`;
+        metabolic_ageBreakdown(rowIndex - 2);
         //Body Water:
         breakdown_header[9].innerText = `Body Water % - ${selectedRow.cells[10].innerText}`;
         body_waterBreakdown(rowIndex - 2);
@@ -1809,15 +2026,34 @@ const fullBreakdown = (rowIndex) => {
         //Weight:
         if (parseFloat(selectedRow.cells[1].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)) {
             breakdown_header[0].innerText = `Weight - ${selectedRow.cells[1].innerText}`;
-            graph(0, 'weight', rowIndex);
-        }
-        else if (parseFloat(selectedRow.cells[1].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)) {
-            breakdown_header[0].innerHTML = `Weight - ${selectedRow.cells[1].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[1].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)).toFixed(1)})</span>`;
+            weightBreakdown(rowIndex - 2);
             graph(0, 'weight', rowIndex);
         }
         else {
-            breakdown_header[0].innerHTML = `Weight - ${selectedRow.cells[1].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText) - parseFloat(selectedRow.cells[1].innerText)).toFixed(1)})</span>`;
-            graph(0, 'weight', rowIndex);
+            if (localStorage.settings_change === 'current') {
+                if (parseFloat(selectedRow.cells[1].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)) {
+                    breakdown_header[0].innerHTML = `Weight - ${selectedRow.cells[1].innerText} <br> Current Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[1].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText)).toFixed(1)})</span>`;
+                    weightBreakdown(rowIndex - 2);
+                    graph(0, 'weight', rowIndex);
+                }
+                else {
+                    breakdown_header[0].innerHTML = `Weight - ${selectedRow.cells[1].innerText} <br> Current Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[1].innerText) - parseFloat(selectedRow.cells[1].innerText)).toFixed(1)})</span>`;
+                    weightBreakdown(rowIndex - 2);
+                    graph(0, 'weight', rowIndex);
+                }
+            }
+            else if (localStorage.settings_change === 'total') {
+                if (parseFloat(selectedRow.cells[1].innerText) > parseFloat(progress_table.rows[2].cells[1].innerText)) {
+                    breakdown_header[0].innerHTML = `Weight - ${selectedRow.cells[1].innerText} <br> Total Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[1].innerText) - parseFloat(progress_table.rows[2].cells[1].innerText)).toFixed(1)})</span>`;
+                    weightBreakdown(rowIndex - 2);
+                    graph(0, 'weight', rowIndex);
+                }
+                else {
+                    breakdown_header[0].innerHTML = `Weight - ${selectedRow.cells[1].innerText} <br> Total Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[2].cells[1].innerText) - parseFloat(selectedRow.cells[1].innerText)).toFixed(1)})</span>`;
+                    weightBreakdown(rowIndex - 2);
+                    graph(0, 'weight', rowIndex);
+                }
+            }
         }
         
         //BMI:
@@ -1826,15 +2062,31 @@ const fullBreakdown = (rowIndex) => {
             bmiBreakdown(rowIndex - 2);
             graph(1, 'bmi', rowIndex);
         }
-        else if (parseFloat(selectedRow.cells[2].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)) {
-            breakdown_header[1].innerHTML = `BMI - ${selectedRow.cells[2].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[2].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)).toFixed(1)})</span>`;
-            bmiBreakdown(rowIndex - 2);
-            graph(1, 'bmi', rowIndex);
-        }
         else {
-            breakdown_header[1].innerHTML = `BMI - ${selectedRow.cells[2].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[2].innerText)).toFixed(1)})</span>`;
-            bmiBreakdown(rowIndex - 2);
-            graph(1, 'bmi', rowIndex);
+            if (localStorage.settings_change === 'current') {
+                if (parseFloat(selectedRow.cells[2].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)) {
+                    breakdown_header[1].innerHTML = `BMI - ${selectedRow.cells[2].innerText} <br> Current Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[2].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText)).toFixed(1)})</span>`;
+                    bmiBreakdown(rowIndex - 2);
+                    graph(1, 'bmi', rowIndex);
+                }
+                else {
+                    breakdown_header[1].innerHTML = `BMI - ${selectedRow.cells[2].innerText} <br> Current Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[2].innerText)).toFixed(1)})</span>`;
+                    bmiBreakdown(rowIndex - 2);
+                    graph(1, 'bmi', rowIndex);
+                }
+            }
+            if (localStorage.settings_change === 'total') {
+                if (parseFloat(selectedRow.cells[2].innerText) > parseFloat(progress_table.rows[2].cells[2].innerText)) {
+                    breakdown_header[1].innerHTML = `BMI - ${selectedRow.cells[2].innerText} <br> Total Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[2].innerText) - parseFloat(progress_table.rows[2].cells[2].innerText)).toFixed(1)})</span>`;
+                    bmiBreakdown(rowIndex - 2);
+                    graph(1, 'bmi', rowIndex);
+                }
+                else {
+                    breakdown_header[1].innerHTML = `BMI - ${selectedRow.cells[2].innerText} <br> Total Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[2].cells[2].innerText) - parseFloat(selectedRow.cells[2].innerText)).toFixed(1)})</span>`;
+                    bmiBreakdown(rowIndex - 2);
+                    graph(1, 'bmi', rowIndex);
+                }
+            }
         }
 
         //Body Fat:
@@ -1843,15 +2095,31 @@ const fullBreakdown = (rowIndex) => {
             body_fatBreakdown(rowIndex - 2);
             graph(2, 'body_fat', rowIndex);
         }
-        else if (parseFloat(selectedRow.cells[3].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)) {
-            breakdown_header[2].innerHTML = `Body Fat % - ${selectedRow.cells[3].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[3].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)).toFixed(1)})</span>`;
-            body_fatBreakdown(rowIndex - 2);
-            graph(2, 'body_fat', rowIndex);
-        }
         else {
-            breakdown_header[2].innerHTML = `Body Fat % - ${selectedRow.cells[3].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText) - parseFloat(selectedRow.cells[3].innerText)).toFixed(1)})</span>`;
-            body_fatBreakdown(rowIndex - 2);
-            graph(2, 'body_fat', rowIndex);
+            if (localStorage.settings_change === 'current') {
+                if (parseFloat(selectedRow.cells[3].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)) {
+                    breakdown_header[2].innerHTML = `Body Fat % - ${selectedRow.cells[3].innerText} <br> Current Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[3].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText)).toFixed(1)})</span>`;
+                    body_fatBreakdown(rowIndex - 2);
+                    graph(2, 'body_fat', rowIndex);
+                }
+                else {
+                    breakdown_header[2].innerHTML = `Body Fat % - ${selectedRow.cells[3].innerText} <br> Current Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[3].innerText) - parseFloat(selectedRow.cells[3].innerText)).toFixed(1)})</span>`;
+                    body_fatBreakdown(rowIndex - 2);
+                    graph(2, 'body_fat', rowIndex);
+                }
+            }
+            if (localStorage.settings_change === 'total') {
+                if (parseFloat(selectedRow.cells[3].innerText) > parseFloat(progress_table.rows[2].cells[3].innerText)) {
+                    breakdown_header[2].innerHTML = `Body Fat % - ${selectedRow.cells[3].innerText} <br> Total Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[3].innerText) - parseFloat(progress_table.rows[2].cells[3].innerText)).toFixed(1)})</span>`;
+                    body_fatBreakdown(rowIndex - 2);
+                    graph(2, 'body_fat', rowIndex);
+                }
+                else {
+                    breakdown_header[2].innerHTML = `Body Fat % - ${selectedRow.cells[3].innerText} <br> Total Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[2].cells[3].innerText) - parseFloat(selectedRow.cells[3].innerText)).toFixed(1)})</span>`;
+                    body_fatBreakdown(rowIndex - 2);
+                    graph(2, 'body_fat', rowIndex);
+                }
+            }
         }
 
         //Visceral Fat:
@@ -1860,29 +2128,64 @@ const fullBreakdown = (rowIndex) => {
             visceral_fatBreakdown(rowIndex - 2);
             graph(3, 'visceral_fat', rowIndex);
         }
-        else if (parseFloat(selectedRow.cells[4].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)) {
-            breakdown_header[3].innerHTML = `Visceral Fat - ${selectedRow.cells[4].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[4].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)).toFixed(1)})</span>`;
-            visceral_fatBreakdown(rowIndex - 2);
-            graph(3, 'visceral_fat', rowIndex);
-        }
         else {
-            breakdown_header[3].innerHTML = `Visceral Fat - ${selectedRow.cells[4].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText) - parseFloat(selectedRow.cells[4].innerText)).toFixed(1)})</span>`;
-            visceral_fatBreakdown(rowIndex - 2);
-            graph(3, 'visceral_fat', rowIndex);
+            if (localStorage.settings_change === 'current') {
+                if (parseFloat(selectedRow.cells[4].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)) {
+                    breakdown_header[3].innerHTML = `Visceral Fat - ${selectedRow.cells[4].innerText} <br> Current Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[4].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText)).toFixed(1)})</span>`;
+                    visceral_fatBreakdown(rowIndex - 2);
+                    graph(3, 'visceral_fat', rowIndex);
+                }
+                else {
+                    breakdown_header[3].innerHTML = `Visceral Fat - ${selectedRow.cells[4].innerText} <br> Current Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[4].innerText) - parseFloat(selectedRow.cells[4].innerText)).toFixed(1)})</span>`;
+                    visceral_fatBreakdown(rowIndex - 2);
+                    graph(3, 'visceral_fat', rowIndex);
+                }
+            }
+            if (localStorage.settings_change === 'total') {
+                if (parseFloat(selectedRow.cells[4].innerText) > parseFloat(progress_table.rows[2].cells[4].innerText)) {
+                    breakdown_header[3].innerHTML = `Visceral Fat - ${selectedRow.cells[4].innerText} <br> Total Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[4].innerText) - parseFloat(progress_table.rows[2].cells[4].innerText)).toFixed(1)})</span>`;
+                    visceral_fatBreakdown(rowIndex - 2);
+                    graph(3, 'visceral_fat', rowIndex);
+                }
+                else {
+                    breakdown_header[3].innerHTML = `Visceral Fat - ${selectedRow.cells[4].innerText} <br> Total Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[2].cells[4].innerText) - parseFloat(selectedRow.cells[4].innerText)).toFixed(1)})</span>`;
+                    visceral_fatBreakdown(rowIndex - 2);
+                    graph(3, 'visceral_fat', rowIndex);
+                }
+            }
         }
 
         //Muscle Mass:
         if (parseFloat(selectedRow.cells[5].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)) {
             breakdown_header[4].innerText = `Muscle Mass - ${selectedRow.cells[5].innerText}`;
-            graph(4, 'muscle_mass', rowIndex);
-        }
-        else if (parseFloat(selectedRow.cells[5].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)) {
-            breakdown_header[4].innerHTML = `Muscle Mass - ${selectedRow.cells[5].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[5].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)).toFixed(1)})</span>`;
+            muscle_massBreakdown(rowIndex - 2);
             graph(4, 'muscle_mass', rowIndex);
         }
         else {
-            breakdown_header[4].innerHTML = `Muscle Mass - ${selectedRow.cells[5].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText) - parseFloat(selectedRow.cells[5].innerText)).toFixed(1)})</span>`;
-            graph(4, 'muscle_mass', rowIndex);
+            if (localStorage.settings_change === 'current') {
+                if (parseFloat(selectedRow.cells[5].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)) {
+                    breakdown_header[4].innerHTML = `Muscle Mass - ${selectedRow.cells[5].innerText} <br> Current Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[5].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText)).toFixed(1)})</span>`;
+                    muscle_massBreakdown(rowIndex - 2);
+                    graph(4, 'muscle_mass', rowIndex);
+                }
+                else {
+                    breakdown_header[4].innerHTML = `Muscle Mass - ${selectedRow.cells[5].innerText} <br> Current Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[5].innerText) - parseFloat(selectedRow.cells[5].innerText)).toFixed(1)})</span>`;
+                    muscle_massBreakdown(rowIndex - 2);
+                    graph(4, 'muscle_mass', rowIndex);
+                }
+            }
+            if (localStorage.settings_change === 'total') {
+                if (parseFloat(selectedRow.cells[5].innerText) > parseFloat(progress_table.rows[2].cells[5].innerText)) {
+                    breakdown_header[4].innerHTML = `Muscle Mass - ${selectedRow.cells[5].innerText} <br> Total Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[5].innerText) - parseFloat(progress_table.rows[2].cells[5].innerText)).toFixed(1)})</span>`;
+                    muscle_massBreakdown(rowIndex - 2);
+                    graph(4, 'muscle_mass', rowIndex);
+                }
+                else {
+                    breakdown_header[4].innerHTML = `Muscle Mass - ${selectedRow.cells[5].innerText} <br> Total Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[2].cells[5].innerText) - parseFloat(selectedRow.cells[5].innerText)).toFixed(1)})</span>`;
+                    muscle_massBreakdown(rowIndex - 2);
+                    graph(4, 'muscle_mass', rowIndex);
+                }
+            }
         }
 
         //Physique Rating:
@@ -1891,15 +2194,31 @@ const fullBreakdown = (rowIndex) => {
             physique_ratingBreakdown(rowIndex - 2);
             graph(5, 'physique_rating', rowIndex);
         }
-        else if (parseFloat(selectedRow.cells[6].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)) {
-            breakdown_header[5].innerHTML = `Physique Rating - ${selectedRow.cells[6].innerText} <span class='increase'>(↑ ${parseFloat(selectedRow.cells[6].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)})</span>`;
-            physique_ratingBreakdown(rowIndex - 2);
-            graph(5, 'physique_rating', rowIndex);
-        }
         else {
-            breakdown_header[5].innerHTML = `Physique Rating - ${selectedRow.cells[6].innerText} <span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText) - parseFloat(selectedRow.cells[6].innerText)})</span>`;
-            physique_ratingBreakdown(rowIndex - 2);
-            graph(5, 'physique_rating', rowIndex);
+            if (localStorage.settings_change === 'current') {
+                if (parseFloat(selectedRow.cells[6].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)) {
+                    breakdown_header[5].innerHTML = `Physique Rating - ${selectedRow.cells[6].innerText} <br> Current Change:<span class='increase'>(↑ ${parseFloat(selectedRow.cells[6].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText)})</span>`;
+                    physique_ratingBreakdown(rowIndex - 2);
+                    graph(5, 'physique_rating', rowIndex);
+                }
+                else {
+                    breakdown_header[5].innerHTML = `Physique Rating - ${selectedRow.cells[6].innerText} <br> Current Change:<span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[6].innerText) - parseFloat(selectedRow.cells[6].innerText)})</span>`;
+                    physique_ratingBreakdown(rowIndex - 2);
+                    graph(5, 'physique_rating', rowIndex);
+                }
+            }
+            if (localStorage.settings_change === 'total') {
+                if (parseFloat(selectedRow.cells[6].innerText) > parseFloat(progress_table.rows[2].cells[6].innerText)) {
+                    breakdown_header[5].innerHTML = `Physique Rating - ${selectedRow.cells[6].innerText} <br> Total Change:<span class='increase'>(↑ ${parseFloat(selectedRow.cells[6].innerText) - parseFloat(progress_table.rows[2].cells[6].innerText)})</span>`;
+                    physique_ratingBreakdown(rowIndex - 2);
+                    graph(5, 'physique_rating', rowIndex);
+                }
+                else {
+                    breakdown_header[5].innerHTML = `Physique Rating - ${selectedRow.cells[6].innerText} <br> Total Change:<span class='decrease'>(↓ ${parseFloat(progress_table.rows[2].cells[6].innerText) - parseFloat(selectedRow.cells[6].innerText)})</span>`;
+                    physique_ratingBreakdown(rowIndex - 2);
+                    graph(5, 'physique_rating', rowIndex);
+                }
+            }
         }
 
         //Bone Mass:
@@ -1908,43 +2227,96 @@ const fullBreakdown = (rowIndex) => {
             bone_massBreakdown(rowIndex - 2);
             graph(6, 'bone_mass', rowIndex);
         }
-        else if (parseFloat(selectedRow.cells[7].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)) {
-            breakdown_header[6].innerHTML = `Bone Mass - ${selectedRow.cells[7].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[7].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)).toFixed(1)})</span>`;
-            bone_massBreakdown(rowIndex - 2);
-            graph(6, 'bone_mass', rowIndex);
-        }
         else {
-            breakdown_header[6].innerHTML = `Bone Mass - ${selectedRow.cells[7].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText) - parseFloat(selectedRow.cells[7].innerText)).toFixed(1)})</span>`;
-            bone_massBreakdown(rowIndex - 2);
-            graph(6, 'bone_mass', rowIndex);
+            if (localStorage.settings_change === 'current') {
+                if (parseFloat(selectedRow.cells[7].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)) {
+                    breakdown_header[6].innerHTML = `Bone Mass - ${selectedRow.cells[7].innerText} <br> Current Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[7].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText)).toFixed(1)})</span>`;
+                    bone_massBreakdown(rowIndex - 2);
+                    graph(6, 'bone_mass', rowIndex);
+                }
+                else {
+                    breakdown_header[6].innerHTML = `Bone Mass - ${selectedRow.cells[7].innerText} <br> Current Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[7].innerText) - parseFloat(selectedRow.cells[7].innerText)).toFixed(1)})</span>`;
+                    bone_massBreakdown(rowIndex - 2);
+                    graph(6, 'bone_mass', rowIndex);
+                }
+            }
+            if (localStorage.settings_change === 'total') {
+                if (parseFloat(selectedRow.cells[7].innerText) > parseFloat(progress_table.rows[2].cells[7].innerText)) {
+                    breakdown_header[6].innerHTML = `Bone Mass - ${selectedRow.cells[7].innerText} <br> Total Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[7].innerText) - parseFloat(progress_table.rows[2].cells[7].innerText)).toFixed(1)})</span>`;
+                    bone_massBreakdown(rowIndex - 2);
+                    graph(6, 'bone_mass', rowIndex);
+                }
+                else {
+                    breakdown_header[6].innerHTML = `Bone Mass - ${selectedRow.cells[7].innerText} <br> Total Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[2].cells[7].innerText) - parseFloat(selectedRow.cells[7].innerText)).toFixed(1)})</span>`;
+                    bone_massBreakdown(rowIndex - 2);
+                    graph(6, 'bone_mass', rowIndex);
+                }
+            }
         }
 
         //BMR:
         if (parseFloat(selectedRow.cells[8].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)) {
             breakdown_header[7].innerText = `BMR - ${selectedRow.cells[8].innerText}`;
-            graph(7, 'bmr', rowIndex);
-        }
-        else if (parseFloat(selectedRow.cells[8].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)) {
-            breakdown_header[7].innerHTML = `BMR - ${selectedRow.cells[8].innerText} <span class='increase'>(↑ ${parseFloat(selectedRow.cells[8].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)})</span>`;
+            bmrBreakdown(rowIndex - 2);
             graph(7, 'bmr', rowIndex);
         }
         else {
-            breakdown_header[7].innerHTML = `BMR - ${selectedRow.cells[8].innerText} <span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText) - parseFloat(selectedRow.cells[8].innerText)})</span>`;
-            graph(7, 'bmr', rowIndex);
+            if (localStorage.settings_change === 'current') {
+                if (parseFloat(selectedRow.cells[8].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)) {
+                    breakdown_header[7].innerHTML = `BMR - ${selectedRow.cells[8].innerText} <br> Current Change:<span class='increase'>(↑ ${parseFloat(selectedRow.cells[8].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText)})</span>`;
+                    bmrBreakdown(rowIndex - 2);
+                    graph(7, 'bmr', rowIndex);
+                }
+                else {
+                    breakdown_header[7].innerHTML = `BMR - ${selectedRow.cells[8].innerText} <br> Current Change:<span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[8].innerText) - parseFloat(selectedRow.cells[8].innerText)})</span>`;
+                    bmrBreakdown(rowIndex - 2);
+                    graph(7, 'bmr', rowIndex);
+                }
+            }
+            if (localStorage.settings_change === 'total') {
+                if (parseFloat(selectedRow.cells[8].innerText) > parseFloat(progress_table.rows[2].cells[8].innerText)) {
+                    breakdown_header[7].innerHTML = `BMR - ${selectedRow.cells[8].innerText} <br> Total Change:<span class='increase'>(↑ ${parseFloat(selectedRow.cells[8].innerText) - parseFloat(progress_table.rows[2].cells[8].innerText)})</span>`;
+                    bmrBreakdown(rowIndex - 2);
+                    graph(7, 'bmr', rowIndex);
+                }
+                else {
+                    breakdown_header[7].innerHTML = `BMR - ${selectedRow.cells[8].innerText} <br> Total Change:<span class='decrease'>(↓ ${parseFloat(progress_table.rows[2].cells[8].innerText) - parseFloat(selectedRow.cells[8].innerText)})</span>`;
+                    bmrBreakdown(rowIndex - 2);
+                    graph(7, 'bmr', rowIndex);
+                }
+            }
         }
-
         //Metabolic Age:
         if (parseFloat(selectedRow.cells[9].innerText) === parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)) {
             breakdown_header[8].innerText = `Metabolic Age - ${selectedRow.cells[9].innerText}`; 
-            graph(8, 'metabolic_age', rowIndex);
-        }
-        else if (parseFloat(selectedRow.cells[9].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)) {
-            breakdown_header[8].innerHTML = `Metabolic Age - ${selectedRow.cells[9].innerText} <span class='increase'>(↑ ${parseFloat(selectedRow.cells[9].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)})</span>`;
+            metabolic_ageBreakdown(rowIndex - 2);
             graph(8, 'metabolic_age', rowIndex);
         }
         else {
-            breakdown_header[8].innerHTML = `Metabolic Age - ${selectedRow.cells[9].innerText} <span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText) - parseFloat(selectedRow.cells[9].innerText)})</span>`;
-            graph(8, 'metabolic_age', rowIndex);
+            if (localStorage.settings_change === 'current') {
+                if (parseFloat(selectedRow.cells[9].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)) {
+                    breakdown_header[8].innerHTML = `Metabolic Age - ${selectedRow.cells[9].innerText} <br> Current Change:<span class='increase'>(↑ ${parseFloat(selectedRow.cells[9].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText)})</span>`;
+                    metabolic_ageBreakdown(rowIndex - 2);
+                    graph(8, 'metabolic_age', rowIndex);
+                }
+                else {
+                    breakdown_header[8].innerHTML = `Metabolic Age - ${selectedRow.cells[9].innerText} <br> Current Change:<span class='decrease'>(↓ ${parseFloat(progress_table.rows[rowIndex - 1].cells[9].innerText) - parseFloat(selectedRow.cells[9].innerText)})</span>`;
+                    metabolic_ageBreakdown(rowIndex - 2);
+                    graph(8, 'metabolic_age', rowIndex);
+                }
+            }
+            if (localStorage.settings_change === 'total') {
+                if (parseFloat(selectedRow.cells[9].innerText) > parseFloat(progress_table.rows[2].cells[9].innerText)) {
+                    breakdown_header[8].innerHTML = `Metabolic Age - ${selectedRow.cells[9].innerText} <br> Total Change:<span class='increase'>(↑ ${parseFloat(selectedRow.cells[9].innerText) - parseFloat(progress_table.rows[2].cells[9].innerText)})</span>`;
+                    metabolic_ageBreakdown(rowIndex - 2);
+                    graph(8, 'metabolic_age', rowIndex);
+                }
+                else {
+                    breakdown_header[8].innerHTML = `Metabolic Age - ${selectedRow.cells[9].innerText} <br> Total Change:<span class='decrease'>(↓ ${parseFloat(progress_table.rows[2].cells[9].innerText) - parseFloat(selectedRow.cells[9].innerText)})</span>`;
+                    metabolic_ageBreakdown(rowIndex - 2);
+                    graph(8, 'metabolic_age', rowIndex);
+                }
+            }
         }
 
         //Body Water:
@@ -1953,21 +2325,34 @@ const fullBreakdown = (rowIndex) => {
             body_waterBreakdown(rowIndex - 2);
             graph(9, 'body_water', rowIndex);
         }
-        else if (parseFloat(selectedRow.cells[10].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)) {
-            breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <span class='increase'>(↑ ${(parseFloat(selectedRow.cells[10].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)).toFixed(1)})</span>`;
-            body_waterBreakdown(rowIndex - 2);
-            graph(9, 'body_water', rowIndex);
-        }
         else {
-            breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[10].innerText)).toFixed(1)})</span>`;
-            body_waterBreakdown(rowIndex - 2);
-            graph(9, 'body_water', rowIndex);
+            if (localStorage.settings_change === 'current') {
+                if (parseFloat(selectedRow.cells[10].innerText) > parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)) {
+                    breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <br> Current Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[10].innerText) - parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText)).toFixed(1)})</span>`;
+                    body_waterBreakdown(rowIndex - 2);
+                    graph(9, 'body_water', rowIndex);
+                }
+                else {
+                    breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <br> Current Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[10].innerText)).toFixed(1)})</span>`;
+                    body_waterBreakdown(rowIndex - 2);
+                    graph(9, 'body_water', rowIndex);
+                }
+            }
+            if (localStorage.settings_change === 'total') {
+                if (parseFloat(selectedRow.cells[10].innerText) > parseFloat(progress_table.rows[2].cells[10].innerText)) {
+                    breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <br> Total Change:<span class='increase'>(↑ ${(parseFloat(selectedRow.cells[10].innerText) - parseFloat(progress_table.rows[2].cells[10].innerText)).toFixed(1)})</span>`;
+                    body_waterBreakdown(rowIndex - 2);
+                    graph(9, 'body_water', rowIndex);
+                }
+                else {
+                    breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <br> Total Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[2].cells[10].innerText) - parseFloat(selectedRow.cells[10].innerText)).toFixed(1)})</span>`;
+                    body_waterBreakdown(rowIndex - 2);
+                    graph(9, 'body_water', rowIndex);
+                }
+            }
         }
     }
 }
-let numberRowsArray;
-let numberRowsArrayFixGap;
-const date = new Date();
 const bmiValue = () => {
     if (localStorage.height_unit === 'm') {
         if (localStorage.weight_unit === 'kg') {
@@ -2012,6 +2397,20 @@ const bmiValue = () => {
         }
     }
 }
+const date = new Date();
+const date_formatChosen = () => {
+    if (localStorage.date_format === 'DD/MM/YY') {
+        return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+    }
+    else if (localStorage.date_format === 'MM/DD/YY') {
+        return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+    }
+    else if (localStorage.date_format === 'YY/MM/DD') {
+        return `${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`; 
+    }
+}
+let numberRowsArray;
+let numberRowsArrayFixGap;
 const numberRows = () => { 
     if ((localStorage.numberRows === undefined && localStorage.canAddEntry !== 'yes') || localStorage.numberRows === '[]') {
         return false;
@@ -2019,7 +2418,7 @@ const numberRows = () => {
     else if (localStorage.numberRows === undefined && localStorage.canAddEntry === 'yes') {
         localStorage.numberRows = JSON.stringify([{
             int: 2,
-            date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
+            date: date_formatChosen(),
             weight: localStorage.weight,
             bmi: bmiValue(),
             body_fat: localStorage.body_fat,
@@ -2069,6 +2468,20 @@ if (window.location.pathname === "/html/index.html") {
 
     else {
         start.addEventListener('click', () => {
+            if (localStorage.localStorageMsg === undefined) {
+                popup.classList.add("show");
+            }
+            else {
+                if (user_details_stored()) {
+                    window.open('/html/composition_details.html', '_self');
+                }
+                else {
+                    window.open('/html/user_details.html', '_self');
+                }
+            }
+        })
+        start_okay.addEventListener('click', () => {
+            localStorage.localStorageMsg = true;
             if (user_details_stored()) {
                 window.open('/html/composition_details.html', '_self');
             }
@@ -2081,6 +2494,39 @@ if (window.location.pathname === "/html/index.html") {
 
 //User Details page:
 if (window.location.pathname === "/html/user_details.html") {
+    if (localStorage.name !== undefined) {
+        name.value = localStorage.name;
+    }
+    if (localStorage.age !== undefined) {
+        age.value = localStorage.age;
+        right(age, 1, 0);
+    }
+    if (localStorage.gender !== undefined) {
+        if (localStorage.gender === 'male') {
+            male.checked = true;
+            right(male, 2, 1);
+        }
+        else {
+            female.checked = true;
+            right(male, 2, 1);
+        }
+    }
+    if (localStorage.height_unit !== undefined) {
+        height_unit.value = localStorage.height_unit; 
+        right(height_unit, 3, 2);
+    }
+    if (localStorage.weight_unit !== undefined) {
+        weight_unit.value = localStorage.weight_unit; 
+        right(weight_unit, 4, 3);
+    }
+    if (localStorage.bmr_unit !== undefined) {
+        bmr_unit.value = localStorage.bmr_unit; 
+        right(bmr_unit, 5, 4);
+    }
+    if (localStorage.date_format !== undefined) {
+        date_format.value = localStorage.date_format;
+        right(date_format, 6, 5);
+    }
     //Name:
     name.addEventListener("keypress", (event) => {
         if ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) && name.value.length < 35) {
@@ -2112,6 +2558,9 @@ if (window.location.pathname === "/html/user_details.html") {
 
     //BMR Unit:
     bmr_unit.addEventListener('focusout', bmrUnitValue)
+
+    //Date Format:
+    date_format.addEventListener('focusout', date_formatValue)
 
     //Next:
     next.addEventListener('click', canNext)
@@ -2198,7 +2647,7 @@ if (window.location.pathname === '/html/progress.html') {
         progress_table.rows[0].cells[1].innerText = `Age: ${localStorage.age * 1}`;
 
         //Height:
-        progress_table.rows[0].cells[2].innerText = `Height: ${(localStorage.height * 1).toFixed(1)} ${localStorage.height_unit}`;
+        progress_table.rows[0].cells[2].innerText = `Height: ${(localStorage.height * 1).toFixed(1)} (${localStorage.height_unit})`;
         
         //Weight Unit:
         progress_table.rows[1].cells[1].innerText += ` (${localStorage.weight_unit})`;
@@ -2226,6 +2675,7 @@ if (window.location.pathname === '/html/progress.html') {
             //Date:
             progress_table.rows[currentRow.int].cells[0].innerText = currentRow.date;
             progress_table.rows[currentRow.int].cells[0].classList = 'date';
+            progress_table.rows[currentRow.int].cells[0].title = `Breakdown of ${progress_table.rows[currentRow.int].cells[0].innerText}`;
             
             //Weight:
             progress_table.rows[currentRow.int].cells[1].innerText = (currentRow.weight * 1).toFixed(1);
@@ -2262,17 +2712,24 @@ if (window.location.pathname === '/html/progress.html') {
             progress_table.rows[currentRow.int].cells[11].style.background = 'white';
             progress_table.rows[currentRow.int].cells[11].style.border = 'none';
             progress_table.rows[currentRow.int].cells[11].style.cursor = 'pointer';
+            progress_table.rows[currentRow.int].cells[11].title = 'Delete Entry';
             progress_table.rows[currentRow.int].cells[11].addEventListener('click', () => {
                 let confirmation = window.confirm(`Are you sure you want to delete this entry done ${currentRow.date}?`);
                 if (confirmation) {
-                    numberRowsArrayFixGap = numberRowsArray.splice(currentRow.int - 2, numberRowsArray.length);
-                    numberRowsArrayFixGap.shift();
-                    numberRowsArrayFixGap.forEach(currentRow => {
-                        currentRow.int--;
-                    })
-                    numberRowsArray = numberRowsArray.concat(numberRowsArrayFixGap)
-                    localStorage.numberRows = JSON.stringify(numberRowsArray);
-                    location.reload();
+                    if (numberRowsArray.length = 1) {
+                        localStorage.clear();
+                        location.reload();
+                    }
+                    else {
+                        numberRowsArrayFixGap = numberRowsArray.splice(currentRow.int - 2, numberRowsArray.length);
+                        numberRowsArrayFixGap.shift();
+                        numberRowsArrayFixGap.forEach(currentRow => {
+                            currentRow.int--;
+                        })
+                        numberRowsArray = numberRowsArray.concat(numberRowsArrayFixGap)
+                        localStorage.numberRows = JSON.stringify(numberRowsArray);
+                        location.reload();
+                    }
                 }
             })
         });
@@ -2310,28 +2767,44 @@ if (window.location.pathname === '/html/progress.html') {
             let confirmation = window.confirm(`Are you sure you want to delete all of your entries? \nWarning! All information will be lost and unretreivable`);
             if (confirmation) {
                 localStorage.clear();
+                localStorage.localStorageMsg = approve_localStorage;
                 location.reload();
             }
         }
     })
 }
 
-//scrollable table - maybe only have one tr in the table header but maybe also no outline in the header so the lineing up doesn't make it look weird
-//colours for change in breakdown must correlate with the users goals and green insinuates good and red insinuates bad
-//automatically fill in details on page not expected to change like height and unit
-//add titles to elements
-//can't add entries on the same day
-//if people do too much in second box then it automatically fills 1st box properly
-//put all information on how breakdowns are done in more information just like tanita understanding your body details page 
-//settings page
-//allow user to choose date format
-//allow user to change units 
-//allow user to choose if they want current change or total change to display
-//message to aware user that site uses localstorage
-//allow printing or downloading of user details
-//weekly reminder to add input
-//if user browser does not support then show images of browsers that do 
-//have better wording on the website
-//reference and cite websites like the tanita website
-//name error message must go when user is unfocussed
-//Clean up code
+//Settings Page: 
+//Open Settings:
+if (user_details_stored() && composition_details_stored()) {
+    open_settings.classList.remove("not");
+    open_settings.addEventListener('click', () => {
+        settings_popup.classList.remove("not");
+    })
+    if (localStorage.height_unit !== undefined) {
+        settings_height_unit.value = localStorage.height_unit; 
+    }
+    if (localStorage.weight_unit !== undefined) {
+        settings_weight_unit.value = localStorage.weight_unit; 
+    }
+    if (localStorage.bmr_unit !== undefined) {
+        settings_bmr_unit.value = localStorage.bmr_unit; 
+    }
+    if (localStorage.settings_change !== undefined) {
+        settings_change.value = localStorage.settings_change;
+    }
+}
+
+//Settings Done:
+settings_done.addEventListener('click', () => {
+    settings_height_unitValue();
+    settings_weight_unitValue();
+    settings_bmr_unitValue();
+    settings_changeValue();
+    settings_popup.classList.add("not");
+    location.reload();
+})
+//Settings Age:
+settings_age.addEventListener('click', goSettings_age);
+//Settings Height: 
+settings_height.addEventListener('click', goSettings_height);
