@@ -285,6 +285,10 @@ canvas {
     text-align: center;
 } 
 
+#tanita_credit p a {
+    text-decoration: underline;
+}
+
 button#open_settings {
     background: none;
     float: right;
