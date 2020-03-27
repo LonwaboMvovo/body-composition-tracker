@@ -44,6 +44,7 @@ const muscle_mass = document.querySelector('#muscle_mass');
 const muscle_mass2 = document.querySelector('#muscle_mass2');
 const physique_rating = document.querySelector('#physique_rating');
 const bone_mass = document.querySelector('#bone_mass');
+const bone_mass2 = document.querySelector('#bone_mass2');
 const bmr = document.querySelector('#bmr');
 const metabolic_age = document.querySelector('#metabolic_age');
 const body_water = document.querySelector('#body_water');
@@ -302,7 +303,7 @@ const ageValue = () => {
         right(age, 1, 0);
     }
 }
-let gender;
+let gender = localStorage.gender;
 const maleValue = () => {
     right(male, 2, 1);
     gender_options_box.style.background = '';
@@ -1264,7 +1265,6 @@ const selectedDateBackground = (dateIndex) => {
         dates[notK].style.background = 'rgb(216, 216, 216)';
     }
     selectedDate.style.background = 'rgb(179, 179, 179)'
-    selectedDate.style.fontSize = '1.55rem';
 }
 const graph = (notJ, title, graphCap) => {
     CHARTS[notJ].getContext('2d');
@@ -2459,14 +2459,22 @@ const numberRows = () => {
 }
 
 //Home Page:
-if (window.location.pathname === "/html/index.html") {
+if (window.location.pathname === "/" || window.location.pathname === '/index.html') {
     //Storage:
     if (typeof(Storage) === 'undefined') {
         document.querySelector('.header_msg').innerHTML = 'Unfortunately your browser does not support the type of storage we use. Try updating your browser or switching to another one.';
         start.classList.add('not');
     }
-
     else {
+        window.addEventListener('keydown', (key) => {
+            if (key.keyCode === 9 && popup.classList.contains('show')) {
+                start_okay.click();
+            }
+            else {
+                start.click();
+            }
+        })
+
         start.addEventListener('click', () => {
             if (localStorage.localStorageMsg === undefined) {
                 popup.classList.add("show");
@@ -2493,7 +2501,7 @@ if (window.location.pathname === "/html/index.html") {
 }
 
 //User Details page:
-if (window.location.pathname === "/html/user_details.html") {
+if (window.location.pathname === "/html/user_details.html" || window.location.pathname === '/html/user_details.html') {
     if (localStorage.name !== undefined) {
         name.value = localStorage.name;
     }
@@ -2527,6 +2535,7 @@ if (window.location.pathname === "/html/user_details.html") {
         date_format.value = localStorage.date_format;
         right(date_format, 6, 5);
     }
+
     //Name:
     name.addEventListener("keypress", (event) => {
         if ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) && name.value.length < 35) {
@@ -2636,6 +2645,7 @@ if (window.location.pathname === '/html/composition_details.html') {
 if (window.location.pathname === '/html/progress.html') {
     //Progress Table:
     if (numberRows() === true) {
+        document.querySelector('.header_msg').style.marginTop = "0px";
         //Name:
         if (localStorage.name === undefined || localStorage.name === '') {
             progress_table.rows[0].cells[0].innerText = 'You';
@@ -2716,7 +2726,7 @@ if (window.location.pathname === '/html/progress.html') {
             progress_table.rows[currentRow.int].cells[11].addEventListener('click', () => {
                 let confirmation = window.confirm(`Are you sure you want to delete this entry done ${currentRow.date}?`);
                 if (confirmation) {
-                    if (numberRowsArray.length = 1) {
+                    if (numberRowsArray.length === 1) {
                         localStorage.clear();
                         location.reload();
                     }
@@ -2743,10 +2753,16 @@ if (window.location.pathname === '/html/progress.html') {
                 fullBreakdown(notI);
             })
         }  
+
+        if (numberRowsArray.length > 5) {
+            progress_table.style.height = '300px';
+        }
     }
 
     else {
         document.querySelector('.header_msg').innerHTML = 'No entries to show';
+        document.querySelector('.header_msg').classList.remove('not');
+        document.querySelector('.header_msg').style.marginTop = "100px";
         progress_table.classList.add('not');
         full_breakdown.classList.add('not');
     }

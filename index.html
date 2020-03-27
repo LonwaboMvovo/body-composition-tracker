@@ -6,16 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>BCT</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
     <div class="page-container">
         <div class="flex_container">
             <header class="home top_page">
                 <nav>
-                    <a href="index.html">Home</a>
-                    <a href="progress.html">Progress</a>
-                    <a href="moreInfo.html">More Info</a>
+                    <button class="not" title="Settings" id="open_settings">⚙️</button>
                     <span class="not" id="settings_popup">
                         <section class="settings">
                             <label for="settings_height_unit">Height Unit:</label>
@@ -61,12 +59,22 @@
     
                         <p class="button" id="settings_done">Done</p>
                     </span>
-                    <button class="not" title="Settings" id="open_settings">⚙️</button>
+                    <a href="index.html">Home</a>
+                    <a href="html/progress.html" class="desktop">Progress</a>
+                    <a href="html/moreInfo.html" class="desktop">More Info</a>
+                    <a href="html/progress.html" class="mobile">Progress <br></a>
+                    <a href="html/moreInfo.html" class="mobile">More Info <br></a>
                 </nav>
-                <h1>Body Composition Tracker</h1>
+                <h1 class="desktop">Body Composition Tracker</h1>
+                <h1 class="mobile">
+                    BCT
+                </h1>
             </header>
         
-            <p class="header_msg home">Welcome to the Body Compostion Tracker Website. When you are ready to begin press Start!</p>
+            <p class="header_msg home">
+                Welcome to the Body Compostion Tracker Website. <br>
+                When you are ready to begin press Start!
+            </p>
         
             <main class="home">
                 <div class="popup">
@@ -80,14 +88,17 @@
         
             <footer class="bottom">
                 <nav>
-                    <a href="index.html">Home</a> <b class="footnav">&middot;</b>
-                    <a href="progress.html">Progress</a> <b class="footnav">&middot;</b>
-                    <a href="moreInfo.html">More Info</a> <b class="footnav">&middot;</b>
-                    <span class="footnav">Body Composition Tracker &#124; &copy; 2019</span>
+                    <a href="index.html" class="desktop">Home</a> <b class="footnav desktop">&middot;</b>
+                    <a href="html/index.html" class="mobile">Home</a> <b class="footnav mobile">&middot;</b>
+                    <a href="html/progress.html" class="desktop">Progress</a> <b class="footnav desktop">&middot;</b>
+                    <a href="html/progress.html" class="mobile">Progress</a> <b class="footnav mobile">&middot;</b>
+                    <a href="html/moreInfo.html" class="desktop">More Info</a> <b class="footnav desktop">&middot;</b>
+                    <a href="html/moreInfo.html" class="mobile">More Info <br></a>
+                    <span class="footnav desktop">Body Composition Tracker &#124; &copy; 2019</span>
+                    <span class="footnav mobile">Body Composition Tracker <br> &copy; 2019</span>
                 </nav>
             </footer>
         </div>
-    </div>
 </body>
-<script type ="text/javascript" src="../javascript/script.js"></script>
+<script type ="text/javascript" src="javascript/script.js"></script>
 </html>

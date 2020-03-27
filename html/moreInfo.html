@@ -6,192 +6,204 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>BCT</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 
 <body>
-   <div id="page-container">
-    <header class="top_page">
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="progress.html">Progress</a>
-            <a href="moreInfo.html">More Information</a>
-            <span class="not" id="settings_popup">
-                <section class="settings">
-                    <label for="settings_height_unit">Height Unit:</label>
-                    <select name="settings_height_unit" class="settings_inputs" id="settings_height_unit">
-                        <option value="cm">cm</option>
-                        <option value="ft">ft</option>
-                        <option value="m">m</option>
-                    </select>
+   <div class="page-container">
+        <div class="flex_container">
+            <header class="top_page">
+                <nav>
+                    <button class="not" title="Settings" id="open_settings">⚙️</button>
+                    <span class="not" id="settings_popup">
+                        <section class="settings">
+                            <label for="settings_height_unit">Height Unit:</label>
+                            <select name="settings_height_unit" class="settings_inputs" id="settings_height_unit">
+                                <option value="cm">cm</option>
+                                <option value="ft">ft</option>
+                                <option value="m">m</option>
+                            </select>
+                        </section>
+    
+                        <section class="settings">
+                            <label for="settings_weight_unit">Weight Unit:</label>
+                            <select name="settings_weight_unit" class="settings_inputs" id="settings_weight_unit">
+                                <option value="kg">kg</option>
+                                <option value="lbs">lbs</option>
+                                <option value="st">st</option>
+                            </select>
+                        </section>
+    
+                        <section class="settings">
+                            <label for="settings_bmr_unit">BMR Unit:</label>
+                            <select name="settings_bmr_unit" class="settings_inputs" id="settings_bmr_unit">
+                                <option value="kcal">kcal</option>
+                                <option value="kJ">kJ</option>
+                            </select>
+                        </section>
+    
+                        <section class="settings">
+                            <label for="settings_change">Change:</label>
+                            <select name="settings_change" class="settings_inputs" id="settings_change">
+                                <option value="current">Current</option>
+                                <option value="total">Total</option>
+                            </select>
+                        </section>
+    
+                        <section class="settings">
+                            <p class="button" id="settings_age">Change Age</p>
+                        </section>
+    
+                        <section class="settings">
+                            <p class="button" id="settings_height">Change Height</p>
+                        </section>
+    
+                        <p class="button" id="settings_done">Done</p>
+                    </span>
+                    <a href="../index.html">Home</a>
+                    <a href="progress.html" class="desktop">Progress</a>
+                    <a href="moreInfo.html" class="desktop">More Info</a>
+                    <a href="progress.html" class="mobile">Progress <br></a>
+                    <a href="moreInfo.html" class="mobile">More Info <br></a>
+                </nav>
+                <h1 class="desktop">Body Composition Tracker</h1>
+                <h1 class="mobile">
+                    BCT
+                </h1>
+            </header>
+    
+            <main id="more_information">
+                <section>
+                    <h2>Weight:</h2>
+                    <p>
+                        Your weight is all the mass that your body contains. Looking into what your 'weight' is composed of can tell if 
+                        you are healthy and need to make efforts to keep yourself that way or if you are unhealthy and need to take steps 
+                        to get healthy. Not much can be determined by looking at weight alone. 
+                        Understanding all your other measurements can help determine what you need to work on to reach your 
+                        health and fitness goals.
+                    </p>
                 </section>
-
-                <section class="settings">
-                    <label for="settings_weight_unit">Weight Unit:</label>
-                    <select name="settings_weight_unit" class="settings_inputs" id="settings_weight_unit">
-                        <option value="kg">kg</option>
-                        <option value="lbs">lbs</option>
-                        <option value="st">st</option>
-                    </select>
+                <section>
+                    <h2>BMI:</h2>
+                    <p>
+                        BMI has been used as a standard indicator of health. 
+                        Your BMI is calculated by dividing your weight (in kg) by the square of your height (in m). 
+                        It is not a perfect system as it does not examine the components of your weight. 
+                        For example, a person with a high muscle mass could be classified as being overweight or obese depending on 
+                        their height, when in fact they are healthy.
+                        On average a person with a BMI: lower than 19 is considered underweight, between 19 and 25 is considered normal and 
+                        healthy, between 25 and 30 is considered overweight and higher than 30 is considered obese
+                    </p>
                 </section>
-
-                <section class="settings">
-                    <label for="settings_bmr_unit">BMR Unit:</label>
-                    <select name="settings_bmr_unit" class="settings_inputs" id="settings_bmr_unit">
-                        <option value="kcal">kcal</option>
-                        <option value="kJ">kJ</option>
-                    </select>
+                <section>
+                    <h2>Body Fat %:</h2>
+                    <p>
+                        Body fat percentage is the ratio of fat to your body weight.
+                        Your body fat is important as it maintains your body temperature, cushions joints and protects internal organs.
+                        It is important however that you keep track of your body fat percentage, as having a high body fat percentage can 
+                        cause long term issues. And having a body fat percentage that is too low can also cause problems such as 
+                        osteoporosis, irregular periods and infertility. It is very important to keep track of your body fat percentage.
+                        Tanita has made body fat ranges which are used in this website to indicate for your age and gender if your body 
+                        fat percentage shows that you are underfat, is within a healthy range, overfat or if you are obese.
+                    </p>
                 </section>
-
-                <section class="settings">
-                    <label for="settings_change">Change:</label>
-                    <select name="settings_change" class="settings_inputs" id="settings_change">
-                        <option value="current">Current</option>
-                        <option value="total">Total</option>
-                    </select>
+    
+                <section>
+                    <h2>Visceral Fat:</h2>
+                    <p>
+                        Visceral fat is the fat located in your abdomen that surrounds and protects the vital organs.
+                        Ensuring that your visceral fat is within a healthy range is important as this can reduce the risk of certain diseases 
+                        such as heart disease, high blood pressure and may delay the onset of type 2 diabetes. As you age your fat will shift 
+                        to your abdominal region, which means that you will have to manage visceral fat levels more the older you get.
+                        Having a visceral fat level from 0 to 12 indicates a healthy level and anything above that usually indicates that
+                        you have an excessive amount of visceral fat.
+                    </p>
                 </section>
-
-                <section class="settings">
-                    <p class="button" id="settings_age">Change Age</p>
+    
+                <section>
+                    <h2>Muscle Mass:</h2>
+                    <p>
+                        Muscle mass is the weight of all your muscles in your body. When your muscle mass increases, the rate at which you 
+                        burn energy will increase which will, in turn, increase your basal metabolic rate (BMR) and this will help you reduce 
+                        excess body fat. Regular exercise and proper nutrition can increase your muscle mass, which can make it seem that 
+                        you are 'gaining weight' and that your efforts are useless but an increase in muscle mass is a good thing. That's 
+                        why it is important to monitor your body composition regularly.
+                    </p>
                 </section>
-
-                <section class="settings">
-                    <p class="button" id="settings_height">Change Height</p>
+    
+                <section>
+                    <h2>Physique Rating:</h2>
+                    <p>
+                        To determine your physique rating, your muscle and body fat levels are assessed and rates the result as one out of nine 
+                        body types. As your activity level changes, the balance of your body fat and muscle mass will gradually change, which in 
+                        turn affects your overall physique. A physique rating of 1 means that you have a 'hidden-obese' body type, 2 means that 
+                        you have an 'obese' body type, 3 means that you have a 'solidly-built' body type, 4 means that you have an 'under-exercised' 
+                        body type, 5 means that you have a 'standard' body type, 6 means that you have a 'standard-muscular' body type, 7 means 
+                        that you have a 'thin' body type, 8 means that you have a 'thin-muscular' body type and 9 means that you have a 
+                        'very-muscular' body type.
+                    </p>
                 </section>
-
-                <p class="button" id="settings_done">Done</p>
-            </span>
-            <button class="not" title="Settings" id="open_settings">⚙️</button>
-        </nav>
-        <h1>Body Composition Tracker</h1>
-    </header>
-
-    <main id="more_information">
-        <section>
-            <h2>Weight:</h2>
-            <p>
-                Your weight is all the mass that your body contains. Looking into what your 'weight' is composed of can tell if 
-                you are healthy and need to make efforts to keep yourself that way or if you are unhealthy and need to take steps 
-                to get healthy. Not much can be determined by looking at weight alone. 
-                Understanding all your other measurements can help determine what you need to work on to reach your 
-                health and fitness goals.
-            </p>
-        </section>
-        <section>
-            <h2>BMI:</h2>
-            <p>
-                BMI has been used as a standard indicator of health. 
-                Your BMI is calculated by dividing your weight (in kg) by the square of your height (in m). 
-                It is not a perfect system as it does not examine the components of your weight. 
-                For example, a person with a high muscle mass could be classified as being overweight or obese depending on 
-                their height, when in fact they are healthy.
-                On average a person with a BMI: lower than 19 is considered underweight, between 19 and 25 is considered normal and 
-                healthy, between 25 and 30 is considered overweight and higher than 30 is considered obese
-            </p>
-        </section>
-        <section>
-            <h2>Body Fat %:</h2>
-            <p>
-                Body fat percentage is the ratio of fat to your body weight.
-                Your body fat is important as it maintains your body temperature, cushions joints and protects internal organs.
-                It is important however that you keep track of your body fat percentage, as having a high body fat percentage can 
-                cause long term issues. And having a body fat percentage that is too low can also cause problems such as 
-                osteoporosis, irregular periods and infertility. It is very important to keep track of your body fat percentage.
-                Tanita has made body fat ranges which are used in this website to indicate for your age and gender if your body 
-                fat percentage shows that you are underfat, is within a healthy range, overfat or if you are obese.
-            </p>
-        </section>
-
-        <section>
-            <h2>Visceral Fat:</h2>
-            <p>
-                Visceral fat is the fat located in your abdomen that surrounds and protects the vital organs.
-                Ensuring that your visceral fat is within a healthy range is important as this can reduce the risk of certain diseases 
-                such as heart disease, high blood pressure and may delay the onset of type 2 diabetes. As you age your fat will shift 
-                to your abdominal region, which means that you will have to manage visceral fat levels more the older you get.
-                Having a visceral fat level from 0 to 12 indicates a healthy level and anything above that usually indicates that
-                you have an excessive amount of visceral fat.
-            </p>
-        </section>
-
-        <section>
-            <h2>Muscle Mass:</h2>
-            <p>
-                Muscle mass is the weight of all your muscles in your body. When your muscle mass increases, the rate at which you 
-                burn energy will increase which will, in turn, increase your basal metabolic rate (BMR) and this will help you reduce 
-                excess body fat. Regular exercise and proper nutrition can increase your muscle mass, which can make it seem that 
-                you are 'gaining weight' and that your efforts are useless but an increase in muscle mass is a good thing. That's 
-                why it is important to monitor your body composition regularly.
-            </p>
-        </section>
-
-        <section>
-            <h2>Physique Rating:</h2>
-            <p>
-                To determine your physique rating, your muscle and body fat levels are assessed and rates the result as one out of nine 
-                body types. As your activity level changes, the balance of your body fat and muscle mass will gradually change, which in 
-                turn affects your overall physique. A physique rating of 1 means that you have a 'hidden-obese' body type, 2 means that 
-                you have an 'obese' body type, 3 means that you have a 'solidly-built' body type, 4 means that you have an 'under-exercised' 
-                body type, 5 means that you have a 'standard' body type, 6 means that you have a 'standard-muscular' body type, 7 means 
-                that you have a 'thin' body type, 8 means that you have a 'thin-muscular' body type and 9 means that you have a 
-                'very-muscular' body type.
-            </p>
-        </section>
-
-        <section>
-            <h2>Bone Mass:</h2>
-            <p>
-                Bone mass is the weight of all bone mineral in your body. Your bone mass is unlikely to have short term changes but it 
-                is very important to have a healthy bone mass. This can be done with a good diet that includes enough calcium and doing 
-                weight training. You should keep track of your bone mass to notice any changes in the long-term. Tanita has 
-                determined healthy bone masses for your gender and total body weight which this website uses to analyze your bone mass.
-            </p>
-        </section>
-
-        <section>
-            <h2>BMR:</h2>
-            <p>
-                Increasing muscle mass will accelerate your basal metabolic rate (BMR), which increases the number of calories you 
-                burn and helps to decrease body fat levels. Your BMR value can be used as a baseline for a diet program but the more 
-                active you are the more calories need to be added, as using energy burns calories. Being in a calorie deficit you will 
-                generally lose weight and being in a calorie surplus will generally gain weight. Depending on your diet and activity 
-                will determine if you gain or lose fat or muscle.
-            </p>
-        </section>
-
-        <section>
-            <h2>Metabolic Age:</h2>
-            <p>
-                To determine your metabolic age, your BMR is compared to the average of your age group. If your metabolic age is 
-                higher than your actual age then it means that you need to make efforts to increase your metabolic rate. Increased 
-                exercise and a healthy diet will increase muscle mass which will increase your BMR, thus lowering your metabolic age.
-                Monitor your metabolic age regularly to make sure you stay on track. 
-            </p>
-        </section>
-
-        <section>
-            <h2>Body Water %:</h2>
-            <p>
-                Your body water percentage is the total amount of fluid in the body expressed as a percentage of total weight.
-                You will lose water regularly throughout the day from sweat, urine and, breathing. This is why it is important to 
-                hydrate regularly. It is recommended to drink 1l of water for every 30kg that you weigh, but it varies.
-                For a female, the average healthy body water range is 45% to 60% and for males, it's 50% to 60%.
-            </p>
-        </section>
-
-        <section id="tanita_credit">
-            <p>All Information in this website is sourced from<a href="https://tanita.eu/help-guides/understanding-your-measurements/" target="_blank" id="tanita">Tanita</a></p>
-        </section>
-    </main>
-
-    <footer class="bottom">
-        <nav>
-            <a href="index.html">Home</a> <b class="footnav">&middot;</b>
-            <a href="progress.html">Progress</a> <b class="footnav">&middot;</b>
-            <a href="moreInfo.html">More Information</a> <b class="footnav">&middot;</b>
-            <span class="footnav">Body Composition Tracker &#124; &copy; 2019</span>
-        </nav>
-    </footer>
+    
+                <section>
+                    <h2>Bone Mass:</h2>
+                    <p>
+                        Bone mass is the weight of all bone mineral in your body. Your bone mass is unlikely to have short term changes but it 
+                        is very important to have a healthy bone mass. This can be done with a good diet that includes enough calcium and doing 
+                        weight training. You should keep track of your bone mass to notice any changes in the long-term. Tanita has 
+                        determined healthy bone masses for your gender and total body weight which this website uses to analyze your bone mass.
+                    </p>
+                </section>
+    
+                <section>
+                    <h2>BMR:</h2>
+                    <p>
+                        Increasing muscle mass will accelerate your basal metabolic rate (BMR), which increases the number of calories you 
+                        burn and helps to decrease body fat levels. Your BMR value can be used as a baseline for a diet program but the more 
+                        active you are the more calories need to be added, as using energy burns calories. Being in a calorie deficit you will 
+                        generally lose weight and being in a calorie surplus will generally gain weight. Depending on your diet and activity 
+                        will determine if you gain or lose fat or muscle.
+                    </p>
+                </section>
+    
+                <section>
+                    <h2>Metabolic Age:</h2>
+                    <p>
+                        To determine your metabolic age, your BMR is compared to the average of your age group. If your metabolic age is 
+                        higher than your actual age then it means that you need to make efforts to increase your metabolic rate. Increased 
+                        exercise and a healthy diet will increase muscle mass which will increase your BMR, thus lowering your metabolic age.
+                        Monitor your metabolic age regularly to make sure you stay on track. 
+                    </p>
+                </section>
+    
+                <section>
+                    <h2>Body Water %:</h2>
+                    <p>
+                        Your body water percentage is the total amount of fluid in the body expressed as a percentage of total weight.
+                        You will lose water regularly throughout the day from sweat, urine and, breathing. This is why it is important to 
+                        hydrate regularly. It is recommended to drink 1l of water for every 30kg that you weigh, but it varies.
+                        For a female, the average healthy body water range is 45% to 60% and for males, it's 50% to 60%.
+                    </p>
+                </section>
+    
+                <section id="tanita_credit">
+                    <p>All Information in this website is sourced from<a href="https://tanita.eu/help-guides/understanding-your-measurements/" target="_blank" id="tanita">Tanita</a></p>
+                </section>
+            </main>
+    
+            <footer class="bottom">
+                <nav>
+                    <a href="../index.html" class="desktop">Home</a> <b class="footnav desktop">&middot;</b>
+                    <a href="index.html" class="mobile">Home</a> <b class="footnav mobile">&middot;</b>
+                    <a href="progress.html" class="desktop">Progress</a> <b class="footnav desktop">&middot;</b>
+                    <a href="progress.html" class="mobile">Progress</a> <b class="footnav mobile">&middot;</b>
+                    <a href="moreInfo.html" class="desktop">More Info</a> <b class="footnav desktop">&middot;</b>
+                    <a href="moreInfo.html" class="mobile">More Info <br></a>
+                    <span class="footnav desktop">Body Composition Tracker &#124; &copy; 2019</span>
+                    <span class="footnav mobile">Body Composition Tracker <br> &copy; 2019</span>
+                </nav>
+            </footer>
+        </div>
    </div>
 </body>
 <script type ="text/javascript" src="../javascript/script.js"></script>
