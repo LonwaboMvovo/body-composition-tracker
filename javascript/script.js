@@ -2824,3 +2824,5 @@ settings_done.addEventListener('click', () => {
 settings_age.addEventListener('click', goSettings_age);
 //Settings Height: 
 settings_height.addEventListener('click', goSettings_height);
+
+//Done by Lonwabo Mvovo
