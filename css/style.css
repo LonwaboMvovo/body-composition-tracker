@@ -441,6 +441,10 @@ button#open_settings:hover {
         margin-bottom: 50px;
     }
 
+    .inputs {
+        width: calc(100% - 50px);
+    }
+
     #settings_popup {
         width: 95%;
     }
