@@ -442,7 +442,7 @@ button#open_settings:hover {
     }
 
     .inputs {
-        width: calc(100% - 50px);
+        width: calc(100% - 30px);
     }
 
     #settings_popup {
