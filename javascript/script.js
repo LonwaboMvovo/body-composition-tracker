@@ -2333,7 +2333,7 @@ const fullBreakdown = (rowIndex) => {
                     graph(9, 'body_water', rowIndex);
                 }
                 else {
-                    breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <br> Current Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[2].innerText) - parseFloat(selectedRow.cells[10].innerText)).toFixed(1)})</span>`;
+                    breakdown_header[9].innerHTML = `Body Water % - ${selectedRow.cells[10].innerText} <br> Current Change:<span class='decrease'>(↓ ${(parseFloat(progress_table.rows[rowIndex - 1].cells[10].innerText) - parseFloat(selectedRow.cells[10].innerText)).toFixed(1)})</span>`;
                     body_waterBreakdown(rowIndex - 2);
                     graph(9, 'body_water', rowIndex);
                 }
