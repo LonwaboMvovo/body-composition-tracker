@@ -2537,20 +2537,20 @@ if (window.location.pathname === "/body-composition-tracker/html/user_details.ht
     }
 
     //Name:
-    name.addEventListener("keypress", (event) => {
-        if ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) && name.value.length < 35) {
-            right(name, 0)
-            name.value += event.key;
-        }
-        else if (name.value.length === 35) {
-            wrong(name, 0)
-            error_msg[0].innerText = '(Max length of name reached. Please provide name lower than 35 characters)';
-        }
-        else {
-            wrong(name, 0)
-            error_msg[0].innerText = '(Please use letters only)';
-        }
-    });
+    // name.addEventListener("keypress", (event) => {
+    //     if ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) && name.value.length < 35) {
+    //         right(name, 0)
+    //         name.value += event.key;
+    //     }
+    //     else if (name.value.length === 35) {
+    //         wrong(name, 0)
+    //         error_msg[0].innerText = '(Max length of name reached. Please provide name lower than 35 characters)';
+    //     }
+    //     else {
+    //         wrong(name, 0)
+    //         error_msg[0].innerText = '(Please use letters only)';
+    //     }
+    // });
 
     //Age:
     age.addEventListener('focusout', ageValue)
